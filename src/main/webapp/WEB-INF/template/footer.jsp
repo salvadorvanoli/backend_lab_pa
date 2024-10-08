@@ -10,7 +10,7 @@
 	<br>
 	<br>
 	<div class="col-4">
-	    <img class="imagen-utec" src="img/utec.webp">
+	    <img class="imagen-utec" src="media/images/utec.webp" alt="UTEC en la vida real">
 	    <p class="color-rosa">Calle Dr Evaristo Ciganda 461, 80000 San José de Mayo, Departamento de San José</p>
 	    <p class="color-marron">©Flamin-Go</p>
 	</div>

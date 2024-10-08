@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-md ms-5 me-5">
     <div class="container-fluid text-center">
         <a class="navbar-brand me-5" href="#">
-            <img src="img/Flamin-Go.webp" alt="Flamin-Go" class="flamin-go-pic" onclick="window.location.href='index.html';">
+            <img src="media/images/Flamin-Go.webp" alt="Flamin-Go" class="flamin-go-pic" onclick="window.location.href='index.html';">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

@@ -14,13 +14,13 @@ import com.flamingo.models.EstadoSesion;
  * Servlet implementation class Home
  */
 @WebServlet ("/home")
-public class home extends HttpServlet {
+public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public home() {
+    public Home() {
         super();
         // TODO Auto-generated constructor stub
     }
