@@ -1,4 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.flamingo.models.Producto" %>
+<%@ page import="com.flamingo.models.Categoria" %>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -15,7 +19,7 @@
 
 	<jsp:include page="/WEB-INF/template/header.jsp" />
 
-    <!-- Ordenar por -->
+     <!-- Ordenar por -->
     <div class="row container-fluid w-100 justify-content-end align-items-center">
         <header class="header-1 col align-self-end">
             <div class="text-center">
@@ -31,50 +35,72 @@
             </div>
         </header>
     </div>
-    
+
     <div class="container-fluid w-100">
         <div class="row">
             <!-- Aside -->
             <aside id="aside" class="aside-1 scrolleable col-3 row">
-                <c:forEach var="categoria" items="${categorias}">
+                <%
+                    List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                    for (Categoria categoria : categorias) {
+                %>
                     <div class="dropdown">
-                        <button class="dropbtn">&#9654; ${categoria.nombre}</button>
+                        <button class="dropbtn">&#9654; <%= categoria.getNombre() %></button>
                         <div class="dropdown-content">
-                            <c:forEach var="subcategoria" items="${categoria.hijos}">
-                                <a href="#" class="dropdown-item">&#9654; ${subcategoria.nombre}</a>
-                                <c:forEach var="subsubcategoria" items="${subcategoria.hijos}">
-                                    <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; ${subsubcategoria.nombre}</a>
-                                </c:forEach>
-                            </c:forEach>
+                            <%
+                                for (Categoria subcategoria : categoria.getHijos()) {
+                            %>
+                                <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombre() %></a>
+                                <%
+                                    for (Categoria subsubcategoria : subcategoria.getHijos()) {
+                                %>
+                                    <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombre() %></a>
+                                <%
+                                    }
+                                %>
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
-                </c:forEach>
+                <%
+                    }
+                %>
             </aside>
 
             <!-- Productos -->
             <main id="prods" class="col-12 col-md">
-                <c:forEach var="producto" items="${productos}">
-                    <article class="rectangle-1 row" onclick="verInfoProducto(${producto.id})">
-                        <img src="${producto.imagenes[0]}" class="col-3 image-1" alt="Imagen del producto">
+                <%
+                    List<Producto> productos = (List<Producto>) request.getAttribute("productos");
+                    for (Producto producto : productos) {
+                %>
+                    <article class="rectangle-1 row" onclick="verInfoProducto(<%= producto.getId() %>)">
+                        <img src="<%= producto.getImagenes().get(0) %>" class="col-3 image-1" alt="Imagen del producto">
                         <div class="col-9 row todo-lodemas">
                             <div class="row col-12 item-estrellas">
-                                <div class="col item-1">${producto.nombre}</div>
+                                <div class="col item-1"><%= producto.getNombre() %></div>
                                 <div class="col conjunto_estrellas">
-                                    <c:forEach var="i" begin="1" end="5">
-                                        <span class="fa fa-star ${i <= producto.estrellas ? 'checked' : ''}"></span>
-                                    </c:forEach>
+                                    <%
+                                        for (int i = 1; i <= 5; i++) {
+                                    %>
+                                        <span class="fa fa-star <%= (i <= producto.getEstrellas() ? "checked" : "") %>"></span>
+                                    <%
+                                        }
+                                    %>
                                 </div>
                             </div>
-                            <div class="tienda-x col-12">${producto.tienda}</div>
+                            <div class="tienda-x col-12"><%= producto.getTienda() %></div>
                             <div class="row col-12 precio-carrito">
-                                <div class="col precio">$UYU ${producto.precio}</div>
+                                <div class="col precio">$UYU <%= producto.getPrecio() %></div>
                                 <div class="col-2 row">
                                     <div class="col carrito fa-solid fa-cart-shopping"></div>
                                 </div>
                             </div>
                         </div>
                     </article>
-                </c:forEach>
+                <%
+                    }
+                %>
             </main>
         </div>    
     </div>

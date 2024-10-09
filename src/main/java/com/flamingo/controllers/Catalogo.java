@@ -27,9 +27,7 @@ public class Catalogo extends HttpServlet {
         request.setAttribute("productos", listaDeProductos);
         request.setAttribute("categorias", listaDeCategorias);
         
-        // Ruta del JSP: asegúrate de que la ruta sea correcta
-        RequestDispatcher dispatcher = request.getRequestDispatcher("../../../../webapp/WEB-INF/catalogo/catalogo.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("../../../../webapp/WEB-INF/catalogo/catalogo.jsp").forward(request, response);
     }
 
     private List<Producto> obtenerListaDeProductos() {
