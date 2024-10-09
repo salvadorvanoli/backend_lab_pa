@@ -14,8 +14,8 @@ import com.flamingo.models.Producto;
 import com.flamingo.models.Categoria;
 
 
-@WebServlet("/catalogo")
-public class catalogo extends HttpServlet {
+@WebServlet("/Catalogo")
+public class Catalogo extends HttpServlet {
     private static final long serialVersionUID = 1L; // Mejor práctica para el serialVersionUID
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
