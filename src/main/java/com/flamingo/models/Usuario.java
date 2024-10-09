@@ -13,14 +13,14 @@ public class Usuario {
     private String web; 
     private String empresa; 
     private String id;
-    private String contraseña; 
+    private String contrasena; 
     private List<Orden> ordenes; 
     private List<Producto> productos; 
 
     // Constructor
     public Usuario(String nombre, String apellido, String nickname, String tipo, String email,
                    String fecha, String foto, String web, String empresa, String id,
-                   String contraseña, List<Orden> ordenes, List<Producto> productos) {
+                   String contrasena, List<Orden> ordenes, List<Producto> productos) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.nickname = nickname;
@@ -31,7 +31,7 @@ public class Usuario {
         this.web = web;
         this.empresa = empresa;
         this.id = id;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.ordenes = ordenes;
         this.productos = productos;
     }
@@ -116,12 +116,12 @@ public class Usuario {
 		this.id = id;
 	}
 
-	public String getContraseña() {
-		return contraseña;
+	public String getContrasena() {
+		return contrasena;
 	}
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
 
 	public List<Orden> getOrdenes() {

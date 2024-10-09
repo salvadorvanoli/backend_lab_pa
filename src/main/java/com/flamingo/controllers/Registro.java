@@ -10,7 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.flamingo.models.Usuario;
-
+import com.flamingo.models.Orden; // Asegúrate de tener esta clase definida
+import com.flamingo.models.Producto; // Asegúrate de tener esta clase definida
 
 @WebServlet("/RegistrarUsuario")
 public class Registro extends HttpServlet {
@@ -20,12 +21,23 @@ public class Registro extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener los parámetros del formulario
-        String email = request.getParameter("email");
+        
+        String nombre = request.getParameter("nombre");
+        String apellido = request.getParameter("apellido");
         String nickname = request.getParameter("nickname");
+        String tipo = request.getParameter("tipo"); 
+        String email = request.getParameter("email");
+        String fecha = request.getParameter("fecha"); 
+        String foto = request.getParameter("foto"); 
+        String web = request.getParameter("web"); 
+        String empresa = request.getParameter("empresa");
+        String id = request.getParameter("id"); 
+        String contrasena = request.getParameter("contrasena");
 
         // Validar si los campos están vacíos
-        if (email == null || email.isEmpty() || nickname == null || nickname.isEmpty()) {
+        if (nombre == null || nombre.isEmpty() || apellido == null || apellido.isEmpty() || 
+            nickname == null || nickname.isEmpty() || email == null || email.isEmpty() || 
+            contrasena == null || contrasena.isEmpty()) {
             request.setAttribute("errorMessage", "Por favor, completa todos los campos.");
             request.getRequestDispatcher("registro.jsp").forward(request, response);
             return;
@@ -48,7 +60,7 @@ public class Registro extends HttpServlet {
         }
 
         // Si todo es válido, crear un nuevo usuario y agregarlo a la lista
-        Usuario nuevoUsuario = new Usuario(email, nickname);
+        Usuario nuevoUsuario = new Usuario(nombre, apellido, nickname, tipo, email, fecha, foto, web, empresa, id, contrasena, new ArrayList<>(), new ArrayList<>());
         usuariosRegistrados.add(nuevoUsuario);
 
         // Guardar las credenciales temporales en sesión (o cualquier otra acción)
@@ -58,7 +70,7 @@ public class Registro extends HttpServlet {
         response.sendRedirect("ingresarDatos.jsp");
     }
 
-    // Método para validar el formato del correo
+    // validar el formato del correo
     private boolean esCorreoValido(String email) {
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         return email.matches(emailRegex);
