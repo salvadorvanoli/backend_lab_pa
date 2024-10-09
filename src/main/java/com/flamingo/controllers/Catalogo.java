@@ -1,6 +1,7 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -19,7 +20,7 @@ public class Catalogo extends HttpServlet {
     private static final long serialVersionUID = 1L; // Mejor práctica para el serialVersionUID
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Supongamos que tienes un método que obtiene la lista de productos
+    	
         List<Producto> listaDeProductos = obtenerListaDeProductos(); // Método ficticio; debes implementarlo
         List<Categoria> listaDeCategorias = obtenerListaDeCategorias(); // Método ficticio; debes implementarlo
         
@@ -30,11 +31,38 @@ public class Catalogo extends HttpServlet {
         request.getRequestDispatcher("../../../../webapp/WEB-INF/catalogo/catalogo.jsp").forward(request, response);
     }
 
-    private List<Producto> obtenerListaDeProductos() {
-        return null; 
+    @SuppressWarnings("null")
+	private List<Producto> obtenerListaDeProductos(){
+    	Categoria Cerealescategoria = new Categoria("Cereales",  null);
+    
+    	List<Categoria> Cereales = new ArrayList<>();
+    	Cereales.add(Cerealescategoria);
+    	
+    	Producto a = new Producto("Cereal Saludable", 4.9 , "todo muy muy saludable" , "1", null, Cereales); 
+    	Producto b = new Producto("Cereal ", 2.5 , "todo nada nada saludable" , "2", null, Cereales); 
+    	
+    	List<Producto> lista = new ArrayList<>();
+    	lista.add(a);
+    	lista.add(b);
+    	
+    	return lista;
     }
 
     private List<Categoria> obtenerListaDeCategorias() {
-        return null; 
+    	Categoria Cerealescategoria = new Categoria("Cereales",  null);
+    	
+    	List<Categoria> Cereales = new ArrayList<>();
+    	Cereales.add(Cerealescategoria);
+    	
+    	Categoria Dulces = new Categoria("Dulces", null);
+    	Categoria Saludables = new Categoria("Saludables",  Cereales);
+    	Categoria Bebidas = new Categoria("Bebidas",  null);
+    	
+    	List<Categoria> todas = null;
+    	todas.add(Dulces);
+    	todas.add(Saludables); 
+    	todas.add(Bebidas);
+    	
+    	return todas;
     }
 }
