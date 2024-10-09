@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.flamingo.models.Usuario;
-import com.flamingo.models.Orden; // Asegúrate de tener esta clase definida
-import com.flamingo.models.Producto; // Asegúrate de tener esta clase definida
+import com.flamingo.models.Orden;
+import com.flamingo.models.Producto;
 
 @WebServlet("/RegistrarUsuario")
 public class Registro extends HttpServlet {
