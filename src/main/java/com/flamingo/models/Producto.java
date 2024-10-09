@@ -58,4 +58,8 @@ public class Producto {
     public void setImagenes(List<String> imagenes) {
         this.imagenes = imagenes;
     }
-}
+
+	public DTProducto getDTProducto() {
+		DTProducto a = new DTProducto(this.nombre, this.descripcion, (float) this.precio);  
+		return a;
+	}

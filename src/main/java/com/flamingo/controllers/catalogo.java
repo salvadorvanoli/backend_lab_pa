@@ -10,6 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.flamingo.models.Producto;
+import com.flamingo.models.Categoria;
+
 
 @WebServlet("/catalogo")
 public class catalogo extends HttpServlet {
@@ -29,14 +32,11 @@ public class catalogo extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    // Métodos ficticios para obtener listas de productos y categorías
     private List<Producto> obtenerListaDeProductos() {
-        // Implementa tu lógica para obtener la lista de productos
-        return null; // Reemplaza con la lógica real
+        return null; 
     }
 
     private List<Categoria> obtenerListaDeCategorias() {
-        // Implementa tu lógica para obtener la lista de categorías
-        return null; // Reemplaza con la lógica real
+        return null; 
     }
 }
