@@ -7,17 +7,21 @@ public class Producto {
     private double precio;
     private String descripcion;
     private String id; 
+    private String nombreTienda;
+    private int estrellas;
     private List<String> imagenes; 
     private List<Categoria> categorias; 
 
     // Constructor
-    public Producto(String nombre, double precio, String descripcion, String id, List<String> imagenes, List<Categoria> categorias) {
+    public Producto(String nombre, double precio, String descripcion, String id, List<String> imagenes, List<Categoria> categorias, String nombreTienda , int estrellas) {
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.id = id;
         this.imagenes = imagenes;
         this.categorias = categorias;
+        this.nombreTienda = nombreTienda;
+        this.estrellas = estrellas;
     }
 
     // Getters y Setters
@@ -67,5 +71,13 @@ public class Producto {
 
     public void setCategorias(List<Categoria> categorias) { 
         this.categorias = categorias;
+    }
+    
+    public String getNombreTienda() {
+    	return this.nombreTienda;
+    }
+    
+    public int getEstrellas() {
+    	return this.estrellas;
     }
 }

@@ -28,7 +28,7 @@ public class Catalogo extends HttpServlet {
         request.setAttribute("productos", listaDeProductos);
         request.setAttribute("categorias", listaDeCategorias);
         
-        request.getRequestDispatcher("../../../../webapp/WEB-INF/catalogo/catalogo.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/catalogo/catalogo.jsp").forward(request, response);
     }
 
     @SuppressWarnings("null")
@@ -38,8 +38,8 @@ public class Catalogo extends HttpServlet {
     	List<Categoria> Cereales = new ArrayList<>();
     	Cereales.add(Cerealescategoria);
     	
-    	Producto a = new Producto("Cereal Saludable", 4.9 , "todo muy muy saludable" , "1", null, Cereales); 
-    	Producto b = new Producto("Cereal ", 2.5 , "todo nada nada saludable" , "2", null, Cereales); 
+    	Producto a = new Producto("Cereal Saludable", 4.9 , "todo muy muy saludable" , "1", null, Cereales,  "DD Market", 5); 
+    	Producto b = new Producto("Cereal ", 2.5 , "todo nada nada saludable" , "2", null, Cereales, "BCT Market", 3); 
     	
     	List<Producto> lista = new ArrayList<>();
     	lista.add(a);
@@ -58,7 +58,7 @@ public class Catalogo extends HttpServlet {
     	Categoria Saludables = new Categoria("Saludables",  Cereales);
     	Categoria Bebidas = new Categoria("Bebidas",  null);
     	
-    	List<Categoria> todas = null;
+    	List<Categoria> todas = new ArrayList<>();
     	todas.add(Dulces);
     	todas.add(Saludables); 
     	todas.add(Bebidas);

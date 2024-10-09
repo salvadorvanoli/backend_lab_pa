@@ -36,72 +36,104 @@
         </header>
     </div>
 
-    <div class="container-fluid w-100">
-        <div class="row">
-            <!-- Aside -->
-            <aside id="aside" class="aside-1 scrolleable col-3 row">
-                <%
-                    List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+<div class="container-fluid w-100"> 
+    <div class="row">
+        <!-- Aside -->
+        <aside id="aside" class="aside-1 scrolleable col-3 row">
+            <%
+                List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                
+                if (categorias != null) { // Verifica que categorias no sea null
                     for (Categoria categoria : categorias) {
-                %>
-                    <div class="dropdown">
-                        <button class="dropbtn">&#9654; <%= categoria.getNombre() %></button>
-                        <div class="dropdown-content">
+            %>
+                <div class="dropdown">
+                    <button class="dropbtn">&#9654; <%= categoria.getNombre() %></button>
+                    <div class="dropdown-content">
+                        <%
+                            List<Categoria> hijas = categoria.getHijas();
+                            if (hijas != null) { // Verifica que hijas no sea null
+                                for (Categoria subcategoria : hijas) {
+                        %>
+                            <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombre() %></a>
                             <%
-                                for (Categoria subcategoria : categoria.getHijos()) {
+                                List<Categoria> subHijas = subcategoria.getHijas();
+                                if (subHijas != null) { // Verifica que subHijas no sea null
+                                    for (Categoria subsubcategoria : subHijas) {
                             %>
-                                <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombre() %></a>
-                                <%
-                                    for (Categoria subsubcategoria : subcategoria.getHijos()) {
-                                %>
-                                    <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombre() %></a>
-                                <%
-                                    }
-                                %>
+                                <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombre() %></a>
                             <%
+                                    }
                                 }
                             %>
-                        </div>
+                        <%
+                                } // Fin del for de subcategorías
+                            } else {
+                        %>
+                            <p>No hay subcategorías disponibles.</p>
+                        <%
+                            } // Fin de la verificación de hijas
+                        %>
                     </div>
-                <%
-                    }
-                %>
-            </aside>
+                </div>
+            <%
+                    } // Fin del for de categorías
+                } else {
+            %>
+                <p>No hay categorías disponibles.</p>
+            <%
+                } // Fin de la verificación de categorías
+            %>
+        </aside>
+    </div>
+</div>
+
 
             <!-- Productos -->
             <main id="prods" class="col-12 col-md">
-                <%
-                    List<Producto> productos = (List<Producto>) request.getAttribute("productos");
-                    for (Producto producto : productos) {
-                %>
-                    <article class="rectangle-1 row" onclick="verInfoProducto(<%= producto.getId() %>)">
-                        <img src="<%= producto.getImagenes().get(0) %>" class="col-3 image-1" alt="Imagen del producto">
-                        <div class="col-9 row todo-lodemas">
-                            <div class="row col-12 item-estrellas">
-                                <div class="col item-1"><%= producto.getNombre() %></div>
-                                <div class="col conjunto_estrellas">
-                                    <%
-                                        for (int i = 1; i <= 5; i++) {
-                                    %>
-                                        <span class="fa fa-star <%= (i <= producto.getEstrellas() ? "checked" : "") %>"></span>
-                                    <%
-                                        }
-                                    %>
-                                </div>
-                            </div>
-                            <div class="tienda-x col-12"><%= producto.getTienda() %></div>
-                            <div class="row col-12 precio-carrito">
-                                <div class="col precio">$UYU <%= producto.getPrecio() %></div>
-                                <div class="col-2 row">
-                                    <div class="col carrito fa-solid fa-cart-shopping"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                <%
-                    }
-                %>
-            </main>
+			    <%
+			        List<Producto> productos = (List<Producto>) request.getAttribute("productos");
+			        
+			        if (productos != null && !productos.isEmpty()) { // Verifica que productos no sea null y no esté vacío
+			            for (Producto producto : productos) {
+			                // Verifica que el producto tenga imágenes antes de acceder a la primera
+			                String imagen = (producto.getImagenes() != null && !producto.getImagenes().isEmpty()) 
+			                                ? producto.getImagenes().get(0) 
+			                                : "ruta/por/defecto.jpg"; // Coloca una ruta de imagen por defecto aquí
+			
+			    %>
+			                <article class="rectangle-1 row" onclick="verInfoProducto(<%= producto.getId() %>)">
+			                    <img src="<%= imagen %>" class="col-3 image-1" alt="Imagen del producto">
+			                    <div class="col-9 row todo-lodemas">
+			                        <div class="row col-12 item-estrellas">
+			                            <div class="col item-1"><%= producto.getNombre() %></div>
+			                            <div class="col conjunto_estrellas">
+			                                <%
+			                                    for (int i = 1; i <= 5; i++) {
+			                                %>
+			                                    <span class="fa fa-star <%= (i <= producto.getEstrellas() ? "checked" : "") %>"></span>
+			                                <%
+			                                    }
+			                                %>
+			                            </div>
+			                        </div>
+			                        <div class="tienda-x col-12"><%= producto.getNombreTienda() %></div>
+			                        <div class="row col-12 precio-carrito">
+			                            <div class="col precio">$UYU <%= producto.getPrecio() %></div>
+			                            <div class="col-2 row">
+			                                <div class="col carrito fa-solid fa-cart-shopping"></div>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </article>
+			            <%
+			            } // Fin del for de productos
+			        } else {
+			            %>
+			            <p>No hay productos disponibles.</p>
+			            <%
+			        } // Fin de la verificación de productos
+			        %>
+			</main>
         </div>    
     </div>
 </body>
