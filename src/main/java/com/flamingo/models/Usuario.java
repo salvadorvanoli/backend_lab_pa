@@ -36,17 +36,111 @@ public class Usuario {
         this.productos = productos;
     }
 
-    // Getters y Setters (omitir por brevedad)
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getWeb() {
+		return web;
+	}
+
+	public void setWeb(String web) {
+		this.web = web;
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getContraseña() {
+		return contraseña;
+	}
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+	}
+
+	public List<Orden> getOrdenes() {
+		return ordenes;
+	}
+
+	public void setOrdenes(List<Orden> ordenes) {
+		this.ordenes = ordenes;
+	}
+
+	public List<Producto> getProductos() {
+		return productos;
+	}
+
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
+	}
+
+ 
     
-    // Ejemplo de Getter
-    public String getNombre() {
-        return nombre;
-    }
-
-    // Ejemplo de Setter
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    // Agregar otros getters y setters aquí...
+   
 }
