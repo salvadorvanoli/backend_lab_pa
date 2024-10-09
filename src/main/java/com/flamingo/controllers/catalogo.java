@@ -1,7 +1,8 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
-import java.util.List; 
+import java.util.List;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-// Anotación para indicar la URL del servlet
+
 @WebServlet("/catalogo")
 public class catalogo extends HttpServlet {
     private static final long serialVersionUID = 1L; // Mejor práctica para el serialVersionUID
