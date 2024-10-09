@@ -11,19 +11,18 @@
 </head>
 <body>
     <main class="container-fluid p-0 d-flex">
-        <article class="rectangle-1 text-wrap">
+        <div class="rectangle-1 text-wrap">
             <!-- Imagen del registro -->
             <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go" class="image-placeholder-1">
-            <h1 class="w-100 textoRegistrar">Registrar</h1>
+            <h1 class="w-100 textoRegistrar"> Registrar </h1>
     
-            <!-- Email -->
+            <!-- email -->
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
                 <label for="floatingInput">Correo electrónico</label>
                 <div class="invalid-feedback" id="emailWarning"></div> <!-- Para el mensaje de advertencia -->
             </div>
 
-            <!-- Nickname -->
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="floatingInputNickname" placeholder="Nickname" required>
                 <label for="floatingInputNickname">Nickname</label>
@@ -36,14 +35,14 @@
     
             <div class="row g-2">
                 <div class="col-md-6">
-                    <button type="button" class="button-cancelar">Cancelar</button>    
+                    <button type="button" class="button-cancelar"> Cancelar</button>    
                 </div>    
     
                 <div class="col-md-6">
-                    <button type="button" class="button-registrar">Registrar</button>    
+                    <button type="button" class="button-registrar"> Registrar</button>    
                 </div> 
             </div>
-        </article>    
+        </div>    
     </main>
 
     <!-- JavaScript -->
@@ -57,9 +56,9 @@
 
             // Función para validar el formato de correo electrónico
             function esCorreoValido(email) {
-                const regex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-                return regex.test(email);
-            }
+    			const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    			return regex.test(email);
+			}
 
             // Verificar email
             emailInput.addEventListener('input', function() {
@@ -125,7 +124,7 @@
                     localStorage.setItem('credencialesTemp', JSON.stringify(credencialesTemp));
 
                     alert('Credenciales temporales guardadas. Procede al siguiente paso.');
-                    window.location.href = 'ingresarDatos.html';
+                    window.location.href = '${pageContext.request.contextPath}/ingresardatos';
                 }
             };
         });

@@ -1,5 +1,6 @@
 package com.flamingo.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Usuario {
@@ -35,6 +36,11 @@ public class Usuario {
         this.ordenes = ordenes;
         this.productos = productos;
     }
+
+	public Usuario(String nombre2, String apellido2, String contrasena2, LocalDate localDate, String sitioWeb,
+			String compania, String tipoUsuario) {
+		// TODO Auto-generated constructor stub
+	}
 
 	public String getNombre() {
 		return nombre;
