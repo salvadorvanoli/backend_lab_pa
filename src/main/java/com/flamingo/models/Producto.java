@@ -63,3 +63,5 @@ public class Producto {
 		DTProducto a = new DTProducto(this.nombre, this.descripcion, (float) this.precio);  
 		return a;
 	}
+	
+}
