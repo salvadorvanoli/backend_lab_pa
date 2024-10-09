@@ -8,14 +8,16 @@ public class Producto {
     private String descripcion;
     private String id; 
     private List<String> imagenes; 
+    private List<Categoria> categorias; 
 
     // Constructor
-    public Producto(String nombre, double precio, String descripcion, String id, List<String> imagenes) {
+    public Producto(String nombre, double precio, String descripcion, String id, List<String> imagenes, List<Categoria> categorias) {
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.id = id;
         this.imagenes = imagenes;
+        this.categorias = categorias;
     }
 
     // Getters y Setters
@@ -59,9 +61,11 @@ public class Producto {
         this.imagenes = imagenes;
     }
 
-	public DTProducto getDTProducto() {
-		DTProducto a = new DTProducto(this.nombre, this.descripcion, (float) this.precio);  
-		return a;
-	}
-	
+    public List<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<Categoria> categorias) { 
+        this.categorias = categorias;
+    }
 }
