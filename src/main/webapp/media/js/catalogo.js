@@ -1,4 +1,3 @@
-// Asumiendo que las categorías están almacenadas en el localStorage  
 const categor = JSON.parse(localStorage.getItem('categorias')) || [];
 const prod = JSON.parse(localStorage.getItem('productos')) || [];
 
