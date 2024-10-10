@@ -11,20 +11,27 @@ public class Producto {
     private List<String> imagenes;
     private List<Categoria> categorias;
     private Proveedor proveedor;
+    int estrellas;
+    String nombreTienda;
+    List<Comentario> comentarios;
 
     // Constructor
-    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
+    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda, List<Comentario> comentarios) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.especificacion = especificacion;
         this.numReferencia = numReferencia;
         this.precio = precio;
+        this.estrellas = estrellas;
+        this.nombreTienda = nombreTienda;
         
         this.imagenes = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
         this.categorias = new ArrayList<>();
         
         this.imagenes = imagenes;
         this.categorias = categorias;
+        this.comentarios = comentarios;
         this.proveedor = proveedor;
     }
 
@@ -60,6 +67,18 @@ public class Producto {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+    
+    public void setNombreTienda(String nombreTienda) {
+    	this.nombreTienda = nombreTienda;
+    }
+    
+    public void setEstrellas(int estrellas) {
+    	this.estrellas = estrellas;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+    	this.comentarios = comentarios;
+    }
 
     // Getters
     public String getNombreProducto() {
@@ -89,6 +108,10 @@ public class Producto {
     public List<Categoria> getCategorias() {
         return categorias;
     }
+    
+    public List<Comentario> getComentarios() {
+    	return this.comentarios;
+    }
 
     public Proveedor getProveedor() {
         return proveedor;
@@ -97,6 +120,14 @@ public class Producto {
     // Método para obtener los datos básicos del producto
     public DTProducto getDTProducto() {
         return new DTProducto(nombreProducto, numReferencia, descripcion, precio);
+    }
+    
+    public String getNombreTienda() {
+    	return this.nombreTienda;
+    }
+    
+    public int getEstrellas() {
+    	return this.estrellas;
     }
 
     // Método para obtener los datos detallados del producto
