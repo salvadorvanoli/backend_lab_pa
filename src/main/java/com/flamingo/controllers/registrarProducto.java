@@ -3,7 +3,6 @@ package com.flamingo.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

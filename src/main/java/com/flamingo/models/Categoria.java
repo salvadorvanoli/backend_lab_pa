@@ -17,9 +17,16 @@ public class Categoria {
     private String nombreCat;
     private List<Producto> productos;
     private Categoria padre;
-    private List<Categoria> hijos;
+    private List<Categoria> hijas;
     private boolean tieneProductos;
 
+    
+    
+    
+    public boolean tieneSubcategorias() {
+        return hijos != null && !hijos.isEmpty();
+    }
+    
     // Constructor
     public Categoria(String nombreCat, List<Categoria> hijos) {
         this.nombreCat = nombreCat;
@@ -112,8 +119,6 @@ public class Categoria {
 	    return nombreCat; 
 	}
 	
-	 public boolean tieneSubcategorias() {
-	        return hijos != null && !hijos.isEmpty();
-	    }
+	 
 }
 

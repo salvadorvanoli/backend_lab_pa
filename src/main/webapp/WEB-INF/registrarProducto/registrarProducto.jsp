@@ -4,8 +4,8 @@
 <%@page import="com.flamingo.models.Usuario"%>
 <%@page import="com.flamingo.models.GestorTemp"%>
 <%@page import="java.util.List"%>
-
 <%@page import="java.util.Collection"%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -315,7 +315,7 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn btn-secondary" onclick="reloadPage()">Agregar otro producto</button>
-	                <button type="button" class="btn btn-primary" onclick="window.location.href='infoProducto.html'">Ver detalles del producto</button>
+	                
 	            </div>
 	        </div>
 	    </div>
@@ -480,10 +480,7 @@
 	        const inputReferencia = document.getElementById("numeroReferencia");
 	        const inputPrecio = document.getElementById("precioProducto");
 	        const inputDescripcion = document.getElementById("descripcionProducto");
-	        console.log("Título:", inputTitulo);
-	        console.log("Número de Referencia:", inputReferencia);
-	        console.log("Precio:", inputPrecio);
-	        console.log("Descripción:", inputDescripcion);
+	        
 	        // Expresión regular para validar que el título solo contenga letras, números y espacios
 	        const regexTitulo = /^[a-zA-Z0-9\s]+$/;
 
@@ -603,7 +600,29 @@
 
 	        // Mostrar el modal de éxito
 	        $('#modalCarrito').modal('show');
-
+	        console.log(nuevoProducto.precio);
+	        console.log(nuevoProducto.nombre);
+	        console.log(nuevoProducto.categorias);
+	        console.log(nuevoProducto.especificaciones);
+	        
+	     // Enviar el nuevo producto al servidor
+	        fetch('/api/productos', {
+	            method: 'POST',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify(nuevoProducto) // Enviar el objeto nuevoProducto como JSON
+	        })
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Error al agregar el producto');
+	            }
+	            return response.json(); // Convertir la respuesta en JSON
+	        })
+	        .then(data => {
+	            console.log('Producto agregado correctamente:', data);
+	            // Aquí puedes manejar la respuesta del servidor
+	        })
 	        // Reiniciar el objeto nuevoProducto para futuros registros
 	        reiniciarNuevoProducto();
 	    });
@@ -625,15 +644,12 @@
 
 <!-- Cargar Font Awesome -->
 <script src="https://kit.fontawesome.com/d795c6c237.js" crossorigin="anonymous"></script>
+
+<!-- Scripts personalizados -->
 <script src="js/init.js"></script>
-<!-- Tu script personalizado -->
-<script src="js/registrarProducto.js"></script>
-<script src="js/infoProducto.js"></script>
-<script src="js/iniciarSesion.js"></script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="media/js/infoProducto.js"></script>
+<script src="media/js/iniciarSesion.js"></script>
 
 </html>
+
 
