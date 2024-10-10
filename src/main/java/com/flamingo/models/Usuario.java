@@ -1,10 +1,12 @@
 package com.flamingo.models;
 
-//import clases.DTFecha; DA ERROR
+import java.util.HashMap;
+
+import com.flamingo.models.DTFecha;
 
 public class Usuario{
     private String nickname;
-    private String  nombre;
+    private String nombre;
     private String apellido;
     private String email;
     private DTFecha fechaNac;

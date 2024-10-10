@@ -1,8 +1,14 @@
 package com.flamingo.models;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class Cliente extends Usuario{
+		private HashMap<Integer, Cantidad> carrito;
 		private List <OrdenDeCompra> OrdenesDeCompras;
 		private List <Comentario> Comentarios;
 		
@@ -10,6 +16,7 @@ public class Cliente extends Usuario{
 			super(nickName, nombre, apellido, email, fecha, foto, contrasenia);
 			this.OrdenesDeCompras = new ArrayList<>();
 			this.Comentarios = new ArrayList<>();
+			this.carrito = new HashMap<>();
 		}
 		
 		public DTCliente getDTCliente() {
@@ -33,14 +40,25 @@ public class Cliente extends Usuario{
 			return this.OrdenesDeCompras;
 		}
 		
-		public List <Comentario> getComentarios( ){
+		public List <Comentario> getComentarios(){
 			return this.Comentarios;
+		}
+		
+		public HashMap<Integer, Cantidad> getCarrito(){
+			return this.carrito;
+		}
+		
+		public void agregarProducto(Cantidad prod) {
+			if (this.carrito.containsKey(prod.getProducto().getNumero()));
+			this.carrito.put(prod.getProducto().getNumero(), prod);
+		}
+		
+		public void quitarProducto(int numProd) {
+			this.carrito.remove(numProd);
 		}
 		
 		public DTClienteDetallado getDTClienteDetallado(){
 			DTClienteDetallado c = new DTClienteDetallado(this.getNickname(), this.getEmail(), this.getNombre(), this.getApellido(), this.getFechaNac(), this.getFoto());
 			return c;
-		}
-		
-		
+		}	
 }

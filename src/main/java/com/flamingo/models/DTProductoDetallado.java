@@ -45,7 +45,7 @@ public class DTProductoDetallado extends DTProducto{
 	}
 	public DTProductoDetallado(String nombre, String descripcion, float precio, int numReferencia,
 			String especificaciones, List<String> categorias, DTProveedor proveedor, List<String> imagenes) {
-		super(nombre, descripcion, precio);
+		super(nombre, numReferencia, descripcion, precio);
 		this.numReferencia = numReferencia;
 		this.especificaciones = especificaciones;
 		this.categorias = categorias;

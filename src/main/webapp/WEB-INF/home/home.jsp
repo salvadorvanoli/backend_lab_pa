@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.flamingo.models.Cliente"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>

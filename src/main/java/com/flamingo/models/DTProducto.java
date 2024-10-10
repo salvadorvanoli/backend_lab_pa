@@ -6,11 +6,13 @@ public class DTProducto {
 	private String nombre;
 	private String descripcion;
 	private float precio;
+	private int numReferencia;
 	
 	
-	public DTProducto(String nombre, String descripcion, float precio) {
+	public DTProducto(String nombre, int num, String descripcion, float precio) {
 		super();
 		this.nombre = nombre;
+		this.numReferencia = num;
 		this.descripcion = descripcion;
 		this.precio = precio;
 	}
@@ -32,6 +34,10 @@ public class DTProducto {
 	}
 	public void setPrecio(float precio) {
 		this.precio = precio;
+	}
+	
+	public int getNumero() {
+		return this.numReferencia;
 	}
 	
 	public String toString() {
