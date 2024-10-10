@@ -156,10 +156,15 @@
 <script>
 	const categor = <%= categoriasJson %>;
 	const prod = <%= productosJson %>;
-		
-	// Asegúrate de que las listas sean válidas para su uso
-    console.log(categor);
-    console.log(prod);
+
+	if (!categor || categor.length === 0) {
+	    console.log("La lista de categorías está vacía o no está definida.");
+	    // Aquí puedes agregar más lógica para manejar el caso vacío
+	}
+
+	if (!prod || prod.length === 0) {
+	    console.log("La lista de productos está vacía o no está definida.");
+	}
 	
 	// Manejar el cambio de estado de las categorías
 	const categoriaLinks = document.querySelectorAll('.dropdown-item');
@@ -338,9 +343,10 @@
 
 	// Función para cargar el catálogo
 	function cargarCatalogo(prod) {
+		
 	    const contenedorPadre = document.getElementById("prods");
 	    contenedorPadre.innerHTML = ''; // Limpiar el contenedor antes de agregar los productos
-
+	    
 	    if (prod.length === 0) {
 	        return;
 	    }
