@@ -25,7 +25,7 @@ import com.flamingo.models.Cliente;
 import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 
 @WebServlet("/VerOrdenDeCompra")
-public class Orden extends HttpServlet {
+public class infoOrden extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
    
@@ -49,18 +49,20 @@ public class Orden extends HttpServlet {
     	Cliente cliente = (Cliente) user;
     	List<OrdenDeCompra> ordenes = cliente.getOrdenesDeCompras();
     	
+    	OrdenDeCompra ordenSeleccionada = null;
     	
     	for(OrdenDeCompra ord : ordenes){
     		if(ord.getNumero() == id){
-    			request.setAttribute("orden", ord);
+    			ordenSeleccionada = ord;
     			break;
     		}
     	}
     	
-    	if(id == -1){
+    	if(ordenSeleccionada == null){
     		throw new OrdenDeCompraNoExisteException("La orden de compra no existe");
     	}
-    
+    	
+    	request.setAttribute("orden", ordenSeleccionada);
     	RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/orden/orden.jsp");
     	dispatcher.forward(request, response);
     	
@@ -69,29 +71,15 @@ public class Orden extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
 			processRequest(request, response);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OrdenDeCompraNoExisteException e) {
-			// TODO Auto-generated catch block
+		} catch (ServletException | IOException | OrdenDeCompraNoExisteException e) {
 			e.printStackTrace();
 		}
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+    	try {
 			processRequest(request, response);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OrdenDeCompraNoExisteException e) {
-			// TODO Auto-generated catch block
+		} catch (ServletException | IOException | OrdenDeCompraNoExisteException e) {
 			e.printStackTrace();
 		}
     }
