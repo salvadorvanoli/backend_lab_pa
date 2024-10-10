@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nicknameInput = document.getElementById('floatingInputNickname');
     const emailWarning = document.getElementById('emailWarning');
     const nicknameWarning = document.getElementById('nicknameWarning');
+    const iniciarSesionButton = document.getElementById('IniciarSesion');
 
     // Función para validar el formato de correo electrónico
     function esCorreoValido(email) {
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Obtener usuarios registrados desde el sistema
     let usuariosRegistrados = [];
-    fetch('/usuarios')
+    fetch(`${contextPath}/usuarios`)
         .then(response => response.json())
         .then(data => {
             usuariosRegistrados = data; // Supongo que la respuesta es un arreglo de usuarios
@@ -23,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar email
     emailInput.addEventListener('input', function() {
         const email = emailInput.value.trim();
-        
         const emailExiste = usuariosRegistrados.some(user => user.email === email);
 
         if (!esCorreoValido(email)) {
@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar nickname
     nicknameInput.addEventListener('input', function() {
         const nickname = nicknameInput.value.trim();
-
         const nicknameExiste = usuariosRegistrados.some(user => user.nickname === nickname);
 
         if (nicknameExiste) {
@@ -53,12 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const IniciarSesion = document.getElementById('IniciarSesion');
+    // Redirigir a la página de inicio de sesión
+    iniciarSesionButton.onclick = function() {
+        window.location.href = `${contextPath}/iniciarsesion`; 
+    };
 
-    IniciarSesion.onclick = function() {
-        window.location.href = `${pageContext.request.contextPath}/iniciarSesion`; 
-    }; // Se agregó un punto y coma aquí
-
+    // Verificación y redirección para el registro
     buttonRegistrar.onclick = function() {
         const email = emailInput.value.trim();
         const nickname = nicknameInput.value.trim();
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Ya existe un usuario registrado con ese email o nickname.');
         } else {
             // Redirigir con los parámetros email y nickname para el controlador
-            window.location.href = `${pageContext.request.contextPath}/ingresardatos?email=${encodeURIComponent(email)}&nickname=${encodeURIComponent(nickname)}`;
+            window.location.href = `${contextPath}/ingresardatos?email=${encodeURIComponent(email)}&nickname=${encodeURIComponent(nickname)}`;
         }
     };
 });
