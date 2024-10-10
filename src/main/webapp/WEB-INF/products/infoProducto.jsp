@@ -151,7 +151,7 @@
                     <div class="linea-resumen"></div>
 						
                     <div id="precio-container">
-                    	<%= producto.getPrecio() %>
+                    	$<%= producto.getPrecio() %>
                     </div>
 
                     <div class="linea-resumen"></div>
@@ -261,19 +261,8 @@
 </body>
 
     <script type="text/javascript">
-	    let productoSeleccionado = JSON.parse(localStorage.getItem("productoSeleccionado")) || productos[0];
-	
-	
-	    function obtenerCategorias(categoria) {
-	        let nombres = categoria.nombre;
-	        if (categoria.hijos && categoria.hijos.length > 0) {
-	            for (let i = 0; i < categoria.hijos.length; i++) {
-	                // Si no es el último hijo, añadir el símbolo '>' entre las categorías
-	                nombres += " > " + obtenerCategorias(categoria.hijos[i]);
-	            }
-	        }
-	        return nombres;
-	    }
+
+
 	
 	    // Lógica para cargar el producto en la página
 	    function cargarProducto(){
@@ -502,8 +491,6 @@
 	        localStorage.setItem("productos", JSON.stringify());
 	        location.reload();
 	    }
-	
-	    cargarProducto();
 	
 	    // Lógica para agregar un producto al carrito
 	
