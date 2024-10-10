@@ -13,6 +13,7 @@ public class Producto {
     private Proveedor proveedor;
     int estrellas;
     String nombreTienda;
+    List<Comentario> comentarios;
 
     // Constructor
     public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda) {
@@ -23,7 +24,9 @@ public class Producto {
         this.precio = precio;
         this.estrellas = estrellas;
         this.nombreTienda = nombreTienda;
+        
         this.imagenes = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
         this.categorias = new ArrayList<>();
         
         this.imagenes = imagenes;
@@ -72,6 +75,10 @@ public class Producto {
     	this.estrellas = estrellas;
     }
 
+    public void setComentarios(List<Comentario> comentarios) {
+    	this.comentarios = comentarios;
+    }
+
     // Getters
     public String getNombreProducto() {
         return nombreProducto;
@@ -99,6 +106,10 @@ public class Producto {
 
     public List<Categoria> getCategorias() {
         return categorias;
+    }
+    
+    public List<Comentario> getComentarios() {
+    	return this.comentarios;
     }
 
     public Proveedor getProveedor() {
