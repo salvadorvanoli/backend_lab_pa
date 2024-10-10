@@ -1,6 +1,6 @@
 package com.flamingo.models;
 
-// import models.DTFecha; Tira error
+//import clases.DTFecha; DA ERROR
 
 public class Usuario{
     private String nickname;

@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.models.Comentario;
 import com.flamingo.models.EstadoSesion;
-import com.flamingo.models.Respuesta;
 
 /**
  * Servlet implementation class Home

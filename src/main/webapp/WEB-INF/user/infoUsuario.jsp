@@ -116,7 +116,7 @@
 	        "tipo": "proveedor",
 	        "email": "salva@salva.com",
 	        "fecha": "2004-05-01",
-	        "foto": "img/test.jpg",
+	        "foto": "media/images/test.jpg",
 	        "web": "salva.com",
 	        "empresa": "salvaEnterprise",
 	        "id": "0",
