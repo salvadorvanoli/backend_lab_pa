@@ -1,3 +1,5 @@
+
+/*
 package com.flamingo.controllers;
 import com.flamingo.exceptions.UsuarioNoEncontrado;
 import java.util.ArrayList;
@@ -74,4 +76,4 @@ public class gestorTemporal {
         return usuarios; // Retorna la lista de usuarios
     }
 
-}
+}*/

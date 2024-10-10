@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.flamingo.models.Usuario;
 
-@WebServlet("/ingresardatos")
+@WebServlet("/registrar")
 public class Registro extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtener los parámetros enviados desde el JSP
@@ -25,8 +25,8 @@ public class Registro extends HttpServlet {
         session.setAttribute("email", email);
         session.setAttribute("nickname", nickname);
 
-        // Redirigir a otra página o JSP si lo prefieres
-        response.sendRedirect(request.getContextPath() + "/proximaPagina"); // Cambia /proximaPagina a la ruta que desees
+        // Redirigir a ingresar datos
+        response.sendRedirect(request.getContextPath() + "/ingresardatos"); // Cambia /proximaPagina a la ruta que desees
     }
 }
 

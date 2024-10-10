@@ -10,6 +10,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import com.flamingo.exceptions.ContraseniaIncorrectaException;
+import com.flamingo.exceptions.UsuarioRepetidoException;
+import com.flamingo.models.DTFecha;
+import com.flamingo.models.ISistema;
+import com.flamingo.models.SistemaFactory;
+import com.flamingo.models.Usuario;
 
 @WebServlet("/ingresardatos")
 public class IngresarDatos extends HttpServlet {
@@ -25,6 +33,13 @@ public class IngresarDatos extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<String> errores = new ArrayList<>();
+        
+        // Obtener email y nickname de la sesión
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        String nickname = (String) session.getAttribute("nickname");
+        
+        String tipoUsuario = request.getParameter("tipoUsuario");
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         String contraseña = request.getParameter("contraseña");
@@ -61,32 +76,41 @@ public class IngresarDatos extends HttpServlet {
             errores.add("La compañía es obligatoria.");
         }
 
+        // Obtener la lista de usuarios registrados a través de ObtenerUsuarios
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        List<Usuario> usuariosRegistrados = sis.getUsuarios();
+
         // Si hay errores, redirigir de vuelta al formulario con mensajes de error
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
+            request.setAttribute("usuariosRegistrados", usuariosRegistrados); // Pasar la lista de usuarios al JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/ingresarDatos.jsp");
             dispatcher.forward(request, response); 
         } else {
-           
-        	// Si no hay errores, se agrega el usuario a la lista
-            gestorTemporal gestor = gestorTemporal.getInstance();
+           // Utiliza email y nickname desde la sesión
+           try {
+        		// Dividir el string por el separador "/"
+        		String[] partes = fecha.split("/");
+        		    int dia = Integer.parseInt(partes[0]);
+        		    int mes = Integer.parseInt(partes[1]);
+        		    int anio = Integer.parseInt(partes[2]);
 
-            // Crear y agregar el nuevo usuario
-            gestor.agregarUsuario(
-                nombre, 
-                apellido, 
-                nombre, 
-                "cliente", 
-                request.getParameter("email"), 
-                fecha, 
-                foto, 
-                sitioWeb, 
-                compañia, 
-                "nuevoId",
-                contraseña
-            );
-            // Redirigir a una página
-        	
+        		    DTFecha fechaDT = new DTFecha(dia, mes, anio);
+        		    if ("Proveedor".equals(tipoUsuario)) {
+        		    	sis.altaUsuarioProveedor(nickname, email, nombre, apellido, fechaDT, compañia, sitioWeb, foto, contraseña, repetirContraseña);
+        		    }
+        		    if("Cliente".equals(tipoUsuario)) {
+        		    	sis.altaUsuarioCliente(nickname, email, nombre, apellido, fechaDT, foto, contraseña, repetirContraseña);
+        		    }
+			
+		} catch (UsuarioRepetidoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ContraseniaIncorrectaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+            // Redirigir a iniciar sesion
             response.sendRedirect(request.getContextPath() + "/iniciarSesion.jsp"); 
         }
     }
