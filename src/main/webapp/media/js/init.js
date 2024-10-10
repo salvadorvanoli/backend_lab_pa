@@ -3,7 +3,7 @@ let usuarios = [
         "nombre": "Salvador",
         "apellido": "Vanoli",
         "nickname": "salvaelpro777",
-        "tipo": "proveedor",
+        "tipo": "Proveedor",
         "email": "salva@salva.com",
         "fecha": "2004-05-01",
         "foto": "img/test.jpg",
