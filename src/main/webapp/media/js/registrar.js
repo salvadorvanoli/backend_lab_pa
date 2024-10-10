@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/usuarios')
         .then(response => response.json())
         .then(data => {
-            usuariosRegistrados = data; // Supongo q la respuesta es un arreglo de usuarios
+            usuariosRegistrados = data; // Supongo que la respuesta es un arreglo de usuarios
         })
         .catch(error => console.error('Error al obtener usuarios:', error));
 
@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const IniciarSesion = document.getElementById('IniciarSesion');
 
     IniciarSesion.onclick = function() {
-        window.location.href = '${pageContext.request.contextPath}/iniciarSesion'; 
+        window.location.href = `${pageContext.request.contextPath}/iniciarSesion`; 
+    }; // Se agregó un punto y coma aquí
 
     buttonRegistrar.onclick = function() {
         const email = emailInput.value.trim();

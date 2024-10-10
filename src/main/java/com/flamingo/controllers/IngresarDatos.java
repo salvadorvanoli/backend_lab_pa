@@ -76,7 +76,7 @@ public class IngresarDatos extends HttpServlet {
             errores.add("La compañía es obligatoria.");
         }
 
-        // Obtener la lista de usuarios registrados a través de ObtenerUsuarios
+        
         ISistema sis = SistemaFactory.getInstancia().getISistema();
         List<Usuario> usuariosRegistrados = sis.getUsuarios();
 

@@ -99,4 +99,8 @@ public abstract class ISistema{
 	
 	public abstract void setTodoNull();
 
+	public abstract void iniciarSesion(Usuario usuarioEncontrado);
+
+	
+
 }
