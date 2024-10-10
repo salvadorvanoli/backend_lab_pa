@@ -26,37 +26,37 @@ public class GestorTemp {
         
         // Subcategoría de Celulares
         Categoria celulares = new Categoria("Celulares", new ArrayList<>());
-        celulares.getHijas().add(new Categoria("Samsung", new ArrayList<>())); // Subcategoría de Samsung
-        celulares.getHijas().add(new Categoria("iPhone", new ArrayList<>()));  // Subcategoría de iPhone
-        celulares.getHijas().add(new Categoria("Xiaomi", new ArrayList<>()));   // Subcategoría de Xiaomi
-        electronica.getHijas().add(celulares);
+        celulares.getHijos().add(new Categoria("Samsung", new ArrayList<>())); // Subcategoría de Samsung
+        celulares.getHijos().add(new Categoria("iPhone", new ArrayList<>()));  // Subcategoría de iPhone
+        celulares.getHijos().add(new Categoria("Xiaomi", new ArrayList<>()));   // Subcategoría de Xiaomi
+        electronica.getHijos().add(celulares);
         
         // Subcategoría de Laptops
         Categoria laptops = new Categoria("Laptops", new ArrayList<>());
-        laptops.getHijas().add(new Categoria("Lenovo", new ArrayList<>())); // Subcategoría de Lenovo
-        laptops.getHijas().add(new Categoria("Dell", new ArrayList<>()));    // Puedes agregar más marcas si lo deseas
-        electronica.getHijas().add(laptops);
+        laptops.getHijos().add(new Categoria("Lenovo", new ArrayList<>())); // Subcategoría de Lenovo
+        laptops.getHijos().add(new Categoria("Dell", new ArrayList<>()));    // Puedes agregar más marcas si lo deseas
+        electronica.getHijos().add(laptops);
         
         categorias.add(electronica);
         
         // Otras categorías
         Categoria moda = new Categoria("Moda", new ArrayList<>());
-        moda.getHijas().add(new Categoria("Vestimenta Masculina", new ArrayList<>()));
-        moda.getHijas().add(new Categoria("Vestimenta Femenina", new ArrayList<>()));
+        moda.getHijos().add(new Categoria("Vestimenta Masculina", new ArrayList<>()));
+        moda.getHijos().add(new Categoria("Vestimenta Femenina", new ArrayList<>()));
         categorias.add(moda);
         
         Categoria hogarYCocina = new Categoria("Hogar y Cocina", new ArrayList<>());
         categorias.add(hogarYCocina);
         
         Categoria bellezaYSalud = new Categoria("Belleza y Salud", new ArrayList<>());
-        bellezaYSalud.getHijas().add(new Categoria("Suplementos", new ArrayList<>()));
-        bellezaYSalud.getHijas().add(new Categoria("Maquillaje", new ArrayList<>()));
+        bellezaYSalud.getHijos().add(new Categoria("Suplementos", new ArrayList<>()));
+        bellezaYSalud.getHijos().add(new Categoria("Maquillaje", new ArrayList<>()));
         categorias.add(bellezaYSalud);
         
         Categoria librosMusicaYPeliculas = new Categoria("Libros, Música y Películas", new ArrayList<>());
-        librosMusicaYPeliculas.getHijas().add(new Categoria("Libros", new ArrayList<>()));
-        librosMusicaYPeliculas.getHijas().add(new Categoria("Música", new ArrayList<>()));
-        librosMusicaYPeliculas.getHijas().add(new Categoria("Películas", new ArrayList<>()));
+        librosMusicaYPeliculas.getHijos().add(new Categoria("Libros", new ArrayList<>()));
+        librosMusicaYPeliculas.getHijos().add(new Categoria("Música", new ArrayList<>()));
+        librosMusicaYPeliculas.getHijos().add(new Categoria("Películas", new ArrayList<>()));
         categorias.add(librosMusicaYPeliculas);
         
         Categoria automotriz = new Categoria("Automotriz", new ArrayList<>());
@@ -93,7 +93,7 @@ public class GestorTemp {
 
     public Categoria obtenerCategoria(String nombre) {
         for (Categoria categoria : categorias) {
-            if (categoria.getNombre().equals(nombre)) {
+            if (categoria.getNombreCat().equals(nombre)) {
                 return categoria;
             }
         }
@@ -111,7 +111,7 @@ public class GestorTemp {
 
     public Producto obtenerProducto(String nombre) {
         for (Producto producto : productos) {
-            if (producto.getNombre().equals(nombre)) {
+            if (producto.getNombreProducto().equals(nombre)) {
                 return producto;
             }
         }

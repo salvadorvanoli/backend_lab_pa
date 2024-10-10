@@ -22,10 +22,10 @@
                     <a class="nav-link" href="catalogo.html">Catálogo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="infoUsuario.html"><i class="fa-solid fa-circle-user" id="icono-usuario"></i></a>
+                    <a class="nav-link" href="infoUsuario"><i class="fa-solid fa-circle-user" id="icono-usuario"></i></a>
                 </li>
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link px-3" id="carrito-button" href="carrito.html"><i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Carrito</a> <!-- aria-disabled="true" para desactivar -->
+                    <a class="nav-link px-3" id="carrito-button" href="/backend_lab_pa/carrito"><i class="fa-solid fa-cart-shopping"></i>&nbsp;&nbsp;Carrito</a> <!-- aria-disabled="true" para desactivar -->
                 </li>
             </ul>
         </div>

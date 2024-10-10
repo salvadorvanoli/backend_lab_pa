@@ -220,24 +220,24 @@
                     <div class="col-md-12 col-12">
                         <div class="row">
                             <div class="dropdown">
-                                <button class="<%= categoriaClase %>" onclick="agregarCategoria('<%= categoria.getNombre() %>')">
-                                    <%= categoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= categoria.getNombre() %>
+                                <button class="<%= categoriaClase %>" onclick="agregarCategoria('<%= categoria.getNombreCat() %>')">
+                                    <%= categoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= categoria.getNombreCat() %>
                                 </button>
 
                                 <!-- Si tiene subcategorías, las mostramos aquí -->
                                 <% if (categoria.tieneSubcategorias()) { %>
                                 <div class="dropdown-content">
-                                    <% for (Categoria subcategoria : categoria.getHijas()) { %>
+                                    <% for (Categoria subcategoria : categoria.getHijos()) { %>
                                     <div class="nested-dropdown">
-                                        <a href="#" onclick="agregarCategoria('<%= subcategoria.getNombre() %>')">
-                                            <%= subcategoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= subcategoria.getNombre() %>
+                                        <a href="#" onclick="agregarCategoria('<%= subcategoria.getNombreCat() %>')">
+                                            <%= subcategoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= subcategoria.getNombreCat() %>
                                         </a>
                                         <!-- Si hay sub-subcategorías, las mostramos aquí -->
                                         <% if (subcategoria.tieneSubcategorias()) { %>
                                         <div class="nested-dropdown-content">
-                                            <% for (Categoria subSubCategoria : subcategoria.getHijas()) { %>
-                                            <a href="#" onclick="agregarCategoria('<%= subSubCategoria.getNombre() %>')">
-                                                <%= subSubCategoria.getNombre() %>
+                                            <% for (Categoria subSubCategoria : subcategoria.getHijos()) { %>
+                                            <a href="#" onclick="agregarCategoria('<%= subSubCategoria.getNombreCat() %>')">
+                                                <%= subSubCategoria.getNombreCat() %>
                                             </a>
                                             <% } %>
                                         </div>
