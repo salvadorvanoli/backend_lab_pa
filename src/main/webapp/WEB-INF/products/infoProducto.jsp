@@ -20,6 +20,21 @@
     <%@page import="com.flamingo.models.OrdenDeCompra"%>
     <%@page import="com.flamingo.models.Categoria"%>
     <%@ page import="java.util.List" %>
+    
+    <style>
+    
+    	.linea-resumen {
+		    width: 100%;
+		    height: 1px;
+		    opacity: 30%;
+		    border-color: #606060;
+		    border-width: 1px;
+		    border-style: solid;
+		    background-color: #606060;
+		}
+    
+    </style>
+    
 </head>
 <body>
     
@@ -40,21 +55,71 @@
             <div class="row">
                 <div class="col-md-6 col-12 mt-5">
                     <div id="imgCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <ol class="carousel-indicators" id="indicadores-carrusel">
-                        </ol>
-                        <div class="carousel-inner" id="item-carrusel">
-                        </div>
-                        <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
+					    <ol class="carousel-indicators" id="indicadores-carrusel">
+					        <%
+					        List<String> imagenes = producto.getImagenes();
+					        for (int contador = 0; contador < imagenes.size(); contador++) {
+					            if (contador == 0) {
+					        %>
+					                <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class="active"></li>
+					        <%
+					            } else {
+					        %>
+					                <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class=""></li>
+					        <%
+					            }
+					        }
+					        %>
+					    </ol>
+					    
+					    <div class="carousel-inner" id="item-carrusel">
+					        <%
+					        for (int contador = 0; contador < imagenes.size(); contador++) {
+					            String imagen = imagenes.get(contador);
+					            if (contador == 0) {
+					        %>
+					                <div class="carousel-item active">
+					                    <img class="d-block w-100" src="<%= imagen %>" alt="Slide">
+					                </div>
+					        <%
+					            } else {
+					        %>
+					                <div class="carousel-item">
+					                    <img class="d-block w-100" src="<%= imagen %>" alt="Slide">
+					                </div>
+					        <%
+					            }
+					        }
+					        %>
+					    </div>
+					    
+					    <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+					        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					        <span class="sr-only">Previous</span>
+					    </a>
+					    <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+					        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+					        <span class="sr-only">Next</span>
+					    </a>
+					</div>
+					
+					<%
+					    // Ocultar el carrusel si no hay imágenes
+					    if (imagenes.isEmpty()) {
+					%>
+					    <script>
+						    document.addEventListener('DOMContentLoaded', function() {
+						    	document.getElementById("imgCarousel").style.display = "none";
+						        document.getElementById("informacion-producto-container").classList.remove("col-md-6");
+						        document.getElementById("informacion-producto-container").classList.add("col-md-12");
+						        document.getElementById("numero-producto").style.textAlign = "left";
+						    });
+					    </script>
+					<%
+					    }
+					%>
                     <div id="numero-producto">
-						<%= producto.getNumReferencia() %>
+						Número de referencia: <%= producto.getNumReferencia() %>
                     </div>
                 </div>
     
@@ -65,8 +130,23 @@
                     </h1>
 
                     <div id="estrellas-container">
-						
-                    </div>
+					    <%
+					    int estrellas = producto.getEstrellas(); // Obtener la cantidad de estrellas
+					    // Insertar estrellas llenas
+					    for (int i = 0; i < estrellas; i++) {
+					    %>
+					        <i class="fas fa-star" style="color: #7A7A7A;"></i>
+					    <%
+					    }
+					    
+					    // Insertar estrellas vacías
+					    for (int i = 0; i < (5 - estrellas); i++) {
+					    %>
+					        <i class="fas fa-star" style="color: #EBEBEB;"></i>
+					    <%
+					    }
+					    %>
+					</div>
 
                     <div class="linea-resumen"></div>
 						
@@ -113,7 +193,7 @@
             </h2>
 
             <div id="especificaciones-container">
-                
+                <ul>
                 <% 
 		        for (String especificacion : producto.getEspecificacion()) { 
 		        %>
@@ -121,7 +201,7 @@
 		        <%
 		        }
 		        %>
-                
+                </ul>
             </div>
 
         </section>
@@ -197,95 +277,6 @@
 	
 	    // Lógica para cargar el producto en la página
 	    function cargarProducto(){
-	        // Nombre del producto
-	        document.getElementById("nombre-producto").innerHTML = productoSeleccionado.nombre;
-	
-	        // Estrellas
-	        document.getElementById("estrellas-container").innerHTML += "";
-	        for(let i=0; i<productoSeleccionado.estrellas; i++){
-	            document.getElementById("estrellas-container").innerHTML += `<i class="fas fa-star" style="color: #7A7A7A;"></i>`;
-	        }
-	        for(let i=0; i<(5 - productoSeleccionado.estrellas); i++){
-	            document.getElementById("estrellas-container").innerHTML += `<i class="fas fa-star" style="color: #EBEBEB;"></i>`;
-	        }
-	
-	        // Precio
-	        document.getElementById("precio-container").innerHTML = "$" + productoSeleccionado.precio;
-	
-	        // Descripcion
-	        document.getElementById("descripcion-texto").innerHTML = productoSeleccionado.descripcion;
-	
-	        // Número del producto
-	        document.getElementById("numero-producto").innerHTML = "Identificador del producto: " + productoSeleccionado.id;
-	
-	        // Categorías
-	        // Inicializa la cadena de categorías
-	        let categoriasDelProducto = "Categorías: ";
-	
-	        // Recorre todas las categorías principales del producto
-	        for (let categoria of productoSeleccionado.categorias) {
-	            categoriasDelProducto += obtenerCategorias(categoria) + ", ";
-	        }
-	
-	        // Elimina la última coma y espacio
-	        if (categoriasDelProducto.endsWith(", ")) {
-	            categoriasDelProducto = categoriasDelProducto.slice(0, -2);
-	        }
-	
-	        // Actualiza el contenedor en el DOM
-	        document.getElementById("categorias-container").innerText = categoriasDelProducto;
-	
-	        // Especificaciones
-	        let htmlToInsert = `
-	            <ul>
-	        `;
-	        for(let especificacion of productoSeleccionado.especificacion) {
-	            htmlToInsert += `
-	                <li>${especificacion}</li>
-	            `;
-	        }
-	        htmlToInsert += `
-	            </ul>
-	        `;
-	        document.getElementById("especificaciones-container").innerHTML = htmlToInsert;
-	
-	        // Imágenes
-	        let contador = 0;
-	        for(let imagen of productoSeleccionado.imagenes) {
-	            if(contador == 0){
-	                document.getElementById("indicadores-carrusel").innerHTML += `
-	                <li data-bs-target="#imgCarousel" data-slide-to="${contador}" class="active"></li>
-	                `;
-	            } else {
-	                document.getElementById("indicadores-carrusel").innerHTML += `
-	                <li data-bs-target="#imgCarousel" data-slide-to="${contador}" class=""></li>
-	                `;
-	            }
-	            
-	
-	            if(contador == 0){
-	                document.getElementById("item-carrusel").innerHTML += `
-	                <div class="carousel-item active">
-	                    <img class="d-block w-100" src="${imagen}" alt="Slide">
-	                </div>
-	                `;
-	            } else {
-	                document.getElementById("item-carrusel").innerHTML += `
-	                <div class="carousel-item">
-	                    <img class="d-block w-100" src="${imagen}" alt="Slide">
-	                </div>
-	                `;
-	            }
-	            
-	            contador++;
-	        }
-	
-	        if(productoSeleccionado.imagenes.length == 0) {
-	            document.getElementById("imgCarousel").style.display = "none";
-	            document.getElementById("informacion-producto-container").classList.remove("col-md-6");
-	            document.getElementById("informacion-producto-container").classList.add("col-md-12");
-	            document.getElementById("numero-producto").style.textAlign = "left";
-	        }
 	
 	        // Comentarios
 	        let comentarios = cargarComentarios() || "";

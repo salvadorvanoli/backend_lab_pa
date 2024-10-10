@@ -675,9 +675,9 @@ public class Sistema extends ISistema {
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
         
         List<String> img1 = new ArrayList<>();
-        img1.add(imagenProducto);
-        img1.add(imagenProducto);
-        img1.add(imagenProducto);
+        //img1.add(imagenProducto);
+        //img1.add(imagenProducto);
+        //img1.add(imagenProducto);
         
         List<String> especificaciones = new ArrayList<>();
         especificaciones.add("Buen");
@@ -687,6 +687,10 @@ public class Sistema extends ISistema {
         Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3);
         Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
         Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
+        
+        producto1.setEstrellas(3);
+        producto2.setEstrellas(3);
+        producto3.setEstrellas(3);
         
         pr1.agregarProducto(producto1);
         pr1.agregarProducto(producto2);

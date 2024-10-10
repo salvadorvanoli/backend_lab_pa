@@ -30,6 +30,14 @@ public class Producto {
         
         this.cantEstrellas = 0;
     }
+    
+    public int getEstrellas() {
+    	return this.cantEstrellas;
+    }
+    
+    public void setEstrellas(int estrellas) {
+    	this.cantEstrellas = estrellas;
+    }
 
     // Setters
     public void setNombreProducto(String nombreProducto) {
