@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.exceptions.UsuarioNoEncontrado; 
-import com.flamingo.controllers.gestorTemporal; 
 import com.flamingo.models.EstadoSesion;
 import com.flamingo.models.Usuario;
 
@@ -34,20 +33,8 @@ public class IniciarSesion extends HttpServlet {
 
         // Intenta buscar el usuario por email o nickname
         Usuario usr = null;
-        try {
-            usr = gestorTemporal.getInstance().buscarUsuario(emailOrNickname);
-        } catch (UsuarioNoEncontrado ex) {
-            // El usuario no fue encontrado, se considerará como login incorrecto
-            nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
-            request.setAttribute("error", "Correo electrónico/nickname o contraseña incorrectos.");
-            objSesion.setAttribute("estado_sesion", nuevoEstado);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp");
-            dispatcher.forward(request, response);
-            return; // Salir del método
-        }
-
         // Verifica la contraseña
-        if (!usr.getContrasena().equals(password)) {
+        if (!usr.getContrasenia().equals(password)) {
             nuevoEstado = EstadoSesion.LOGIN_INCORRECTO;
             request.setAttribute("error", "Correo electrónico/nickname o contraseña incorrectos.");
         } else {

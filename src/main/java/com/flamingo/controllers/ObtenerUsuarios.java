@@ -7,6 +7,7 @@ import java.util.List;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
+import com.google.gson.Gson; // Importar Gson
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,29 +20,17 @@ public class ObtenerUsuarios extends HttpServlet {
         ISistema sis = SistemaFactory.getInstancia().getISistema(); // Obtener la instancia del sistema
         List<Usuario> usuarios = sis.getUsuarios(); // Obtener la lista de usuarios registrados
 
-        // Crear JSON manualmente
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("[");
+        // Crear una instancia de Gson
+        Gson gson = new Gson();
 
-        for (int i = 0; i < usuarios.size(); i++) {
-            Usuario usuario = usuarios.get(i);
-            jsonBuilder.append("{");
-            jsonBuilder.append("\"email\":\"").append(usuario.getEmail()).append("\",");
-            jsonBuilder.append("\"nickname\":\"").append(usuario.getNickname()).append("\"");
-            jsonBuilder.append("}");
-
-            if (i < usuarios.size() - 1) {
-                jsonBuilder.append(",");
-            }
-        }
-
-        jsonBuilder.append("]");
+        // Convertir la lista de usuarios a JSON
+        String json = gson.toJson(usuarios);
 
         // Configurar la respuesta
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        out.write(jsonBuilder.toString());
+        out.write(json);
         out.flush();
     }
 }
