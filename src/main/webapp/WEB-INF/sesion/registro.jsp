@@ -13,7 +13,7 @@
     <main class="container-fluid p-0 d-flex">
         <div class="rectangle-1 text-wrap">
             <!-- Imagen del registro -->
-            <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go" class="image-placeholder-1">
+            <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go"  width="50px" height="50px">
             <h1 class="w-100 textoRegistrar"> Registrar </h1>
     
             <!-- email -->
@@ -35,7 +35,7 @@
     
             <div class="row g-2">
                 <div class="col-md-6">
-                    <button type="button" class="button-cancelar"> Cancelar</button>    
+                    <button type="button" class="button-cancelar" onclick="window.location.href='${pageContext.request.contextPath}/home'"> Cancelar</button>   
                 </div>    
     
                 <div class="col-md-6">
@@ -47,95 +47,91 @@
 
     <!-- JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() { 
-            const buttonRegistrar = document.querySelector('.button-registrar');
-            const emailInput = document.getElementById('floatingInput');
-            const nicknameInput = document.getElementById('floatingInputNickname');
-            const emailWarning = document.getElementById('emailWarning');
-            const nicknameWarning = document.getElementById('nicknameWarning');
+    document.addEventListener('DOMContentLoaded', function() { 
+        const buttonRegistrar = document.querySelector('.button-registrar');
+        const emailInput = document.getElementById('floatingInput');
+        const nicknameInput = document.getElementById('floatingInputNickname');
+        const emailWarning = document.getElementById('emailWarning');
+        const nicknameWarning = document.getElementById('nicknameWarning');
 
-            // Función para validar el formato de correo electrónico
-            function esCorreoValido(email) {
-    			const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    			return regex.test(email);
-			}
+        // Función para validar el formato de correo electrónico
+        function esCorreoValido(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
 
-            // Verificar email
-            emailInput.addEventListener('input', function() {
-                const email = emailInput.value.trim();
-                const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
+        // Verificar email
+        emailInput.addEventListener('input', function() {
+            const email = emailInput.value.trim();
+            const usuariosRegistrados = []; // Aquí deberías obtener los usuarios registrados desde el servidor.
 
-                const emailExiste = usuariosRegistrados.some(user => user.email === email);
+            const emailExiste = usuariosRegistrados.some(user => user.email === email);
 
-                if (!esCorreoValido(email)) {
-                    emailWarning.textContent = 'Por favor, introduce un correo electrónico válido.';
-                    emailInput.classList.add('is-invalid');
-                } else if (emailExiste) {
-                    emailWarning.textContent = 'Este correo ya está registrado.';
-                    emailInput.classList.add('is-invalid');
-                } else {
-                    emailWarning.textContent = '';
-                    emailInput.classList.remove('is-invalid');
-                }
-            });
-
-            // Verificar nickname
-            nicknameInput.addEventListener('input', function() {
-                const nickname = nicknameInput.value.trim();
-                const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-                const nicknameExiste = usuariosRegistrados.some(user => user.nickname === nickname);
-
-                if (nicknameExiste) {
-                    nicknameWarning.textContent = 'Este nickname ya está registrado.';
-                    nicknameInput.classList.add('is-invalid');
-                } else {
-                    nicknameWarning.textContent = '';
-                    nicknameInput.classList.remove('is-invalid');
-                }
-            });
-
-            buttonRegistrar.onclick = function() {
-                const email = emailInput.value.trim();
-                const nickname = nicknameInput.value.trim();
-
-                if (!email || !nickname) {
-                    alert('Por favor, completa todos los campos.');
-                    return;
-                }
-
-                if (!esCorreoValido(email)) {
-                    alert('Por favor, introduce un correo electrónico válido.');
-                    emailInput.classList.add('is-invalid');
-                    return;
-                }
-
-                const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-                const usuarioExistente = usuariosRegistrados.find(user => user.email === email || user.nickname === nickname);
-
-                if (usuarioExistente) {
-                    alert('Ya existe un usuario registrado con ese email o nickname.');
-                } else {
-                    const credencialesTemp = {
-                        email: email,
-                        nickname: nickname
-                    };
-                    localStorage.setItem('credencialesTemp', JSON.stringify(credencialesTemp));
-
-                    alert('Credenciales temporales guardadas. Procede al siguiente paso.');
-                    window.location.href = '${pageContext.request.contextPath}/ingresardatos';
-                }
-            };
+            if (!esCorreoValido(email)) {
+                emailWarning.textContent = 'Por favor, introduce un correo electrónico válido.';
+                emailInput.classList.add('is-invalid');
+            } else if (emailExiste) {
+                emailWarning.textContent = 'Este correo ya está registrado.';
+                emailInput.classList.add('is-invalid');
+            } else {
+                emailWarning.textContent = '';
+                emailInput.classList.remove('is-invalid');
+            }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const IniciarSesion = document.getElementById('IniciarSesion');
+        // Verificar nickname
+        nicknameInput.addEventListener('input', function() {
+            const nickname = nicknameInput.value.trim();
+            const usuariosRegistrados = []; // Aquí deberías obtener los usuarios registrados desde el servidor.
 
-            IniciarSesion.onclick = function() {
-                window.location.href = 'iniciarSesion.html';
-            };
+            const nicknameExiste = usuariosRegistrados.some(user => user.nickname === nickname);
+
+            if (nicknameExiste) {
+                nicknameWarning.textContent = 'Este nickname ya está registrado.';
+                nicknameInput.classList.add('is-invalid');
+            } else {
+                nicknameWarning.textContent = '';
+                nicknameInput.classList.remove('is-invalid');
+            }
         });
+
+        const IniciarSesion = document.getElementById('IniciarSesion');
+
+        IniciarSesion.onclick = function() {
+            window.location.href = '${pageContext.request.contextPath}/iniciarSesion'; // Redirigir a la página de inicio de sesión
+        };
+        
+        buttonRegistrar.onclick = function() {
+            const email = emailInput.value.trim();
+            const nickname = nicknameInput.value.trim();
+
+            if (!email || !nickname) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            if (!esCorreoValido(email)) {
+                alert('Por favor, introduce un correo electrónico válido.');
+                emailInput.classList.add('is-invalid');
+                return;
+            }
+
+            const usuariosRegistrados = []; // usuarios registrados
+
+            const usuarioExistente = usuariosRegistrados.find(user => user.email === email || user.nickname === nickname);
+
+            if (usuarioExistente) {
+                alert('Ya existe un usuario registrado con ese email o nickname.');
+            } else {
+                // Redirigir con los parámetros email y nickname para el controlador
+                window.location.href = `${pageContext.request.contextPath}/ingresardatos?email=${encodeURIComponent(email)}&nickname=${encodeURIComponent(nickname)}`;
+            }
+        };
+
+    });
+
+
+        
     </script>
 
     <!-- Bootstrap JS -->

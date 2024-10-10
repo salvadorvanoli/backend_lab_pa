@@ -32,6 +32,7 @@ public class IngresarDatos extends HttpServlet {
         String fecha = request.getParameter("fecha");
         String sitioWeb = request.getParameter("sitioWeb");
         String compañia = request.getParameter("compania");
+        String foto = request.getParameter("imagenUrl");
 
         // Validaciones
         if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
@@ -64,18 +65,34 @@ public class IngresarDatos extends HttpServlet {
         if (!errores.isEmpty()) {
             request.setAttribute("errores", errores);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/ingresarDatos.jsp");
-            dispatcher.forward(request, response); // Ajusta la ruta según sea necesario
+            dispatcher.forward(request, response); 
         } else {
-            // Procesar el registro del usuario (guardar en base de datos, etc.)
-            // Aquí puedes agregar la lógica para guardar los datos del usuario
+           
+        	// Si no hay errores, se agrega el usuario a la lista
+            gestorTemporal gestor = gestorTemporal.getInstance();
 
-            // Redirigir a una página de éxito o confirmación
-            response.sendRedirect(request.getContextPath() + "/paginaExito.jsp"); // Ajusta esta ruta según sea necesario
+            // Crear y agregar el nuevo usuario
+            gestor.agregarUsuario(
+                nombre, 
+                apellido, 
+                nombre, 
+                "cliente", 
+                request.getParameter("email"), 
+                fecha, 
+                foto, 
+                sitioWeb, 
+                compañia, 
+                "nuevoId",
+                contraseña
+            );
+            // Redirigir a una página
+        	
+            response.sendRedirect(request.getContextPath() + "/iniciarSesion.jsp"); 
         }
     }
 
     private boolean validarNombreSinNumeros(String nombre) {
-        return !nombre.matches(".*\\d.*"); // Devuelve true si no hay dígitos
+        return !nombre.matches(".*\\d.*"); 
     }
 
     private boolean validarUrl(String url) {

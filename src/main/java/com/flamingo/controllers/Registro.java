@@ -13,27 +13,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.flamingo.models.Usuario;
 
-@WebServlet("/registrar")
+@WebServlet("/ingresardatos")
 public class Registro extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener los parámetros enviados desde el JSP
+        String email = request.getParameter("email");
+        String nickname = request.getParameter("nickname");
 
-    // Lista de usuarios
-    private static List<Usuario> usuariosRegistrados = new ArrayList<>();
+        // Guardar estos valores en la sesión
+        HttpSession session = request.getSession();
+        session.setAttribute("email", email);
+        session.setAttribute("nickname", nickname);
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Redirigir al JSP sin hacer verificaciones
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/registro.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        // Redirigir a otra página o JSP si lo prefieres
+        response.sendRedirect(request.getContextPath() + "/proximaPagina"); // Cambia /proximaPagina a la ruta que desees
     }
 }
+
