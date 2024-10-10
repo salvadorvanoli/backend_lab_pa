@@ -13,39 +13,50 @@
      <!-- NAVBAR -->
 	<jsp:include page="/WEB-INF/template/header.jsp"/>
 
+	<%@ page import="com.flamingo.models.Producto" %>
+	<%@ page import="com.flamingo.models.Usuario" %>
+	<%@ page import="java.util.List" %>
  
-    <main class="container-fluid">
+   	<%
+	    // Obtener el usuario y la lista de productos desde el request
+	    Usuario usuarioActual = (Usuario) request.getAttribute("usuarioActual");
+	    List<Producto> productos = (List<Producto>) request.getAttribute("productos");
+	%>
+
+	<main class="container-fluid">
 	    <div class="rectangle-1">
 	        <div class="rectangle-2">
-	            <div class="row"> 
-	                <div class="col-md-2 d-flex">
-	                    <!-- Imagen dinámica del producto -->
-	                    <div class="fotosProductos">
-	                    
-	                        <img src="<%= producto.getImagen() %>" alt="Imagen del Producto">
-	                    </div>   
-	                </div>
-	                <div class="col-md-4 d-flex flex-column justify-content-start p-0">
-	                    <!-- Nombre dinámico del producto -->
-	                    <h1 class="nombresProductos text-start mt-3"><%= producto.getNombre() %></h1>    
-	                    <!-- Descripción dinámica del producto -->
-	                    <h2 class="descripcionProductos text-start m-0"><%= producto.getDescripcion() %></h2>
-	                    <!-- Precio dinámico del producto -->
-	                    <h2 class="precioProductos text-start mt-3"> $<%= producto.getPrecio() %></h2>
-	                </div>
-	                <div class="col-md-4">
-	                    <!-- Número de producto dinámico -->
-	                    <h1 class="numProducto text-start mt-3">Nro. Producto: <%= producto.getNumero() %></h1>
-	                    <div class="stepper-container d-flex align-items-end">
-	                        <!-- Cantidad disponible dinámica -->
-	                        <input type="number" id="quantity" class="stepper" value="0" min="0" max="<%= producto.getCantidadMaxima() %>" disabled>
-	                        <label for="quantity" class="labelCantidad">Cantidad</label> 
-	                    </div>          
-	                </div>
-	                <div class="col-md-2">
-	                    <h1 class="textoSubtotal mt-3">Subtotal</h1>
-	                    <!-- Subtotal dinámico -->
-	                    <h1 class="precioProductosSubt mt-3">$<%= producto.getSubtotal() %></h1>
+	            <div class="row">
+	                <div class="col-md-2 d-flex flex-column">
+	                    <!-- Comprobar si hay productos disponibles -->
+	                    <% if (productos != null && !productos.isEmpty()) { %>
+	                        <% for (Producto producto : productos) { %>
+	                            <div class="fotosProductos">
+	                                <!-- Iterar sobre la lista de imágenes -->
+	                                <% 
+	                                    List<String> imagenes = producto.getImagenes(); // Asumiendo que tienes un método getImagenes()
+	                                    if (imagenes != null && !imagenes.isEmpty()) {
+	                                        for (String imagen : imagenes) { 
+	                                %>
+	                                            <img src="<%= imagen != null ? imagen : "media/images/default.webp" %>" alt="Imagen del Producto">
+	                                <% 
+	                                        }
+	                                    } else { 
+	                                %>
+	                                        <img src="media/images/default.webp" alt="Imagen del Producto no disponible">
+	                                <% 
+	                                    } 
+	                                %>
+	                            </div>
+	                            <h1 class="nombresProductos text-start mt-3"><%= producto.getNombreProducto() != null ? producto.getNombreProducto() : "Nombre no disponible" %></h1>
+	                            <h2 class="descripcionProductos text-start m-0"><%= producto.getDescripcion() != null ? producto.getDescripcion() : "Descripción no disponible" %></h2>
+	                            <h2 class="precioProductos text-start mt-3">$<%= producto.getPrecio() >= 0 ? producto.getPrecio() : "0" %></h2>
+								<h1 class="numProducto text-start mt-3">Nro. Producto: <%= producto.getNumReferencia() > 0 ? producto.getNumReferencia() : "N/A" %></h1>
+	                            <h1 class="precioProductosSubt mt-3"></h1>
+	                        <% } %>
+	                    <% } else { %>
+	                        <h1>No hay productos disponibles.</h1>
+	                    <% } %>
 	                </div>
 	            </div>
 	        </div>
@@ -60,18 +71,18 @@
 	            <h1 class="impuestos"> Impuestos</h1>
 	        </div>
 	        <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-	            <!-- Subtotales dinámicos -->
-	            <h1 class="subtotal2">$<%= carrito.getSubtotal() %></h1>
-	            <h1 class="envio2"> $<%= carrito.getEnvio() %></h1>
-	            <h1 class="impuestos2"> $<%= carrito.getImpuestos() %></h1>
+	            <!-- Subtotales dinámicos con validación del carrito nulo -->
+	            <h1 class="subtotal2">$${carrito != null ? carrito.getSubtotal() : '0'}</h1>
+	            <h1 class="envio2">$${carrito != null ? carrito.getEnvio() : '0'}</h1>
+	            <h1 class="impuestos2">$${carrito != null ? carrito.getImpuestos() : '0'}</h1>
 	        </div>
 	        <div class="horizontal-line"></div>
 	        <div class="col-md-6 mt-3">
 	            <h1 class="total"> Total </h1>
 	        </div>
 	        <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-	            <!-- Total dinámico -->
-	            <h1 class="total2"> $<%= carrito.getTotal() %></h1>
+	            <!-- Total dinámico con validación del carrito nulo -->
+	            <h1 class="total2">$${carrito != null ? carrito.getTotal() : '0'}</h1>
 	        </div>
 	        <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
 	            <button type="button" class="button-volver" id="volver"> Volver </button>

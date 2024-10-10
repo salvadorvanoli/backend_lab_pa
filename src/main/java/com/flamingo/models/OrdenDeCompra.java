@@ -9,6 +9,7 @@ public class OrdenDeCompra {
 	private DTFecha fecha;
 	private Cliente cliente;
 	private List<Cantidad> cantidad;
+	private List<Producto> productos;
 	
 	public int getNumero() {
 		return numero;
@@ -39,6 +40,13 @@ public class OrdenDeCompra {
 	}
 	public void setCantidad(List<Cantidad> cantidad) {
 		this.cantidad = cantidad;
+	}
+	
+	public List<Producto> getProductos() {
+		return this.productos;
+	}
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
 	}
 	
 	public void desvincularCliente () {

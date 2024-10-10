@@ -243,24 +243,16 @@ public class Catalogo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
 			processRequest(request, response);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		} 
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+    	try {
 			processRequest(request, response);
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
+		} catch (ServletException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
     }
 }

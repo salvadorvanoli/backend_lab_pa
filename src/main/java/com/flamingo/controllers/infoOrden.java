@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
+import com.flamingo.models.Cantidad;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.Comentario;
 import com.flamingo.models.ISistema;
@@ -35,6 +36,7 @@ public class infoOrden extends HttpServlet {
     	
     	String num = request.getParameter("ordenId");
     	int id = -1;
+    	
     	
     	try {
     	    id = Integer.parseInt(num);
@@ -61,8 +63,13 @@ public class infoOrden extends HttpServlet {
     	if(ordenSeleccionada == null){
     		throw new OrdenDeCompraNoExisteException("La orden de compra no existe");
     	}
+
+    	List<Producto> productos = (List<Producto>) ordenSeleccionada.getProductos();
+    	request.setAttribute("productos", productos);
+
+    	HashMap<Integer, Cantidad> carri = cliente.getCarrito();
+    	request.setAttribute("carrito", carri);
     	
-    	request.setAttribute("orden", ordenSeleccionada);
     	RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/orden/orden.jsp");
     	dispatcher.forward(request, response);
     	

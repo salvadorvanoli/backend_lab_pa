@@ -1,5 +1,5 @@
-	const categor = JSON.parse('<%= request.getAttribute("categorias") %>') || [];
-	const prod = JSON.parse('<%= request.getAttribute("productos") %>') || [];
+	const categor = JSON.parse(localStorage.getItem('categorias')) || [];
+	const prod = JSON.parse(localStorage.getItem('productos')) || [];
 	
 	// Manejar el cambio de estado de las categorías
 	const categoriaLinks = document.querySelectorAll('.dropdown-item');
