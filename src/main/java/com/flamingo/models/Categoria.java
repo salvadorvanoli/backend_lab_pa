@@ -6,6 +6,7 @@ public class Categoria {
     private String nombre;
     private List<Categoria> hijas;
 
+
     // Constructor
     public Categoria(String nombre, List<Categoria> hijas) {
         this.nombre = nombre;
@@ -28,4 +29,10 @@ public class Categoria {
     public void setHijas(List<Categoria> hijas) {
         this.hijas = hijas;
     }
+    
+    public boolean tieneSubcategorias() {
+        return hijas != null && !hijas.isEmpty();
+    }
+    
+    
 }
