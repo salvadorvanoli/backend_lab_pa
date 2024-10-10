@@ -15,8 +15,10 @@ import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 
+import com.google.gson.Gson;
+
 /**
- * Servlet implementation class Usuarios
+ * Servlet implementation class Carrito
  */
 @WebServlet ("/carrito")
 public class Carrito extends HttpServlet {
@@ -40,7 +42,10 @@ public class Carrito extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// String usuario = request.getParameter("usuarioActual");
-		ISistema sis = SistemaFactory.getInstancia().getISistema();
+		if (getServletContext().getAttribute("sistema") == null) {
+			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
+		}
+		ISistema sis = (ISistema) getServletContext().getAttribute("sistema");
 		sis.crearCasos();
 		try {
 			sis.elegirCliente("Salva");
@@ -58,6 +63,8 @@ public class Carrito extends HttpServlet {
 		} else {
 			// Usuario usr;
 			Usuario usr = (Usuario) usuario;
+			String json = new Gson().toJson(usr);
+			System.out.println(json);
 			// try {
 				// ISistema sistema = SistemaFactory.getInstancia().getISistema();
 				// sistema.elegirCliente(usuario);

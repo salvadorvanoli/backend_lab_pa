@@ -65,8 +65,7 @@
 				
 				                    <!-- CONTENEDOR DE LOS PRODUCTOS DEL CARRITO -->
 				                    <div class="contenedor-productos" id="carrito">
-				
-				                        
+
 				                    </div>
 				
 				
@@ -480,7 +479,7 @@
 
     <!-- FOOTER -->
 	<jsp:include page="/WEB-INF/template/footer.jsp"/>
-    <script src="media/js/carrito.js"></script>
+    <script src="/media/js/carrito.js"></script>
 
 </body>
 </html>
