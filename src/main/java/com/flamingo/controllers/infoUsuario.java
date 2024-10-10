@@ -14,25 +14,15 @@ import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 
-/**
- * Servlet implementation class Home
- */
 @WebServlet ("/infoUsuario")
 public class infoUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public infoUsuario() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    /**
-	 * inicializa la sesión si no estaba creada 
-	 * @param request 
-	 */
 	public static void initSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("paginas_navegadas") == null) {
@@ -43,11 +33,6 @@ public class infoUsuario extends HttpServlet {
 		}
 	}
 	
-	/**
-	 * Devuelve el estado de la sesión
-	 * @param request
-	 * @return 
-	 */
 	public static EstadoSesion getEstado(HttpServletRequest request)
 	{
 		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
@@ -80,18 +65,10 @@ public class infoUsuario extends HttpServlet {
 		}
 	}
 	
-	
-	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request, response);
 	}
