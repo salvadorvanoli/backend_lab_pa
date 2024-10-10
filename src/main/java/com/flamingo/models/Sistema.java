@@ -130,13 +130,13 @@ public class Sistema extends ISistema {
 	
 	
 	@Override
-	public boolean registrarProducto(String titulo, int numReferencia, String descrip, String especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
+	public boolean registrarProducto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda, List<Comentario> comentarios) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
 		if (this.usuarioActual == null || ! (this.usuarioActual instanceof Proveedor)) {
 			throw new NullPointerException("No se ha elegido un proveedor previamente.");
 		}
 
 		try {
-			this.existeProducto(titulo, numReferencia, false);
+			this.existeProducto(nombreProducto, numReferencia, false);
 		} catch (ProductoRepetidoException e) {
 			throw new ProductoRepetidoException(e.getMessage());
 		}
@@ -154,9 +154,9 @@ public class Sistema extends ISistema {
 		if (categoriasSinProductos != "") {
 	        throw new CategoriaNoPuedeTenerProductosException("Las categorías " + categoriasSinProductos + " no puede contener productos.");
 	    }
-		Proveedor proveedor = (Proveedor) this.usuarioActual;
-		Producto prod = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor); // Esto esta re mal
-		proveedor.agregarProducto(prod);
+		Proveedor proveedor1 = (Proveedor) this.usuarioActual;
+		Producto prod = new Producto(nombreProducto, descripcion, especificacion, numReferencia, precio, imagenes, categorias, proveedor1, estrellas, nombreTienda, comentarios); // Esto esta re mal
+		proveedor1.agregarProducto(prod);
 		this.productoActual = prod;
 		this.agregarProductoACategorias(categorias);
 		return true;
@@ -672,14 +672,14 @@ public class Sistema extends ISistema {
         Proveedor pr2 = new Proveedor("Amy_w", "Amy", "Casadevino", "amy.casadevino@example.com", fecha2, imagen4, "Mary on a cross Enterprise", "http://MaryOnACross.com", "breakingBAld");
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
         
-        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, null, c2,  pr3);
-        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, null, c1,  pr2);
-        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", "Pilas AAA", 997, 350.20f, null, c3,  pr1);
+        //Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, null, c2,  pr3);
+        //Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, null, c1,  pr2);
+        //Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", "Pilas AAA", 997, 350.20f, null, c3,  pr1);
         
-        cat1.agregarProducto(producto1);
-        cat2.agregarProducto(producto2);
-        cat2.agregarProducto(producto3);
-        cat3.agregarProducto(producto2);
+        //cat1.agregarProducto(producto1);
+        //cat2.agregarProducto(producto2);
+        //cat2.agregarProducto(producto3);
+        //cat3.agregarProducto(producto2);
         
         OrdenDeCompra orden1 = new OrdenDeCompra(88, fecha1, cl1, null);
         orden1.setPrecioTotal(1350.50f);
@@ -696,14 +696,14 @@ public class Sistema extends ISistema {
         
         cl3.getOrdenesDeCompras().add(orden3);
         
-        orden1.agregarProducto(producto1.getDTProducto(), 15);
-        orden1.agregarProducto(producto2.getDTProducto(), 3);
+        //orden1.agregarProducto(producto1.getDTProducto(), 15);
+        //orden1.agregarProducto(producto2.getDTProducto(), 3);
         
-        orden2.agregarProducto(producto3.getDTProducto(), 20);
-        orden2.agregarProducto(producto1.getDTProducto(), 45);
+        //orden2.agregarProducto(producto3.getDTProducto(), 20);
+        //orden2.agregarProducto(producto1.getDTProducto(), 45);
         
-        orden3.agregarProducto(producto3.getDTProducto(), 1000);
-        orden3.agregarProducto(producto2.getDTProducto(), 1);
+        //orden3.agregarProducto(producto3.getDTProducto(), 1000);
+        //orden3.agregarProducto(producto2.getDTProducto(), 1);
         
 		ordenes.put(orden1.getNumero(), orden1);
 		ordenes.put(orden2.getNumero(), orden2);

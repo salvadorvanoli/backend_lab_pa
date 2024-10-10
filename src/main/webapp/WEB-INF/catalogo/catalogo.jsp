@@ -50,37 +50,38 @@
 	            <div class="dropdown">
 	                <button class="dropbtn" aria-haspopup="true" aria-expanded="false">&#9654; <%= categoria.getNombreCat() %></button>
 	                <div class="dropdown-content">
-	                    <%
-	                    HashMap<String, Categoria> hijosHash = categoria.getHijos();
-	                    
-	                        if (hijosHash != null && !hijosHash.isEmpty()) { // Verifica que hijos no sea null y no esté vacío
-	                            ArrayList<Categoria> hijos = new ArrayList<>(hijosHash.values());
-	                            for (Categoria subcategoria : hijos) {
-	                    %>
-	                                <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombreCat() %></a>
-	                                <%
-	                                HashMap<String, Categoria> subhijosHash = subcategoria.getHijos();
-	                                ArrayList<Categoria> subhijos = new ArrayList<>(subhijosHash.values());
-	                                    if (subhijos != null && !subhijos.isEmpty()) { // Verifica que subhijos no esté vacío
-	                                        for (Categoria subsubcategoria : subhijos) {
-	                                %>
-	                                            <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombreCat() %></a>
-	                                <%
-	                                        }
-	                                    } else {
-	                                %>
-	                                        <p>No hay subsubcategorías disponibles.</p>
-	                                <%
-	                                    } // Fin de la verificación de subhijos
-	                                %>
-	                            <%
-	                            } // Fin del for de subcategorías
-	                        } else {
-	                    %>
-	                            <p>No hay subcategorías disponibles.</p>
-	                    <%
-	                        } // Fin de la verificación de hijos
-	                    %>
+	                    <% 
+							HashMap<String, Categoria> hijosHash = categoria.getHijos();
+						    
+						    if (hijosHash != null && !hijosHash.isEmpty()) { // Verifica que hijos no sea null y no esté vacío
+						        ArrayList<Categoria> hijos = new ArrayList<>(hijosHash.values());
+						        for (Categoria subcategoria : hijos) {
+						%>
+						            <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombreCat() %></a>
+						            <%
+						            // Verifica si la subcategoría tiene hijos
+						            HashMap<String, Categoria> subhijosHash = subcategoria.getHijos();
+						            if (subhijosHash != null && !subhijosHash.isEmpty()) { // Verifica que subhijos no sea null y no esté vacío
+						                ArrayList<Categoria> subhijos = new ArrayList<>(subhijosHash.values());
+						                for (Categoria subsubcategoria : subhijos) {
+						            %>
+						                    <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombreCat() %></a>
+						            <%
+						                }
+						            } else {
+						            %>
+						                <p>No hay subsubcategorías disponibles.</p>
+						            <%
+						            } // Fin de la verificación de subhijos
+						            %>
+						        <%
+						        } // Fin del for de subcategorías
+						    } else {
+						%>
+						        <p>No hay subcategorías disponibles.</p>
+						<%
+						    } // Fin de la verificación de hijos
+						%>
 	                </div>
 	            </div>
 	    <%

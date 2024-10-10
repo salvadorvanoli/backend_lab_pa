@@ -37,7 +37,7 @@ public abstract class ISistema{
 	
 	public abstract boolean altaUsuarioProveedor(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String nomCompania, String linkWeb, String imagen, String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException;
 
-	public abstract boolean registrarProducto(String titulo, int numReferencia, String descrip, String especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException;
+	public abstract boolean registrarProducto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda, List<Comentario> comentarios) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException;
 	
 	public abstract DTProductoDetallado verInformacionProducto();
 
