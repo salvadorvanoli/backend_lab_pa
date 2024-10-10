@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class DTProductoDetallado extends DTProducto{
 	
 	private int numReferencia;
-	private String especificaciones;
+	private List<String> especificaciones;
 	private List<String> categorias;
 	private DTProveedor proveedor;
 	private List<String> imagenes;
@@ -19,10 +19,10 @@ public class DTProductoDetallado extends DTProducto{
 	public void setNumReferencia(int numReferencia) {
 		this.numReferencia = numReferencia;
 	}
-	public String getEspecificaciones() {
+	public List<String> getEspecificaciones() {
 		return especificaciones;
 	}
-	public void setEspecificaciones(String especificaciones) {
+	public void setEspecificaciones(List<String> especificaciones) {
 		this.especificaciones = especificaciones;
 	}
 	public List<String> getCategorias() {
@@ -44,7 +44,7 @@ public class DTProductoDetallado extends DTProducto{
 		this.imagenes = imagenes;
 	}
 	public DTProductoDetallado(String nombre, String descripcion, float precio, int numReferencia,
-			String especificaciones, List<String> categorias, DTProveedor proveedor, List<String> imagenes) {
+			List<String> especificaciones, List<String> categorias, DTProveedor proveedor, List<String> imagenes) {
 		super(nombre, numReferencia, descripcion, precio);
 		this.numReferencia = numReferencia;
 		this.especificaciones = especificaciones;
