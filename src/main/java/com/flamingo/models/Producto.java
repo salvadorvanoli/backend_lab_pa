@@ -16,7 +16,7 @@ public class Producto {
     List<Comentario> comentarios;
 
     // Constructor
-    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda) {
+    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda, List<Comentario> comentarios) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.especificacion = especificacion;
@@ -31,6 +31,7 @@ public class Producto {
         
         this.imagenes = imagenes;
         this.categorias = categorias;
+        this.comentarios = comentarios;
         this.proveedor = proveedor;
     }
 
