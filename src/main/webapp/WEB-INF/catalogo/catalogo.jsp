@@ -39,6 +39,7 @@
         </header>
     </div>
 
+
 	<aside id="aside" class="aside-1 scrolleable col-3 row">
 	    <%
 	        List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
@@ -93,7 +94,6 @@
 	</aside>
 
 
-
             <!-- Productos -->
     <main id="prods" class="col-12 col-md">
 	    <%
@@ -136,12 +136,12 @@
 	            } // Fin del for de productos
 	        } else {
 	    %>
-	            <p>No hay productos disponibles.</p>
+	    	<p>No hay productos disponibles.</p>
 	    <%
 	        } // Fin de la verificación de productos
 	    %>
-	</main>
-
+	  
+	</main> 
 </body>
 
 <jsp:include page="/WEB-INF/template/footer.jsp" />
