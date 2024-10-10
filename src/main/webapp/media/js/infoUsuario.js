@@ -127,6 +127,8 @@ async function obtenerUsuarioActual() {
 
         // Parsear la respuesta a JSON
         const usuario = await response.json();
+		
+		console.log(usuario);
         return usuario;
     } catch (error) {
         console.error(error);
@@ -137,10 +139,10 @@ async function obtenerUsuarioActual() {
 async function cargarDatos() {
 	const usuarioActual = await obtenerUsuarioActual();
 	
-	//if (!usuarioActual) {
-	//    window.location.href = "iniciarSesion.html";
-	//    return;
-	//}
+	if (!usuarioActual) {
+	    window.location.href = "iniciarSesion.html";
+	    return;
+	}
 	
 	if(usuarioActual.tipo == "Proveedor") {
 	    document.getElementById("proveedor-section").innerHTML = `
@@ -273,7 +275,7 @@ async function cargarDatos() {
     }
 }
 
-cargarDatos();
+//cargarDatos();
 
 // Actualizar datos del usuario
 

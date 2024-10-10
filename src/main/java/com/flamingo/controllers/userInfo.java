@@ -1,4 +1,5 @@
 package com.flamingo.controllers;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,9 +32,7 @@ public class userInfo extends HttpServlet {
 			throws ServletException, IOException {
 		
 		HttpSession session = req.getSession();
-		
-		session.setAttribute("usuarioActual", "1");
-		
+
 		// Verifica si el usuarioActual es null
 		if (session.getAttribute("usuarioActual") == null) {
 			resp.sendRedirect(req.getContextPath() + "/iniciarSesion");
@@ -44,14 +43,12 @@ public class userInfo extends HttpServlet {
 		resp.setContentType("application/json");
 		PrintWriter out = resp.getWriter();
 		
-		
-
 		// Crea el JSON de respuesta
 		String jsonResponse = "{\r\n"
 			+ "    \"nombre\": \"Salvador\",\r\n"
 			+ "    \"apellido\": \"Vanoli\",\r\n"
 			+ "    \"nickname\": \"salvaelpro777\",\r\n"
-			+ "    \"tipo\": \"Cliente\",\r\n"
+			+ "    \"tipo\": \"Proveedor\",\r\n"
 			+ "    \"email\": \"salva@salva.com\",\r\n"
 			+ "    \"fecha\": \"2004-05-01\",\r\n"
 			+ "    \"foto\": \"media/images/test.jpg\",\r\n"
@@ -152,10 +149,18 @@ public class userInfo extends HttpServlet {
 			+ "    ]\r\n"
 			+ "}";
 		
-		
+		// Convertir el objeto a JSON usando Gson
+        Gson gson = new Gson();
+        String usuario = "asdfadsf";
+        String jsonResponse2 = gson.toJson(usuario);
+        
+        System.out.println(jsonResponse2);
+
+        // Envía el JSON como respuesta
+        out.print(jsonResponse2);
 
 		// Envía el JSON como respuesta
-		out.print(jsonResponse);
+		//out.print(jsonResponse);
 		out.flush();
 	}
 	

@@ -44,4 +44,18 @@ public class DTFecha {
 		return String.valueOf(this.dia) + '/' + String.valueOf(this.mes) + '/' + String.valueOf(this.anio);
 	}
 	
+	public String getFechaEnFormatoInput() {
+		
+		String mesInput = String.valueOf(mes);
+		if(mes <= 9) {
+			mesInput = "0" + mesInput;
+		}
+		
+		String diaInput = String.valueOf(dia);
+		if(dia <= 9) {
+			diaInput = "0" + diaInput;
+		}
+		return anio + "-" + mesInput + "-" + diaInput;
+	}
+	
 }

@@ -8,7 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.models.EstadoSesion;
+import com.flamingo.models.ISistema;
+import com.flamingo.models.SistemaFactory;
+import com.flamingo.models.Usuario;
 
 /**
  * Servlet implementation class Home
@@ -49,21 +53,31 @@ public class infoUsuario extends HttpServlet {
 		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
 	}
 
-	private void processRequest(HttpServletRequest req, HttpServletResponse resp)
+	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = req.getSession();
+		ISistema sis = SistemaFactory.getInstancia().getISistema();
+		sis.crearCasos();
+		try {
+			//sis.elegirProveedor("elIsma");
+			sis.elegirCliente("Salva");
+		} catch(UsuarioNoExisteException e) {
 		
-		session.setAttribute("usuarioActual", "1");
-		
-		if(session.getAttribute("usuarioActual").equals(null)) {
-			resp.sendRedirect(req.getContextPath() + "/iniciarSesion");
-	        return;
 		}
+		request.setAttribute("usuarioActual", sis.getUsuarioActual());
+		Object usuario = request.getAttribute("usuarioActual");	
 		
-		
-		
-		req.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
-		forward(req, resp);
+		if(usuario == null) {
+			request.setAttribute("usuarioActual", null);
+			request.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
+					forward(request, response);
+				
+		} else {
+			Usuario usr = (Usuario) usuario;
+			request.setAttribute("usuarioActual", usr);
+
+			request.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
+					forward(request, response);
+		}
 	}
 	
 	
