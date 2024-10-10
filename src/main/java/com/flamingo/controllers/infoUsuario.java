@@ -51,35 +51,22 @@ public class infoUsuario extends HttpServlet {
 
 	private void processRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		initSession(req);
+		HttpSession session = req.getSession();
 		
-		switch(getEstado(req)){
-			case NO_LOGIN:
-				// hace que se ejecute el jsp sin cambiar la url
-				req.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
-						forward(req, resp);
-				break;
-			case LOGIN_INCORRECTO:
-				// hace que se ejecute el jsp sin cambiar la url
-				req.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
-						forward(req, resp);
-				break;
-				
-				// hace que se ejecute el jsp sin cambiar la url
-				//req.getRequestDispatcher("/WEB-INF/home/inicioErroneo.jsp").
-				//		forward(req, resp);
-				//break;
-			case LOGIN_CORRECTO:
-				// hace que se ejecute el jsp sin cambiar la url
-				req.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
-						forward(req, resp);
-				break;
-				
-				// manda una redirección a otra URL (cambia la URL)
-				//resp.sendRedirect("/flamingo/perfil");
-				//break;
+		session.setAttribute("usuarioActual", "1");
+		
+		if(session.getAttribute("usuarioActual").equals(null)) {
+			resp.sendRedirect(req.getContextPath() + "/iniciarSesion");
+	        return;
 		}
+		
+		
+		
+		req.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
+		forward(req, resp);
 	}
+	
+	
 	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
