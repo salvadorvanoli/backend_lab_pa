@@ -1,4 +1,107 @@
-let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || null; // En un futuro la información se traerá del backend
+let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || {
+    "nombre": "Salvador",
+    "apellido": "Vanoli",
+    "nickname": "salvaelpro777",
+    "tipo": "proveedor",
+    "email": "salva@salva.com",
+    "fecha": "2004-05-01",
+    "foto": "media/images/test.jpg",
+    "web": "salva.com",
+    "empresa": "salvaEnterprise",
+    "id": "0",
+    "ordenes": [
+        {
+            "id": 0,
+            "fecha": "2024-09-24",
+            "productos": [
+                {
+                    "nombre": "Zucaritas",
+                    "precio": 300,
+                    "descripcion": "Muy ricas, sisi muy muy ricas",
+                    "imagenes": [
+                      "/img/test.jpg",
+                      "/img/test.jpg"
+                    ],
+                    "id": "777",
+                    "cantidad": 1
+                },
+                {
+                    "nombre": "WATAFAK",
+                    "precio": 200,
+                    "descripcion": "sii",
+                    "imagenes": [
+                      "/img/test.jpg",
+                      "/img/test.jpg"
+                    ],
+                    "id": "778",
+                    "cantidad": 5
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "fecha": "2024-09-27",
+            "productos": [
+                {
+                    "nombre": "Zucaritas",
+                    "precio": 400,
+                    "descripcion": "Muy ricas, sisi muy muy ricas",
+                    "imagenes": [
+                      "/img/test.jpg",
+                      "/img/test.jpg"
+                    ],
+                    "id": "777",
+                    "cantidad": 6
+                },
+                {
+                    "nombre": "SSSSSSSSSSSESx",
+                    "precio": 200,
+                    "descripcion": "sii",
+                    "imagenes": [
+                      "/img/test.jpg",
+                      "/img/test.jpg"
+                    ],
+                    "id": "778",
+                    "cantidad": 8
+                }
+            ]
+        },
+    ],
+    "productos": [
+        {
+            "nombre": "Zucaritas",
+            "estrellas": 3,
+            "precio": 300,
+            "descripcion": "Muy ricas, sisi muy muy ricas",
+            "id": "777",
+            "categorias": [
+                {
+                    "nombre": "Comida",
+                    "hijas": [
+                        {
+                            "nombre": "Dulce",
+                            "hijas": [
+                                {
+                                    "nombre": "Cereales",
+                                    "hijas": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "especificacion": [
+                "Cereal dulce de maíz",
+                "0 proteína 100% lípidos",
+                "Totalmente mortal para el cuerpo"
+            ],
+            "imagenes": [
+                "/img/test.jpg",
+                "/img/test.jpg"
+            ]
+        }
+    ]
+}; // En un futuro la información se traerá del backend
 
 if(usuarioActual == null) {
     window.location.href = "iniciarSesion.html";
