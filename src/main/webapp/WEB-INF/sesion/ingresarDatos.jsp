@@ -18,13 +18,13 @@
         <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go" class="image-placeholder-1">
         <h1 class="w-100 tituloComDato"> Completar datos </h1>
 
-        <!-- Icono de usuario y boton de elegir imagen -->
+        <!-- Icono de usuario y botón de elegir imagen -->
         <figure>
             <i class="fa-solid fa-circle-user" id="icono-usuario2"></i>
             <div>
                 <button type="button" class="btn btn-primary btn-block buttonElegirImagen" id="buttonElegirImagen">Elegir imagen</button>
                 <input type="file" id="inputImagen" name="imagenPerfil" accept="image/*" style="display: none;">
-				<input type="hidden" id="imagenUrl" name="imagenUrl">
+                <input type="hidden" id="imagenUrl" name="imagenUrl">
             </div>
         </figure>
 
@@ -57,18 +57,20 @@
             <input type="date" class="form-control" id="inputFecha" name="fecha" placeholder="Fecha" required>
             <label for="inputFecha">Fecha</label>
         </div>
-		<!-- los dos radios de proveedor y cliente -->
-            <div class="row g-2 w-50 me-auto ms-auto">
-                <div class="col-md-6 form-check radios">
-                    <input class="form-check-input radios" type="radio" name="tipoUsuario" id="flexRadioDefault1" value="Proveedor">
-                    <label class="form-check-label textoradios" for="flexRadioDefault1">Proveedor</label>
-                </div>
-            
-                <div class="col-md-6 form-check radios">
-                    <input class="form-check-input radios" type="radio" name="tipoUsuario" id="flexRadioDefault2" value="Cliente" checked>
-                    <label class="form-check-label textoradios" for="flexRadioDefault2">Cliente</label>
-                </div>
+
+        <!-- Radios para Proveedor y Cliente -->
+        <div class="row g-2 w-50 me-auto ms-auto">
+            <div class="col-md-6 form-check radios">
+                <input class="form-check-input radios" type="radio" name="tipoUsuario" id="flexRadioDefault1" value="Proveedor">
+                <label class="form-check-label textoradios" for="flexRadioDefault1">Proveedor</label>
             </div>
+
+            <div class="col-md-6 form-check radios">
+                <input class="form-check-input radios" type="radio" name="tipoUsuario" id="flexRadioDefault2" value="Cliente" checked>
+                <label class="form-check-label textoradios" for="flexRadioDefault2">Cliente</label>
+            </div>
+        </div>
+
         <!-- Sitio web -->
         <div class="form-floating">
             <input type="text" class="form-control text-input-sitioWeb" id="inputSitioWeb" name="sitioWeb" placeholder="Sitio web">
@@ -81,8 +83,7 @@
             <label for="inputCompania">Compañía</label>
         </div>
 
-        <div id="error-mensajes" style="color: red;">
-        </div>
+        <div id="error-mensajes" style="color: red;"></div>
 
         <div class="row g-2">
             <div class="col-md-6">
@@ -90,7 +91,7 @@
             </div>
 
             <div class="col-md-6">
-                <button type="button" id="button-registrar"> Registrar</button>
+                <button type="submit" id="button-registrar"> Registrar</button>
             </div>
         </div>
     </form>
@@ -109,9 +110,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const fechaInput = document.getElementById('inputFecha');
     const radioProveedor = document.getElementById('flexRadioDefault1');
     const radioCliente = document.getElementById('flexRadioDefault2');
-
+    const imagenUrlInput = document.getElementById('imagenUrl');
     const errores = {};
 
+    
+    
     function validarCampoTexto(input, minLength, fieldName) {
         if (input.value.trim().length < minLength) {
             errores[fieldName] = `${fieldName} debe tener al menos ${minLength} caracteres.`;
@@ -241,7 +244,9 @@ document.addEventListener('DOMContentLoaded', function() {
         validarCampoTexto(companiaInput, 1, 'Compañía');
     });
 
-    buttonRegistrar.addEventListener('click', function() {
+    buttonRegistrar.addEventListener('click', function(event) {
+        event.preventDefault(); // Previene el envío automático del formulario
+        
         validarCampoTexto(nombreInput, 3, 'Nombre');
         validarCampoTexto(apellidoInput, 3, 'Apellido');
         validarContraseñas();
@@ -256,9 +261,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Si no hay errores, se envía el formulario
         if (Object.keys(errores).length === 0) {
             document.getElementById('form-registrar').submit();
-            window.location.href = '${pageContext.request.contextPath}/iniciarSesion';
         }
     });
+
 
     buttonCancelar.addEventListener('click', function() {
         window.location.href = '${pageContext.request.contextPath}/home';

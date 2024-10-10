@@ -13,11 +13,11 @@
     <main class="container-fluid p-0 d-flex">
         <div class="rectangle-1 text-wrap">
             <!-- Imagen del registro -->
-            <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go"  width="50px" height="50px">
+            <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go" width="50px" height="50px">
             <h1 class="w-100 textoRegistrar"> Registrar </h1>
 
             <!-- Formulario de registro -->
-            <form action="${pageContext.request.contextPath}/ingresardatos" method="post">
+            <form action="${pageContext.request.contextPath}/registrar" method="post" id="registroForm">
                 <!-- email -->
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
@@ -51,7 +51,6 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', function() { 
-        const buttonRegistrar = document.querySelector('.button-registrar');
         const emailInput = document.getElementById('floatingInput');
         const nicknameInput = document.getElementById('floatingInputNickname');
         const emailWarning = document.getElementById('emailWarning');
@@ -109,34 +108,25 @@
             window.location.href = '<%= request.getContextPath() %>/iniciarsesion'; 
         };
 
-        // Verificación y redirección para el registro
-        buttonRegistrar.onclick = function() {
+        // Validación antes de enviar el formulario
+        const formulario = document.getElementById('registroForm');
+        formulario.onsubmit = function(event) {
+            event.preventDefault(); // Previene el envío automático
+
             const email = emailInput.value.trim();
             const nickname = nicknameInput.value.trim();
 
-            if (!email || !nickname) {
-                alert('Por favor, completa todos los campos.');
+            // Verificar si hay errores
+            if (emailInput.classList.contains('is-invalid') || nicknameInput.classList.contains('is-invalid')) {
+                alert('Por favor, corrige los errores antes de enviar el formulario.');
                 return;
             }
 
-            if (!esCorreoValido(email)) {
-                alert('Por favor, introduce un correo electrónico válido.');
-                emailInput.classList.add('is-invalid');
-                return;
-            }
-
-            const usuarioExistente = usuariosRegistrados.find(user => user.email === email || user.nickname === nickname);
-
-            if (usuarioExistente) {
-                alert('Ya existe un usuario registrado con ese email o nickname.');
-            } else {
-                // Redirigir con los parámetros email y nickname para el controlador
-                window.location.href = '<%= request.getContextPath() %>/ingresardatos?email=' + encodeURIComponent(email) + '&nickname=' + encodeURIComponent(nickname);
-            }
+            // Enviar el formulario si todo está bien
+            formulario.submit();
         };
     });
-</script>
-
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

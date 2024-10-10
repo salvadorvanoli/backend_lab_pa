@@ -717,6 +717,12 @@ public class Sistema extends ISistema {
        
 		
 	}
+
+	@Override
+	public void iniciarSesion(Usuario usuarioEncontrado) {
+		// HAY QUE IMPLEMENTARLOO
+		
+	}
 	
 	
 	

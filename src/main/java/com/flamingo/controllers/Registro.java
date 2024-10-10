@@ -22,15 +22,15 @@ public class Registro extends HttpServlet {
         String email = request.getParameter("email");
         String nickname = request.getParameter("nickname");
 
-        // Aquí puedes agregar la lógica para validar y guardar el usuario
-        // Por ejemplo, puedes llamar a tu sistema para registrar el usuario
-
+  
+        System.out.println("registro Email: " + email);
+        System.out.println("registro Nickname: " + nickname);
+        
         // Guardar estos valores en la sesión
         HttpSession session = request.getSession();
         session.setAttribute("email", email);
         session.setAttribute("nickname", nickname);
 
-        // Redirigir a ingresar datos después de un registro exitoso
-        response.sendRedirect(request.getContextPath() + "/ingresardatos"); // Cambia /ingresardatos a la ruta que desees
+        response.sendRedirect(request.getContextPath() + "/ingresardatos"); 
     }
 }
