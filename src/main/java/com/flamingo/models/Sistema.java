@@ -685,6 +685,10 @@ public class Sistema extends ISistema {
         orden1.setPrecioTotal(1350.50f);
         
         cl1.getOrdenesDeCompras().add(orden1);
+        // HashMap<Integer, Cantidad> carrito = new HashMap<>();
+        Cantidad cant1 = new Cantidad(producto1.getDTProducto(), 4);
+        
+        cl1.agregarProducto(cant1);
         
         OrdenDeCompra orden2 = new OrdenDeCompra(77, fecha2, cl2, null);
         orden2.setPrecioTotal(555.75f);

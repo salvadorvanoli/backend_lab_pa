@@ -10,10 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // import com.flamingo.exceptions.UsuarioNoEncontrado;
-import com.flamingo.models.SistemaFactory;
 import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.models.Cliente;
 import com.flamingo.models.ISistema;
+import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 
 /**
@@ -41,6 +40,14 @@ public class Carrito extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// String usuario = request.getParameter("usuarioActual");
+		ISistema sis = SistemaFactory.getInstancia().getISistema();
+		sis.crearCasos();
+		try {
+			sis.elegirCliente("Salva");
+		} catch(UsuarioNoExisteException e) {
+			
+		}
+		request.setAttribute("usuarioActual", sis.getUsuarioActual());
 		Object usuario = request.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
@@ -50,23 +57,24 @@ public class Carrito extends HttpServlet {
 				
 		} else {
 			// Usuario usr;
-			Cliente usr;
-			try {
+			Usuario usr = (Usuario) usuario;
+			// try {
 				// ISistema sistema = SistemaFactory.getInstancia().getISistema();
 				// sistema.elegirCliente(usuario);
 				// usr = sistema.getUsuarioActual();
-				usr = (Cliente) usuario;
-				
+				// usr = (Cliente) usuario;
+			/*	
 			} catch(Exception ex){
 				response.sendError(404); // el usuario no es un cliente
 				request.getRequestDispatcher("/WEB-INF/errorPages/404.jsp").
 						include(request, response);
 				return;
 			}
+			*/
 			
 			// setea el usuario
 			request.setAttribute("usuarioActual", usr);
-			
+
 			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
 					forward(request, response);
 		}

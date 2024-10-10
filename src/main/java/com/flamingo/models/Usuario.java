@@ -12,6 +12,7 @@ public class Usuario{
     private DTFecha fechaNac;
     private String foto;
     private String contrasenia;
+    private HashMap<Integer, Cantidad> carrito;
 
     public Usuario(String nickname, String nombre, String apellido, String email, DTFecha fechaNac, String foto, String contrasenia){
         this.nickname = nickname;
@@ -21,6 +22,7 @@ public class Usuario{
         this.fechaNac = fechaNac;
         this.foto = foto;
         this.contrasenia = contrasenia;
+        this.carrito = new HashMap<>();
     }
 
 	public String getNickname() {
@@ -78,4 +80,22 @@ public class Usuario{
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
 	}
+	
+	public HashMap<Integer, Cantidad> getCarrito(){
+		return this.carrito;
+	}
+	
+	public void agregarProducto(Cantidad prod) {
+		if (this.carrito.containsKey(prod.getProducto().getNumero()));
+		this.carrito.put(prod.getProducto().getNumero(), prod);
+	}
+	
+	public void quitarProducto(int numProd) {
+		this.carrito.remove(numProd);
+	}
+	
+	public void setCarrito(HashMap<Integer, Cantidad> carrito) {
+		this.carrito = carrito;
+	}
+	
 }
