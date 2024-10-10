@@ -47,20 +47,20 @@
 	                    for (Categoria categoria : categorias) {
 	            %>
 	                <div class="dropdown">
-	                    <button class="dropbtn">&#9654; <%= categoria.getNombre() %></button>
+	                    <button class="dropbtn">&#9654; <%= categoria.getNombreCat() %></button>
 	                    <div class="dropdown-content">
 	                        <%
 	                            List<Categoria> hijas = categoria.getHijas();
 	                            if (hijas != null) { // Verifica que hijas no sea null
 	                                for (Categoria subcategoria : hijas) {
 	                        %>
-	                            <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombre() %></a>
+	                            <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombreCat() %></a>
 	                            <%
 	                                List<Categoria> subHijas = subcategoria.getHijas();
 	                                if (subHijas != null) { // Verifica que subHijas no sea null
 	                                    for (Categoria subsubcategoria : subHijas) {
 	                            %>
-	                                <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombre() %></a>
+	                                <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombreCat() %></a>
 	                            <%
 	                                    }
 	                                }

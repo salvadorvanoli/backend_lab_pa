@@ -11,15 +11,18 @@ public class Producto {
     private List<String> imagenes;
     private List<Categoria> categorias;
     private Proveedor proveedor;
+    int estrellas;
+    String nombreTienda;
 
     // Constructor
-    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
+    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, int estrellas, String nombreTienda) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.especificacion = especificacion;
         this.numReferencia = numReferencia;
         this.precio = precio;
-        
+        this.estrellas = estrellas;
+        this.nombreTienda = nombreTienda;
         this.imagenes = new ArrayList<>();
         this.categorias = new ArrayList<>();
         
@@ -60,6 +63,14 @@ public class Producto {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+    
+    public void setNombreTienda(String nombreTienda) {
+    	this.nombreTienda = nombreTienda;
+    }
+    
+    public void setEstrellas(int estrellas) {
+    	this.estrellas = estrellas;
+    }
 
     // Getters
     public String getNombreProducto() {
@@ -97,6 +108,14 @@ public class Producto {
     // Método para obtener los datos básicos del producto
     public DTProducto getDTProducto() {
         return new DTProducto(nombreProducto, numReferencia, descripcion, precio);
+    }
+    
+    public String getNombreTienda() {
+    	return this.nombreTienda;
+    }
+    
+    public int getEstrellas() {
+    	return this.estrellas;
     }
 
     // Método para obtener los datos detallados del producto
