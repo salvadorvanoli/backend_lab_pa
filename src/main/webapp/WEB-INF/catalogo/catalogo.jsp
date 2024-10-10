@@ -20,7 +20,7 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/template/header.jsp" />
+	<jsp:include page="/WEB-INF/template/header.jsp"/>
 
     <!-- Ordenar por -->
     <div class="row container-fluid w-100 justify-content-end align-items-center">

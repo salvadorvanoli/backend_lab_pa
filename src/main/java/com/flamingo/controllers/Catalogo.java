@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.flamingo.models.Producto;
+import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.Comentario;
 
@@ -23,7 +24,7 @@ public class Catalogo extends HttpServlet {
     private List<Producto> listaDeProductos;
     private List<Categoria> listaDeCategorias;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         try {
             this.listaDeProductos = obtenerListaDeProductos();
             this.listaDeCategorias = obtenerListaDeCategorias(); 
@@ -239,5 +240,27 @@ public class Catalogo extends HttpServlet {
         return categorias;
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+			processRequest(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+			processRequest(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }
