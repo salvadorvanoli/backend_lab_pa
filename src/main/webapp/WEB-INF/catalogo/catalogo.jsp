@@ -1,5 +1,8 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="java.util.ArrayList"%>
 <%@ page import="com.flamingo.models.Producto" %>
 <%@ page import="com.flamingo.models.Categoria" %>
 
@@ -36,104 +39,109 @@
         </header>
     </div>
 
-	<div class="container-fluid w-100"> 
-	    <div class="row">
-	        <!-- Aside -->
-	        <aside id="aside" class="aside-1 scrolleable col-3 row">
-	            <%
-	                List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-	                
-	                if (categorias != null) { // Verifica que categorias no sea null
-	                    for (Categoria categoria : categorias) {
-	            %>
-	                <div class="dropdown">
-	                    <button class="dropbtn">&#9654; <%= categoria.getNombreCat() %></button>
-	                    <div class="dropdown-content">
-	                        <%
-	                            List<Categoria> hijas = categoria.getHijas();
-	                            if (hijas != null) { // Verifica que hijas no sea null
-	                                for (Categoria subcategoria : hijas) {
-	                        %>
-	                            <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombreCat() %></a>
+	<aside id="aside" class="aside-1 scrolleable col-3 row">
+	    <%
+	        List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+	        
+	        if (categorias != null) { // Verifica que categorias no sea null
+	            for (Categoria categoria : categorias) {
+	    %>
+	            <div class="dropdown">
+	                <button class="dropbtn" aria-haspopup="true" aria-expanded="false">&#9654; <%= categoria.getNombreCat() %></button>
+	                <div class="dropdown-content">
+	                    <%
+	                    HashMap<String, Categoria> hijosHash = categoria.getHijos();
+	                    
+	                        if (hijosHash != null && !hijosHash.isEmpty()) { // Verifica que hijos no sea null y no esté vacío
+	                            ArrayList<Categoria> hijos = new ArrayList<>(hijosHash.values());
+	                            for (Categoria subcategoria : hijos) {
+	                    %>
+	                                <a href="#" class="dropdown-item">&#9654; <%= subcategoria.getNombreCat() %></a>
+	                                <%
+	                                HashMap<String, Categoria> subhijosHash = subcategoria.getHijos();
+	                                ArrayList<Categoria> subhijos = new ArrayList<>(subhijosHash.values());
+	                                    if (subhijos != null && !subhijos.isEmpty()) { // Verifica que subhijos no esté vacío
+	                                        for (Categoria subsubcategoria : subhijos) {
+	                                %>
+	                                            <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombreCat() %></a>
+	                                <%
+	                                        }
+	                                    } else {
+	                                %>
+	                                        <p>No hay subsubcategorías disponibles.</p>
+	                                <%
+	                                    } // Fin de la verificación de subhijos
+	                                %>
 	                            <%
-	                                List<Categoria> subHijas = subcategoria.getHijas();
-	                                if (subHijas != null) { // Verifica que subHijas no sea null
-	                                    for (Categoria subsubcategoria : subHijas) {
-	                            %>
-	                                <a href="#" class="dropdown-item">&emsp;&emsp;&#9654; <%= subsubcategoria.getNombreCat() %></a>
-	                            <%
-	                                    }
-	                                }
-	                            %>
-	                        <%
-	                                } // Fin del for de subcategorías
-	                            } else {
-	                        %>
+	                            } // Fin del for de subcategorías
+	                        } else {
+	                    %>
 	                            <p>No hay subcategorías disponibles.</p>
-	                        <%
-	                            } // Fin de la verificación de hijas
-	                        %>
-	                    </div>
+	                    <%
+	                        } // Fin de la verificación de hijos
+	                    %>
 	                </div>
-	            <%
-	                    } // Fin del for de categorías
-	                } else {
-	            %>
-	                <p>No hay categorías disponibles.</p>
-	            <%
-	                } // Fin de la verificación de categorías
-	            %>
-	        </aside>
-	    </div>
-	</div>
+	            </div>
+	    <%
+	            } // Fin del for de categorías
+	        } else {
+	    %>
+	            <p>No hay categorías disponibles.</p>
+	    <%
+	        } // Fin de la verificación de categorías
+	    %>
+	</aside>
+
 
 
             <!-- Productos -->
     <main id="prods" class="col-12 col-md">
-		<%
-			List<Producto> productos = (List<Producto>) request.getAttribute("productos");
-			        
-			if (productos != null && !productos.isEmpty()) { // Verifica que productos no sea null y no esté vacío
-				for (Producto producto : productos) {
-			       // Verifica que el producto tenga imágenes antes de acceder a la primera
-			       String imagen = (producto.getImagenes() != null && !producto.getImagenes().isEmpty()) 
-			       ? producto.getImagenes().get(0) 
-			       : "media/images/default.webp"; // Coloca una ruta de imagen por defecto aquí
-			
-		%>
-		<article class="rectangle-1 row" onclick="verInfoProducto(<%= producto.getId() %>)">
-			<img src="<%= imagen %>" class="col-3 image-1" alt="Imagen del producto">
-				<div class="col-9 row todo-lodemas">
-			    	<div class="row col-12 item-estrellas">
-			        	<div class="col item-1"><%= producto.getNombre() %></div>
-			           	<div class="col conjunto_estrellas">
-			            	<%
-			                	for (int i = 1; i <= 5; i++) {
-			               	%>
-			                	<span class="fa fa-star <%= (i <= producto.getEstrellas() ? "checked" : "") %>"></span>
-			                <%
-			                	}
-			                %>
-			            </div>
-			        </div>
-			        <div class="tienda-x col-12"><%= producto.getNombreTienda() %></div>
-			        <div class="row col-12 precio-carrito">
-			        	<div class="col precio">$UYU <%= producto.getPrecio() %></div>
-			            <div class="col-2 row">
-			            	<div class="col carrito fa-solid fa-cart-shopping"></div>
-			            </div>
-			        </div>
-			    </div>
-			</article>
-			<%
-				} // Fin del for de productos
-				} else {
-			%>
-				<p>No hay productos disponibles.</p>
-			<%
-				} // Fin de la verificación de productos
-			%>
+	    <%
+	        List<Producto> productos = (List<Producto>) request.getAttribute("productos");
+	            
+	        if (productos != null && !productos.isEmpty()) { // Verifica que productos no sea null y no esté vacío
+	            for (Producto producto : productos) {
+	                String imagen = (producto.getImagenes() != null && !producto.getImagenes().isEmpty()) 
+	                ? producto.getImagenes().get(0) 
+	                : "media/images/default.webp"; // Coloca una ruta de imagen por defecto aquí
+	    %>
+	                <article class="rectangle-1 row product" data-referencia="<%= producto.getNumReferencia() %>">
+	                    <figure class="col-3">
+	                        <img src="<%= imagen %>" class="image-1" alt="Imagen de <%= producto.getNombreTienda() %> - <%= producto.getNumReferencia() %>">
+	                        <figcaption><%= producto.getNombreTienda() %></figcaption>
+	                    </figure>
+	                    <div class="col-9 row todo-lodemas">
+	                        <div class="row col-12 item-estrellas">
+	                            <div class="col item-1"><%= producto.getNumReferencia() %></div>
+	                            <div class="col conjunto_estrellas">
+	                                <%
+	                                    for (int i = 1; i <= 5; i++) {
+	                                %>
+	                                    <span class="fa fa-star <%= (i <= producto.getEstrellas() ? "checked" : "") %>"></span>
+	                                <%
+	                                    }
+	                                %>
+	                            </div>
+	                        </div>
+	                        <div class="tienda-x col-12"><%= producto.getNombreTienda() %></div>
+	                        <div class="row col-12 precio-carrito">
+	                            <div class="col precio">$UYU <%= producto.getPrecio() %></div>
+	                            <div class="col-2 row">
+	                                <div class="col carrito fa-solid fa-cart-shopping"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </article>
+	    <%
+	            } // Fin del for de productos
+	        } else {
+	    %>
+	            <p>No hay productos disponibles.</p>
+	    <%
+	        } // Fin de la verificación de productos
+	    %>
 	</main>
+
 </body>
 
 <jsp:include page="/WEB-INF/template/footer.jsp" />

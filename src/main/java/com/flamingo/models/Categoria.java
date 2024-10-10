@@ -24,7 +24,7 @@ public class Categoria {
         this.padre = padre;
         this.hijos = new HashMap<>();
     }
-
+    
     // Getter para nombreCat
     public String getNombreCat() {
         return nombreCat;
