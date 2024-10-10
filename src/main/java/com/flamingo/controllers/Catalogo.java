@@ -38,8 +38,8 @@ public class Catalogo extends HttpServlet {
     	List<Categoria> Cereales = new ArrayList<>();
     	Cereales.add(Cerealescategoria);
     	
-    	Producto a = new Producto("Cereal Saludable", 4.9 , "todo muy muy saludable" , "1", null, Cereales,  "DD Market", 5); 
-    	Producto b = new Producto("Cereal ", 2.5 , "todo nada nada saludable" , "2", null, Cereales, "BCT Market", 3); 
+    	Producto a = new Producto("Cereal Saludable", 4.9 , "todo muy muy saludable" , "1", null, Cereales,  "DD Market", 5, 10); 
+    	Producto b = new Producto("Cereal ", 2.5 , "todo nada nada saludable" , "2", null, Cereales, "BCT Market", 3, 130); 
     	
     	List<Producto> lista = new ArrayList<>();
     	lista.add(a);
