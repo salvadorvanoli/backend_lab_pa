@@ -1,45 +1,34 @@
 package com.flamingo.models;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.HashMap;
 
-public class Usuario {
+import com.flamingo.models.DTFecha;
+
+public class Usuario{
+    private String nickname;
     private String nombre;
     private String apellido;
-    private String nickname;
-    private String tipo; 
     private String email;
-    private String fecha; 
-    private String foto; 
-    private String web; 
-    private String empresa; 
-    private String id;
-    private String contrasena; 
-    private List<Orden> ordenes; 
-    private List<Producto> productos; 
+    private DTFecha fechaNac;
+    private String foto;
+    private String contrasenia;
 
-    // Constructor
-    public Usuario(String nombre, String apellido, String nickname, String tipo, String email,
-                   String fecha, String foto, String web, String empresa, String id,
-                   String contrasena, List<Orden> ordenes, List<Producto> productos) {
+    public Usuario(String nickname, String nombre, String apellido, String email, DTFecha fechaNac, String foto, String contrasenia){
+        this.nickname = nickname;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.nickname = nickname;
-        this.tipo = tipo;
         this.email = email;
-        this.fecha = fecha;
+        this.fechaNac = fechaNac;
         this.foto = foto;
-        this.web = web;
-        this.empresa = empresa;
-        this.id = id;
-        this.contrasena = contrasena;
-        this.ordenes = ordenes;
-        this.productos = productos;
+        this.contrasenia = contrasenia;
     }
 
-	public Usuario(String nombre2, String apellido2, String contrasena2, LocalDate localDate, String sitioWeb,
-			String compania, String tipoUsuario) {
-		// TODO Auto-generated constructor stub
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public String getNombre() {
@@ -58,22 +47,6 @@ public class Usuario {
 		this.apellido = apellido;
 	}
 
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -82,12 +55,12 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public String getFecha() {
-		return fecha;
+	public DTFecha getFechaNac() {
+		return fechaNac;
 	}
 
-	public void setFecha(String fecha) {
-		this.fecha = fecha;
+	public void setFechaNac(DTFecha fechaNac) {
+		this.fechaNac = fechaNac;
 	}
 
 	public String getFoto() {
@@ -98,55 +71,11 @@ public class Usuario {
 		this.foto = foto;
 	}
 
-	public String getWeb() {
-		return web;
+	public String getContrasenia() {
+		return contrasenia;
 	}
 
-	public void setWeb(String web) {
-		this.web = web;
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
 	}
-
-	public String getEmpresa() {
-		return empresa;
-	}
-
-	public void setEmpresa(String empresa) {
-		this.empresa = empresa;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getContrasena() {
-		return contrasena;
-	}
-
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
-	}
-
-	public List<Orden> getOrdenes() {
-		return ordenes;
-	}
-
-	public void setOrdenes(List<Orden> ordenes) {
-		this.ordenes = ordenes;
-	}
-
-	public List<Producto> getProductos() {
-		return productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
-	}
-
-	
-    
-   
 }
