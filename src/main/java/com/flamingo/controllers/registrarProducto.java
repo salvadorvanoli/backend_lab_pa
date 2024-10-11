@@ -1,6 +1,7 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class registrarProducto extends HttpServlet {
 		if(usuario == null) {
 			request.setAttribute("usuarioActual", null);
 			
-			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
+			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
 					forward(request, response);
 		} else {
 			Usuario usr = (Usuario) usuario;
@@ -59,7 +60,7 @@ public class registrarProducto extends HttpServlet {
 			request.setAttribute("categorias", ctg);
 			
 
-			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
+			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
 					forward(request, response);
 		}
 	}

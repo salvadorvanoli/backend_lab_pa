@@ -4,6 +4,9 @@
 <%@page import="com.flamingo.models.Usuario"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Collection"%>
+<%@page import="java.util.HashMap"%>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -190,8 +193,8 @@
 		</div>
 
 
-	<!-- Cargar menú de categorías-->
-	<div class="container-md container-fluid">
+	<!-- Cargar menú de categorías -->
+<div class="container-md container-fluid">
     <div class="row">
         <div class="col-md-12">
             <h2 class="elegir_categoria">Seleccionar categoría</h2>
@@ -202,17 +205,20 @@
             <div class="vertical-menu-1">
                 <div class="row">
                     <% 
-                        
+                        // Obtener el objeto de categorías desde el request
                         Object categoriasObj = request.getAttribute("categorias");
-                        List<Categoria> categorias = null;
+                        HashMap<String, Categoria> categorias = null;
 
-                        if (categoriasObj instanceof List<?>) {
-                            categorias = (List<Categoria>) categoriasObj;
+                        // Verificar si el objeto es un HashMap y hacer el cast apropiado
+                        if (categoriasObj instanceof HashMap<?,?>) {
+                            categorias = (HashMap<String, Categoria>) categoriasObj;
                         }
 
                         if (categorias != null) {
-                            for (Categoria categoria : categorias) {
+                            // Iterar sobre los valores del HashMap (es decir, las instancias de Categoria)
+                            for (Categoria categoria : categorias.values()) {
                                 
+                                // Determinar la clase CSS según si tiene subcategorías o no
                                 String categoriaClase = categoria.tieneSubcategorias() ? "dropbtn" : "dropbtnW";
                     %>
                     <!-- Mostrar categoría principal -->
@@ -226,7 +232,7 @@
                                 <!-- Si tiene subcategorías, las mostramos aquí -->
                                 <% if (categoria.tieneSubcategorias()) { %>
                                 <div class="dropdown-content">
-                                    <% for (Categoria subcategoria : categoria.getHijos()) { %>
+                                    <% for (Categoria subcategoria : categoria.getHijos().values()) { %>
                                     <div class="nested-dropdown">
                                         <a href="#" onclick="agregarCategoria('<%= subcategoria.getNombreCat() %>')">
                                             <%= subcategoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= subcategoria.getNombreCat() %>
@@ -234,7 +240,7 @@
                                         <!-- Si hay sub-subcategorías, las mostramos aquí -->
                                         <% if (subcategoria.tieneSubcategorias()) { %>
                                         <div class="nested-dropdown-content">
-                                            <% for (Categoria subSubCategoria : subcategoria.getHijos()) { %>
+                                            <% for (Categoria subSubCategoria : subcategoria.getHijos().values()) { %>
                                             <a href="#" onclick="agregarCategoria('<%= subSubCategoria.getNombreCat() %>')">
                                                 <%= subSubCategoria.getNombreCat() %>
                                             </a>
@@ -255,7 +261,7 @@
                 </div>
             </div>
         </div>
-  
+   
 
 			
 			
@@ -320,6 +326,11 @@
 	    </div>
 	</div>
 
+
+
+
+
+
 	<script>
 	
 	function mostrarAlerta(mensaje) {
@@ -358,7 +369,8 @@
 	    categorias: [],
 	    especificaciones: [],
 	    imagenes: [],
-	    comentarios: []
+	    comentarios: [],
+		descripcion; ""
 	};
 
 
@@ -551,18 +563,18 @@
 	        // Validar los datos del producto
 	        if (!revisarDatosProducto()) return;
 
+	        // Obtener valores de los campos del formulario
+	        nuevoProducto.nombre = document.getElementById("tituloProducto").value;
+	        nuevoProducto.referencia = document.getElementById("numeroReferencia").value;
+	        nuevoProducto.precio = parseFloat(document.getElementById("precioProducto").value);
+	        nuevoProducto.descripcion = document.getElementById("descripcionProducto").value;
+
 	        // Verificar si al menos una categoría ha sido seleccionada
 	        if (nuevoProducto.categorias.length === 0) {
 	            mostrarAlerta("Debes seleccionar al menos una categoría.");
 	            return;
 	        }
 
-	        // Obtener valores de los campos del formulario
-	        nuevoProducto.nombre = document.getElementById("tituloProducto").value;
-	        nuevoProducto.referencia = document.getElementById("numeroReferencia").value;
-	        nuevoProducto.precio = parseFloat(document.getElementById("precioProducto").value);
-	        nuevoProducto.descripcion = document.getElementById("descripcionProducto").value;
-	        console.log(nuevoProducto);
 	        // Agregar especificaciones
 	        nuevoProducto.especificaciones = []; // Reiniciar las especificaciones
 	        const especificacionesInputs = document.querySelectorAll('.tabla input[type="text"]');
@@ -586,42 +598,22 @@
 	        }
 	        mensajeExito += '<br>';
 
-	     // Mostrar las categorías seleccionadas en el mensaje de éxito
+	        // Mostrar las categorías seleccionadas en el mensaje de éxito
 	        mensajeExito += `Categorías: `;
 	        if (nuevoProducto.categorias.length > 0) {
 	            mensajeExito += nuevoProducto.categorias.join(', ');
-	        } 
+	        } else {
+	            mensajeExito += 'Ninguna';
+	        }
 	        mensajeExito += '<br>';
 
-	        
 	        // Mostrar el mensaje en el modal
 	        document.querySelector('#modalCarrito .modal-body').innerHTML = mensajeExito;
 
 	        // Mostrar el modal de éxito
 	        $('#modalCarrito').modal('show');
-	        console.log(nuevoProducto.precio);
-	        console.log(nuevoProducto.nombre);
-	        console.log(nuevoProducto.categorias);
-	        console.log(nuevoProducto.especificaciones);
-	        
-	     // Enviar el nuevo producto al servidor
-	        fetch('/api/productos', {
-	            method: 'POST',
-	            headers: {
-	                'Content-Type': 'application/json'
-	            },
-	            body: JSON.stringify(nuevoProducto) // Enviar el objeto nuevoProducto como JSON
-	        })
-	        .then(response => {
-	            if (!response.ok) {
-	                throw new Error('Error al agregar el producto');
-	            }
-	            return response.json(); // Convertir la respuesta en JSON
-	        })
-	        .then(data => {
-	            console.log('Producto agregado correctamente:', data);
-	            // Aquí puedes manejar la respuesta del servidor
-	        })
+
+	       
 	        // Reiniciar el objeto nuevoProducto para futuros registros
 	        reiniciarNuevoProducto();
 	    });
@@ -629,7 +621,9 @@
 
 
 	</script>
-
+	
+	
+	
 
 	<jsp:include page="/WEB-INF/template/footer.jsp" />
 
