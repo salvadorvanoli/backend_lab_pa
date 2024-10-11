@@ -65,7 +65,9 @@ public class IniciarSesion extends HttpServlet {
             dispatcher.forward(request, response);
         } else {
             // Inicio de sesión exitoso: Establecer el usuario actual en ISistema
+        	//System.out.println("te encontramos " + usuarioEncontrado.getEmail());
             sis.iniciarSesion(usuarioEncontrado);
+        	//System.out.println("te encontramos " + sis.getUsuarioActual().getEmail());
             // HAY QUE IMPLEMENTARLO EN SISTEMAAA
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/home");
