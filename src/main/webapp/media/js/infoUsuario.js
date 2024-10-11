@@ -1,149 +1,3 @@
-let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || {
-    "nombre": "Salvador",
-    "apellido": "Vanoli",
-    "nickname": "salvaelpro777",
-    "tipo": "proveedor",
-    "email": "salva@salva.com",
-    "fecha": "2004-05-01",
-    "foto": "media/images/test.jpg",
-    "web": "salva.com",
-    "empresa": "salvaEnterprise",
-    "id": "0",
-    "ordenes": [
-        {
-            "id": 0,
-            "fecha": "2024-09-24",
-            "productos": [
-                {
-                    "nombre": "Zucaritas",
-                    "precio": 300,
-                    "descripcion": "Muy ricas, sisi muy muy ricas",
-                    "imagenes": [
-                      "/img/test.jpg",
-                      "/img/test.jpg"
-                    ],
-                    "id": "777",
-                    "cantidad": 1
-                },
-                {
-                    "nombre": "WATAFAK",
-                    "precio": 200,
-                    "descripcion": "sii",
-                    "imagenes": [
-                      "/img/test.jpg",
-                      "/img/test.jpg"
-                    ],
-                    "id": "778",
-                    "cantidad": 5
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "fecha": "2024-09-27",
-            "productos": [
-                {
-                    "nombre": "Zucaritas",
-                    "precio": 400,
-                    "descripcion": "Muy ricas, sisi muy muy ricas",
-                    "imagenes": [
-                      "/img/test.jpg",
-                      "/img/test.jpg"
-                    ],
-                    "id": "777",
-                    "cantidad": 6
-                },
-                {
-                    "nombre": "SSSSSSSSSSSESx",
-                    "precio": 200,
-                    "descripcion": "sii",
-                    "imagenes": [
-                      "/img/test.jpg",
-                      "/img/test.jpg"
-                    ],
-                    "id": "778",
-                    "cantidad": 8
-                }
-            ]
-        },
-    ],
-    "productos": [
-        {
-            "nombre": "Zucaritas",
-            "estrellas": 3,
-            "precio": 300,
-            "descripcion": "Muy ricas, sisi muy muy ricas",
-            "id": "777",
-            "categorias": [
-                {
-                    "nombre": "Comida",
-                    "hijas": [
-                        {
-                            "nombre": "Dulce",
-                            "hijas": [
-                                {
-                                    "nombre": "Cereales",
-                                    "hijas": []
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "especificacion": [
-                "Cereal dulce de maíz",
-                "0 proteína 100% lípidos",
-                "Totalmente mortal para el cuerpo"
-            ],
-            "imagenes": [
-                "/img/test.jpg",
-                "/img/test.jpg"
-            ]
-        }
-    ]
-}; // En un futuro la información se traerá del backend
-
-if(usuarioActual == null) {
-    window.location.href = "iniciarSesion.html";
-}
-
-if(usuarioActual.tipo == "Proveedor") {
-    document.getElementById("proveedor-section").innerHTML = `
-        <h2>
-            Información Proveedor
-        </h2>
-
-        <div class="container-md container-fluid">
-            <div class="row">
-                <div id="info-proveedor-container">
-                    <div class="form-group d-flex align-items-center">
-                        <div class="mr-2 w-100">
-                            <input type="text" class="form-control" id="inputSitioWeb" placeholder="" disabled>
-                            <input type="text" class="form-control mt-2 mb-2" id="inputCompañía" placeholder="" disabled>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="productos-proveedor-container">
-            
-        </div>
-
-        <div class="container-md container-fluid">
-            <div class="row">
-                <div id="boton-agregar-producto">
-                    <div class="form-group d-flex align-items-center">
-                        <div class="mr-2 w-100">
-                            <button type="button" class="btn btn-primary botonRosado mt-2" id="agregar-producto-btn">Agregar producto</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
 // Esta función a futuro trae los productos de un proveedor, dado su id, de la base de datos
 function getProductos(id) {
     let productos = [
@@ -164,8 +18,8 @@ function getProductos(id) {
             "Totalmente mortal para el cuerpo"
         ],
         "imagenes": [
-            "/img/test.jpg",
-            "/img/test.jpg"
+            "media/images/test.jpg",
+            "media/images/test.jpg"
         ]
         },
         {
@@ -185,8 +39,8 @@ function getProductos(id) {
             "Totalmente mortal para el cuerpo"
         ],
         "imagenes": [
-            "/img/test.jpg",
-            "/img/test.jpg"
+            "media/images/test.jpg",
+            "media/images/test.jpg"
         ]
         },
         {
@@ -206,8 +60,8 @@ function getProductos(id) {
             "Totalmente mortal para el cuerpo"
         ],
         "imagenes": [
-            "/img/test.jpg",
-            "/img/test.jpg"
+            "media/images/test.jpg",
+            "media/images/test.jpg"
         ]
         },
         {
@@ -227,8 +81,8 @@ function getProductos(id) {
             "Totalmente mortal para el cuerpo"
         ],
         "imagenes": [
-            "/img/test.jpg",
-            "/img/test.jpg"
+            "media/images/test.jpg",
+            "media/images/test.jpg"
         ]
         },
         {
@@ -248,8 +102,8 @@ function getProductos(id) {
             "Totalmente mortal para el cuerpo"
         ],
         "imagenes": [
-            "/img/test.jpg",
-            "/img/test.jpg"
+            "media/images/test.jpg",
+            "media/images/test.jpg"
         ]
         }
     ]
@@ -257,7 +111,119 @@ function getProductos(id) {
     return productos;
 }
 
-function cargarDatos() {
+async function obtenerUsuarioActual() {
+    try {
+        const response = await fetch('http://localhost:8080/backend_lab_pa/userInfo', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario');
+        }
+
+        // Parsear la respuesta a JSON
+        const usuario = await response.json();
+		
+		console.log(usuario);
+        return usuario;
+    } catch (error) {
+        console.error(error);
+		return;
+    }
+}
+
+async function cargarDatos() {
+	const usuarioActual = await obtenerUsuarioActual();
+	
+	if (!usuarioActual) {
+	    window.location.href = "iniciarSesion.html";
+	    return;
+	}
+	
+	if(usuarioActual.tipo == "Proveedor") {
+	    document.getElementById("proveedor-section").innerHTML = `
+	        <h2>
+	            Información Proveedor
+	        </h2>
+
+	        <div class="container-md container-fluid">
+	            <div class="row">
+	                <div id="info-proveedor-container">
+	                    <div class="form-group d-flex align-items-center">
+	                        <div class="mr-2 w-100">
+	                            <input type="text" class="form-control" id="inputSitioWeb" placeholder="" disabled>
+	                            <input type="text" class="form-control mt-2 mb-2" id="inputCompañía" placeholder="" disabled>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+
+	        <div id="productos-proveedor-container">
+	            
+	        </div>
+
+	        <div class="container-md container-fluid">
+	            <div class="row">
+	                <div id="boton-agregar-producto">
+	                    <div class="form-group d-flex align-items-center">
+	                        <div class="mr-2 w-100">
+	                            <button type="button" class="btn btn-primary botonRosado mt-2" id="agregar-producto-btn">Agregar producto</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    `;
+	}
+	
+	// Eventos para los botones de ver orden de compra y agregar producto
+
+	document.getElementById("ver-orden-btn").addEventListener("click", () => {
+	    localStorage.setItem("ordenParaVisualizar", JSON.stringify(document.getElementById("selectOrdenes").value || "0"))
+	    window.location.href = "infoOrdenCompra.html";
+	});
+
+	if(usuarioActual.tipo == "Proveedor"){
+	    document.getElementById("agregar-producto-btn").addEventListener("click", () => {
+	        window.location.href = "registrarProducto.html";
+	    });
+	}
+	
+	document.getElementById("actualizar-datos-usuario").addEventListener("click", function(event) {
+	    if(revisarDatos()){
+	        window.location.reload();
+	    }
+	});
+
+	// Cambiar foto dinámicamente
+
+	document.getElementById("inputFile").addEventListener("change", function(event) {
+	    const file = event.target.files[0];
+	    const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+
+	    if (file && validImageTypes.includes(file.type)) {
+	        const reader = new FileReader();
+
+	        reader.onload = function(e) {
+	            document.getElementById("fotoPerfilUsuario").src = e.target.result;
+	        };
+
+	        reader.readAsDataURL(file);
+	    } else {
+	        mostrarAlerta("Por favor, selecciona un archivo de imagen válido (PNG, JPG, JPEG, WEBP).");
+	    }
+	});
+
+	document.getElementById("cerrar-sesion").addEventListener("click", () => {
+	    localStorage.removeItem("usuarioActual");
+	    location.reload();
+	});
+	
     const inputNombre = document.getElementById("inputNombre");
     const inputApellido = document.getElementById("inputApellido");
     const inputNickname = document.getElementById("inputNickname");
@@ -281,8 +247,8 @@ function cargarDatos() {
     }
 
     if(usuarioActual.tipo == "Proveedor") {
-        document.getElementById("inputSitioWeb").value = usuarioActual.sitioWeb;
-        document.getElementById("inputCompañía").value = usuarioActual.compania;
+        document.getElementById("inputSitioWeb").value = usuarioActual.web;
+        document.getElementById("inputCompañía").value = usuarioActual.empresa;
 
         let productos = getProductos(usuarioActual.id);
 
@@ -309,20 +275,7 @@ function cargarDatos() {
     }
 }
 
-cargarDatos();
-
-// Eventos para los botones de ver orden de compra y agregar producto
-
-document.getElementById("ver-orden-btn").addEventListener("click", () => {
-    localStorage.setItem("ordenParaVisualizar", JSON.stringify(document.getElementById("selectOrdenes").value || "0"))
-    window.location.href = "infoOrdenCompra.html";
-});
-
-if(usuarioActual.tipo == "Proveedor"){
-    document.getElementById("agregar-producto-btn").addEventListener("click", () => {
-        window.location.href = "registrarProducto.html";
-    });
-}
+//cargarDatos();
 
 // Actualizar datos del usuario
 
@@ -402,33 +355,3 @@ function revisarDatos(){
 
     return true;
 }
-
-document.getElementById("actualizar-datos-usuario").addEventListener("click", function(event) {
-    if(revisarDatos()){
-        window.location.reload();
-    }
-});
-
-// Cambiar foto dinámicamente
-
-document.getElementById("inputFile").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
-
-    if (file && validImageTypes.includes(file.type)) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            document.getElementById("fotoPerfilUsuario").src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    } else {
-        mostrarAlerta("Por favor, selecciona un archivo de imagen válido (PNG, JPG, JPEG, WEBP).");
-    }
-});
-
-document.getElementById("cerrar-sesion").addEventListener("click", () => {
-    localStorage.removeItem("usuarioActual");
-    location.reload();
-});

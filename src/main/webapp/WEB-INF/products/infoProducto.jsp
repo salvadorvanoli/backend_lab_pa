@@ -11,9 +11,26 @@
     <jsp:include page="/WEB-INF/template/head.jsp" />
  
     <link rel="stylesheet" href="media/css/infoProducto.css">
-
+	
+    <%@page import="com.flamingo.models.Usuario"%>
+    <%@page import="com.flamingo.models.Cliente"%>
+    <%@page import="com.flamingo.models.Proveedor"%>
+    <%@page import="com.flamingo.models.OrdenDeCompra"%>
+    <%@page import="com.flamingo.models.Producto"%>
+    <%@page import="com.flamingo.models.OrdenDeCompra"%>
+    <%@page import="com.flamingo.models.Categoria"%>
+    <%@ page import="java.util.List" %>
 </head>
 <body>
+    
+    <%
+    	Producto producto = (Producto) request.getAttribute("productoActual");
+	
+		if(producto == null) {
+			response.sendRedirect("backend_lab_pa/home");
+	        return;
+		}
+	%>
     
     <jsp:include page="/WEB-INF/template/header.jsp" />
 
@@ -37,29 +54,31 @@
                         </a>
                     </div>
                     <div id="numero-producto">
-
+						<%= producto.getNumReferencia() %>
                     </div>
                 </div>
     
                 
                 <div class="col-md-6 col-12 mt-5" id="informacion-producto-container">
                     <h1 id="nombre-producto">
-
+						<%= producto.getNombreProducto() %>
                     </h1>
 
                     <div id="estrellas-container">
-
+						
                     </div>
 
                     <div class="linea-resumen"></div>
-
-                    <div id="precio-container"></div>
+						
+                    <div id="precio-container">
+                    	<%= producto.getPrecio() %>
+                    </div>
 
                     <div class="linea-resumen"></div>
 
                     <div id="descripcion-container">
                         <p id="descripcion-texto">
-
+							<%= producto.getDescripcion() %>
                         </p>
                     </div>
 
@@ -72,8 +91,16 @@
             </div>
 
             <div id="categorias-container">
-
-            </div>
+			    <%
+			        List<Categoria> categorias = producto.getCategorias();
+			        for (int i = 0; i < categorias.size(); i++) {
+			            out.print(categorias.get(i).getNombreCat());
+			            if (i < categorias.size() - 1) {
+			                out.print(", ");
+			            }
+			        }
+			    %>
+			</div>
 
         </div>
 
@@ -86,6 +113,14 @@
             </h2>
 
             <div id="especificaciones-container">
+                
+                <% 
+		        for (String especificacion : producto.getEspecificacion()) { 
+		        %>
+		            <li><%= especificacion %></li>
+		        <%
+		        }
+		        %>
                 
             </div>
 

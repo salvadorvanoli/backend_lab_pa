@@ -130,7 +130,7 @@ public class Sistema extends ISistema {
 	
 	
 	@Override
-	public boolean registrarProducto(String titulo, int numReferencia, String descrip, String especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
+	public boolean registrarProducto(String titulo, int numReferencia, String descrip, List<String> especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
 		if (this.usuarioActual == null || ! (this.usuarioActual instanceof Proveedor)) {
 			throw new NullPointerException("No se ha elegido un proveedor previamente.");
 		}
@@ -560,7 +560,7 @@ public class Sistema extends ISistema {
 	}
 	
 	@Override
-	public void modificarDatosProducto(String nombreProd, int numReferencia, String descripcion, float precio, String especificacion) throws ProductoRepetidoException {
+	public void modificarDatosProducto(String nombreProd, int numReferencia, String descripcion, float precio, List<String> especificacion) throws ProductoRepetidoException {
 		if (this.productoActual == null) {
 			throw new NullPointerException("No se ha elegido un producto previamente.");
 		}
@@ -657,12 +657,14 @@ public class Sistema extends ISistema {
         // this.getCategorias().put(cat2.getNombreCat(), cat2);
         this.getCategorias().put(cat3.getNombreCat(), cat3);
         
-        String imagen1 = "/Images/Chico1.png";
-        String imagen2 = "/Images/Chico2.png";
-        String imagen3 = "/Images/Chico3.png";
-        String imagen4 = "/Images/Chica1.png";
-        String imagen5 = "/Images/Chica2.png";
-        String imagen6 = "/Images/Chica3.png";
+        String imagen1 = "media/images/Chico1.png";
+        String imagen2 = "media/images/Chico2.png";
+        String imagen3 = "media/images/Chico3.png";
+        String imagen4 = "media/images/Chica1.png";
+        String imagen5 = "media/images/Chica2.png";
+        String imagen6 = "media/images/Chica3.png";
+        
+        String imagenProducto = "media/images/oreo.webp";
         
         Cliente cl1 = new Cliente("Salva", "Salvador", "Santurio", "Salva.Santu@example.com", fecha1, imagen2, "contrasenia");
         Cliente cl2 = new Cliente("Otto", "Nadia", "Gorría", "Panconqueso1012@example.com", fecha2, imagen5, "supersonic");
@@ -672,9 +674,23 @@ public class Sistema extends ISistema {
         Proveedor pr2 = new Proveedor("Amy_w", "Amy", "Casadevino", "amy.casadevino@example.com", fecha2, imagen4, "Mary on a cross Enterprise", "http://MaryOnACross.com", "breakingBAld");
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
         
-        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, null, c2,  pr3);
-        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, null, c1,  pr2);
-        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", "Pilas AAA", 997, 350.20f, null, c3,  pr1);
+        List<String> img1 = new ArrayList<>();
+        img1.add(imagenProducto);
+        img1.add(imagenProducto);
+        img1.add(imagenProducto);
+        
+        List<String> especificaciones = new ArrayList<>();
+        especificaciones.add("Buen");
+        especificaciones.add("Producto");
+        especificaciones.add("!!!!");
+        
+        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3);
+        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
+        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
+        
+        pr1.agregarProducto(producto1);
+        pr1.agregarProducto(producto2);
+        pr1.agregarProducto(producto3);
         
         cat1.agregarProducto(producto1);
         cat2.agregarProducto(producto2);
@@ -690,6 +706,7 @@ public class Sistema extends ISistema {
         orden2.setPrecioTotal(555.75f);
         
         cl2.getOrdenesDeCompras().add(orden2);
+        cl1.getOrdenesDeCompras().add(orden2);
         
         OrdenDeCompra orden3 = new OrdenDeCompra(66, fecha1, cl3, null);
         orden3.setPrecioTotal(625.50f);
