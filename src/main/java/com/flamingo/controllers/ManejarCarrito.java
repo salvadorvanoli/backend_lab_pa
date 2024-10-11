@@ -26,14 +26,14 @@ import com.google.gson.GsonBuilder;
 /**
  * Servlet implementation class Carrito
  */
-@WebServlet ("/carrito")
-public class Carrito extends HttpServlet {
+@WebServlet ("/manejarcarrito")
+public class ManejarCarrito extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Carrito() {
+    public ManejarCarrito() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -56,44 +56,40 @@ public class Carrito extends HttpServlet {
 		} else {
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
+		
 		try {
 			sis.elegirCliente("Salva");
 		} catch(UsuarioNoExisteException e) {
 			// Manejar error
 		}
-		HttpSession session = request.getSession();
+		
+		// HttpSession session = request.getSession();
 		// Object usuario = session.getAttribute("usuarioActual");
 		request.setAttribute("usuarioActual", sis.getUsuarioActual());
-		session.setAttribute("usuarioActual", sis.getUsuarioActual());
 		Object usuario = request.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
+			System.out.println("Entre a user = null");
 			// session.setAttribute("usuarioActual", null);
 			request.setAttribute("usuarioActual", null);
 			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
 					forward(request, response);
 				
 		} else {
+			System.out.println("NOOOOOO Entre a user = null");
 			Usuario usr = (Usuario) usuario;
-			
 			Gson gson = new GsonBuilder()
 					.registerTypeAdapter(Cantidad.class, new CantidadAdapter())
 	                .create();
 			String cartJson = gson.toJson(usr.getCarrito());
 			System.out.println(cartJson);
-			/*
+			
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			
 			PrintWriter out = response.getWriter();
 			out.print(cartJson);
 			out.flush();
-			*/
-			
-			request.setAttribute("usuarioActual", usr);
-
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
-					forward(request, response);
 		}
 	}
 	

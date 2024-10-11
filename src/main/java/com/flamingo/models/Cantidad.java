@@ -1,16 +1,21 @@
 package com.flamingo.models;
 import java.util.List;
+
+import com.flamingo.models.adapters.CantidadAdapter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
+
 import java.util.ArrayList;
 
+@JsonAdapter(CantidadAdapter.class)
 public class Cantidad {
-	
-	private DTProducto producto;
+	private Producto producto;
 	private int cantidad;
 	
-	public DTProducto getProducto() {
+	public Producto getProducto() {
 		return producto;
 	}
-	public void setProducto(DTProducto producto) {
+	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
 	public int getCantidad() {
@@ -25,7 +30,7 @@ public class Cantidad {
 		this.cantidad = cantidad;
 	}
 	
-	public void linkProducto(DTProducto producto) {
+	public void linkProducto(Producto producto) {
 		this.producto = producto;
 	}
 	
@@ -33,23 +38,23 @@ public class Cantidad {
 		return this.cantidad*this.producto.getPrecio();
 	}
 	
-	public Cantidad(DTProducto producto, int cantidad) {
+	public Cantidad(Producto producto, int cantidad) {
 		super();
 		this.producto = producto;
 		this.cantidad = cantidad;
 	}
 	
 	public DTCantidadProducto getDTCantidadProducto() {
-		return new DTCantidadProducto(this, this.producto, this.getSubtotal());
+		return new DTCantidadProducto(this.cantidad, this.producto.getDTProducto(), this.getSubtotal());
 	}
 	
 	public String toString() {
-		return "Nombre del producto: " + this.producto.getNombre() + System.lineSeparator()
+		return "Nombre del producto: " + this.producto.getNombreProducto() + System.lineSeparator()
         + "Cantidad del producto = " + this.cantidad + ";" + System.lineSeparator();
 	}
 	
 	public String toString2() {
-		return this.producto.getNombre() + System.lineSeparator()
+		return this.producto.getNombreProducto() + System.lineSeparator()
         + "   X" + this.cantidad + "" + System.lineSeparator();
 	}
 }

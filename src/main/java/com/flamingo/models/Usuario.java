@@ -3,6 +3,7 @@ package com.flamingo.models;
 import java.util.HashMap;
 
 import com.flamingo.models.DTFecha;
+import com.google.gson.annotations.Expose;
 
 public class Usuario{
     private String nickname;
@@ -12,6 +13,7 @@ public class Usuario{
     private DTFecha fechaNac;
     private String foto;
     private String contrasenia;
+    
     private HashMap<Integer, Cantidad> carrito;
 
     public Usuario(String nickname, String nombre, String apellido, String email, DTFecha fechaNac, String foto, String contrasenia){
@@ -86,8 +88,8 @@ public class Usuario{
 	}
 	
 	public void agregarProducto(Cantidad prod) {
-		if (this.carrito.containsKey(prod.getProducto().getNumero()));
-		this.carrito.put(prod.getProducto().getNumero(), prod);
+		if (this.carrito.containsKey(prod.getProducto().getNumReferencia()));
+		this.carrito.put(prod.getProducto().getNumReferencia(), prod);
 	}
 	
 	public void quitarProducto(int numProd) {
@@ -96,6 +98,10 @@ public class Usuario{
 	
 	public void setCarrito(HashMap<Integer, Cantidad> carrito) {
 		this.carrito = carrito;
+	}
+	
+	public String toString() {
+		return this.nombre + " - " + this.apellido;
 	}
 	
 }

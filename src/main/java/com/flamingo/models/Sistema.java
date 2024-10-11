@@ -318,7 +318,7 @@ public class Sistema extends ISistema {
 	        OrdenDeCompra nueva = new OrdenDeCompra(codigoOrden, this.getFechaActual(), clienteActual, null);
 	        
 	        for (Cantidad cant : cantidad) {
-	        	nueva.agregarProducto(cant.getProducto(), cant.getCantidad());
+	        	nueva.agregarProducto(cant.getProducto().getDTProducto(), cant.getCantidad());
 	        }
 	        
 	        this.ordenes.put(codigoOrden, nueva);
@@ -351,6 +351,7 @@ public class Sistema extends ISistema {
 	
 	
 	/* ALTERNATIVA A LA FUNCION DAR ALTA ORDEN */
+	/*
 	@Override
 	public DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException {
 		if (this.usuarioActual == null) {
@@ -370,6 +371,7 @@ public class Sistema extends ISistema {
 		this.listaOrden.clear();
 		return ord.getDTOrdenDetallada();
 	}
+	*/
 	
 	
 	
@@ -405,7 +407,7 @@ public class Sistema extends ISistema {
 		if (prod == null) {
 			throw new ProductoNoExisteException("El producto de nombre " + '"' + nombreProducto + '"' + " no existe.");
 		}
-		Cantidad cant = new Cantidad(prod.getDTProducto(), cantidad);
+		Cantidad cant = new Cantidad(prod, cantidad);
 		this.listaOrden.add(cant);
 		return true;
 	}
@@ -672,8 +674,12 @@ public class Sistema extends ISistema {
         Proveedor pr2 = new Proveedor("Amy_w", "Amy", "Casadevino", "amy.casadevino@example.com", fecha2, imagen4, "Mary on a cross Enterprise", "http://MaryOnACross.com", "breakingBAld");
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
         
-        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, null, c2,  pr3);
-        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, null, c1,  pr2);
+        List<String> imgs = new ArrayList<>();
+        imgs.add("img1");
+        imgs.add("img2");
+        
+        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, imgs, c2,  pr3);
+        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, imgs, c1,  pr2);
         Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", "Pilas AAA", 997, 350.20f, null, c3,  pr1);
         
         cat1.agregarProducto(producto1);
@@ -686,9 +692,12 @@ public class Sistema extends ISistema {
         
         cl1.getOrdenesDeCompras().add(orden1);
         // HashMap<Integer, Cantidad> carrito = new HashMap<>();
-        Cantidad cant1 = new Cantidad(producto1.getDTProducto(), 4);
+        Cantidad cant1 = new Cantidad(producto1, 4);
+        Cantidad cant2 = new Cantidad(producto2, 13);
+        
         
         cl1.agregarProducto(cant1);
+        cl1.agregarProducto(cant2);
         
         OrdenDeCompra orden2 = new OrdenDeCompra(77, fecha2, cl2, null);
         orden2.setPrecioTotal(555.75f);

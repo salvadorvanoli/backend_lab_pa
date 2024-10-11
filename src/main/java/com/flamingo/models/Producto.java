@@ -2,6 +2,8 @@ package com.flamingo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 public class Producto {
     private String nombreProducto;
     private String descripcion;

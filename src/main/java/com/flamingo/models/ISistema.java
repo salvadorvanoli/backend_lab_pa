@@ -63,7 +63,7 @@ public abstract class ISistema{
 	
 	public abstract int generarCodigoOrden();
 
-	public abstract DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException;
+	// public abstract DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException;
 
 	public abstract void cancelarOrdenDeCompra(int numero) throws OrdenDeCompraNoExisteException;
 
