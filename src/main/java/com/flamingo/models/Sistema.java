@@ -675,9 +675,9 @@ public class Sistema extends ISistema {
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
         
         List<String> img1 = new ArrayList<>();
-        //img1.add(imagenProducto);
-        //img1.add(imagenProducto);
-        //img1.add(imagenProducto);
+        img1.add(imagenProducto);
+        img1.add(imagenProducto);
+        img1.add(imagenProducto);
         
         List<String> especificaciones = new ArrayList<>();
         especificaciones.add("Buen");
@@ -687,6 +687,22 @@ public class Sistema extends ISistema {
         Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3);
         Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
         Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
+        
+        Comentario comentario1 = new Comentario("C001", "Me encanta este producto, muy útil en la cocina.", new ArrayList<>(), cl1, producto2, fecha1, 3);
+        Comentario comentario2 = new Comentario("C002", "No estoy muy satisfecho, esperaba más funciones.", new ArrayList<>(), cl2, producto2, fecha2, 1);
+        Comentario comentario3 = new Comentario("C003", "Lo recomiendo al 100%, excelente calidad.", new ArrayList<>(), cl3, producto2, fecha1, 5);
+        
+        Comentario comentario4 = new Comentario("C004", "Estoy de acuerdo", new ArrayList<>(), cl1, producto2, fecha1, 0);
+        Comentario comentario5 = new Comentario("C005", "Estoy en desacuerdo", new ArrayList<>(), cl2, producto2, fecha2, 0);
+        Comentario comentario6 = new Comentario("C006", "Siu", new ArrayList<>(), cl3, producto2, fecha1, 0);
+        
+        comentario4.agregarRespuesta(comentario5);
+        comentario1.agregarRespuesta(comentario4);
+        comentario1.agregarRespuesta(comentario6);
+        
+        producto2.agregarComentario(comentario1);
+        producto2.agregarComentario(comentario2);
+        producto2.agregarComentario(comentario3);
         
         producto1.setEstrellas(3);
         producto2.setEstrellas(3);

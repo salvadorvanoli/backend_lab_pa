@@ -36,11 +36,14 @@ public class infoProducto extends HttpServlet {
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
 		ISistema sis = SistemaFactory.getInstancia().getISistema();
 		sis.crearCasos();
+		
+		String productoSeleccionado = request.getParameter("productoSeleccionado");
+		
 		try {
 			//sis.elegirProveedor("elIsma");
 			sis.elegirCliente("Salva");
 			sis.elegirCategoria("Intrumentos Electricos");
-			sis.elegirProducto("Guitarra");
+			sis.elegirProducto("Guitarra"); // Acá entre paréntesis tendría que ir "productoSeleccionado".
 		} catch(UsuarioNoExisteException e) {
 		
 		}
