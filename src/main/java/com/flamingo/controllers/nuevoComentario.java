@@ -66,6 +66,10 @@ public class nuevoComentario extends HttpServlet {
 
             Producto productoActual = sis.getProductoActual();
 
+            if(!usuarioActual.comproProducto(sis.getProductoActual().getNumReferencia())) {
+            	return;
+            }
+            
             if (productoActual != null) {
 
                 productoActual.agregarComentario(nuevoComentario);

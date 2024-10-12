@@ -67,6 +67,10 @@ public class nuevaRespuesta extends HttpServlet {
             Comentario nuevoComentario = new Comentario(sis.generarIdComentario(), textoComentario, lista, usuarioActual, sis.getProductoActual(), fechaActual, 0);
 
             Producto productoActual = sis.getProductoActual();
+            
+            if(!usuarioActual.comproProducto(sis.getProductoActual().getNumReferencia())) {
+            	return;
+            }
 
             if (productoActual != null) {
 
