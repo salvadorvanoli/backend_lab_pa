@@ -702,6 +702,7 @@ public class Sistema extends ISistema {
         Proveedor pr1 = new Proveedor("elIsma", "Isma", "Belardo", "lalala@example.com", fecha1, imagen3, "Sugar Cane Bank", "http://SugarCaneBank.com", "WonderWall");
         Proveedor pr2 = new Proveedor("Amy_w", "Amy", "Casadevino", "amy.casadevino@example.com", fecha2, imagen4, "Mary on a cross Enterprise", "http://MaryOnACross.com", "breakingBAld");
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
+       
         
         List<String> img1 = new ArrayList<>();
         img1.add(imagenProducto);
@@ -754,7 +755,7 @@ public class Sistema extends ISistema {
 		this.usuarios.add(cl2);
 		this.usuarios.add(pr1);
 		this.usuarios.add(pr2);
-
+		
        
 		
 	}

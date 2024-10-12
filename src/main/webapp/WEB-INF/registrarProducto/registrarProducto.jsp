@@ -327,11 +327,30 @@
 	</div>
 
 
-
+	<form id="formProducto" action="/backend_lab_pa/registrarProducto" method="POST" style="display:none;">
+    <input type="hidden" name="id" id="productoId">
+    <input type="hidden" name="nombre" id="productoNombre">
+    <input type="hidden" name="precio" id="productoPrecio">
+    <input type="hidden" name="categorias" id="productoCategorias">
+    <input type="hidden" name="especificaciones" id="productoEspecificaciones">
+    <input type="hidden" name="imagenes" id="productoImagenes">
+	</form>
 
 
 
 	<script>
+	
+	function cargarProductoEnFormulario() {
+	    // Asignar los valores del objeto nuevoProducto al formulario
+	    document.getElementById('productoId').value = nuevoProducto.id;
+	    document.getElementById('productoNombre').value = nuevoProducto.nombre;
+	    document.getElementById('productoPrecio').value = nuevoProducto.precio;
+	    document.getElementById('productoCategorias').value = JSON.stringify(nuevoProducto.categorias);
+	    document.getElementById('productoEspecificaciones').value = JSON.stringify(nuevoProducto.especificaciones);
+	    document.getElementById('productoImagenes').value = JSON.stringify(nuevoProducto.imagenes);
+	    
+	}
+	
 	
 	function mostrarAlerta(mensaje) {
 	    console.log("Mensaje recibido:", mensaje); // Para verificar si el mensaje llega
@@ -366,11 +385,11 @@
 	    id: generarIdRandom(),
 	    nombre: "",
 	    precio: 0,
+	    numeroRef: 0,
 	    categorias: [],
 	    especificaciones: [],
 	    imagenes: [],
-	    comentarios: [],
-		descripcion; ""
+	    comentarios: []
 	};
 
 
@@ -563,18 +582,18 @@
 	        // Validar los datos del producto
 	        if (!revisarDatosProducto()) return;
 
-	        // Obtener valores de los campos del formulario
-	        nuevoProducto.nombre = document.getElementById("tituloProducto").value;
-	        nuevoProducto.referencia = document.getElementById("numeroReferencia").value;
-	        nuevoProducto.precio = parseFloat(document.getElementById("precioProducto").value);
-	        nuevoProducto.descripcion = document.getElementById("descripcionProducto").value;
-
 	        // Verificar si al menos una categoría ha sido seleccionada
 	        if (nuevoProducto.categorias.length === 0) {
 	            mostrarAlerta("Debes seleccionar al menos una categoría.");
 	            return;
 	        }
 
+	        // Obtener valores de los campos del formulario
+	        nuevoProducto.nombre = document.getElementById("tituloProducto").value;
+	        nuevoProducto.referencia = document.getElementById("numeroReferencia").value;
+	        nuevoProducto.precio = parseFloat(document.getElementById("precioProducto").value);
+	        nuevoProducto.descripcion = document.getElementById("descripcionProducto").value;
+	        console.log(nuevoProducto);
 	        // Agregar especificaciones
 	        nuevoProducto.especificaciones = []; // Reiniciar las especificaciones
 	        const especificacionesInputs = document.querySelectorAll('.tabla input[type="text"]');
@@ -598,22 +617,28 @@
 	        }
 	        mensajeExito += '<br>';
 
-	        // Mostrar las categorías seleccionadas en el mensaje de éxito
+	     // Mostrar las categorías seleccionadas en el mensaje de éxito
 	        mensajeExito += `Categorías: `;
 	        if (nuevoProducto.categorias.length > 0) {
 	            mensajeExito += nuevoProducto.categorias.join(', ');
-	        } else {
-	            mensajeExito += 'Ninguna';
-	        }
+	        } 
 	        mensajeExito += '<br>';
 
+	        
 	        // Mostrar el mensaje en el modal
 	        document.querySelector('#modalCarrito .modal-body').innerHTML = mensajeExito;
 
 	        // Mostrar el modal de éxito
 	        $('#modalCarrito').modal('show');
-
-	       
+	        console.log(nuevoProducto.precio);
+	        console.log(nuevoProducto.nombre);
+	        console.log(nuevoProducto.categorias);
+	        console.log(nuevoProducto.especificaciones);
+	        
+	    	
+	        cargarProductoEnFormulario(); // Asegúrate de que los datos estén en el formulario
+	        document.getElementById('formProducto').submit(); // Envía el formulario
+	        
 	        // Reiniciar el objeto nuevoProducto para futuros registros
 	        reiniciarNuevoProducto();
 	    });
@@ -621,7 +646,6 @@
 
 
 	</script>
-	
 	
 	
 
