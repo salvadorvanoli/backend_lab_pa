@@ -290,10 +290,6 @@
 	        
 	        document.getElementById("comentarioId" + contador).value = id;
 	    }
-	
-	    function aceptarComentario(contador, id) {
-			
-	    }
     
 	    document.addEventListener("DOMContentLoaded", function() {
 	
