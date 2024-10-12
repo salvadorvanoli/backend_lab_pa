@@ -3,7 +3,7 @@ import java.util.List;
 
 public class ComentarioRenderer {
 
-    public static String renderComentarios(List<Comentario> comentarios, int nivel, int contador) {
+    public static String renderComentarios(List<Comentario> comentarios, int nivel, int contador, Boolean compro) {
         StringBuilder html = new StringBuilder();
         
         for (Comentario comentario : comentarios) {
@@ -33,20 +33,26 @@ public class ComentarioRenderer {
                 }
             }
             
-            html.append("</div><button class='btn btn-success mt-2' onclick='mostrarCajaRespuesta(")
-	            .append(contador)
+            html.append("</div>");
+            
+            if(compro) {
+            	html.append("<button class='btn btn-success mt-2' onclick='mostrarCajaRespuesta(")
+            	.append(contador)
 	            .append(", \"")
 	            .append(comentario.getId())
-	            .append("\")'>Responder</button>")
-	            .append("</div></div>")
+	            .append("\")'>Responder</button>");
+            }
+            
+            html.append("</div></div>")
 	            .append("<div class='texto-comentario col-md-8 col-12'>")
 	            .append(comentario.getContenido())
 	            .append("</div></div>");
+           
 
             // Recursivamente renderizar las respuestas
             if (comentario.getComentarios() != null && !comentario.getComentarios().isEmpty()) {
                 html.append("<div class='respuestas-comentario'>")
-                    .append(renderComentarios(comentario.getComentarios(), nivel + 1, contador))
+                    .append(renderComentarios(comentario.getComentarios(), nivel + 1, contador, compro))
                     .append("</div>");
             }
             

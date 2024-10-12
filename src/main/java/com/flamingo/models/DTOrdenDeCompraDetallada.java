@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class DTOrdenDeCompraDetallada extends DTOrdenDeCompra{
 	private List<DTCantidadProducto> productosCantidad;
 
-	public DTOrdenDeCompraDetallada(int numero, Cliente cliente, float precio, DTFecha fecha, List<Cantidad> cantidad, List<DTCantidadProducto> lista) {
+	public DTOrdenDeCompraDetallada(int numero, Cliente cliente, float precio, DTFecha fecha, List<DTCantidadProducto> cantidad, List<DTCantidadProducto> lista) {
 		super(numero, cliente, precio, fecha, cantidad);
 		this.productosCantidad = lista;
 	}
@@ -38,7 +38,7 @@ public class DTOrdenDeCompraDetallada extends DTOrdenDeCompra{
 	    float total = 0;
 	    
 	    for (DTCantidadProducto item : productosCantidad) {
-	        total += item.getProducto().getPrecio() * item.getCantidad().getCantidad();
+	        total += item.getProducto().getPrecio() * item.getCantidad();
 	    }
 	    
 	    return total;

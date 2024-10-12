@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Cliente extends Usuario{
-		private HashMap<Integer, Cantidad> carrito;
 		private List <OrdenDeCompra> OrdenesDeCompras;
 		private List <Comentario> Comentarios;
+		private HashMap<Integer, Cantidad> carrito;
 		
 		public Cliente(String nickName, String nombre, String apellido, String email, DTFecha fecha, String foto, String contrasenia){
 			super(nickName, nombre, apellido, email, fecha, foto, contrasenia);
@@ -44,21 +44,43 @@ public class Cliente extends Usuario{
 			return this.Comentarios;
 		}
 		
+		public DTClienteDetallado getDTClienteDetallado(){
+			DTClienteDetallado c = new DTClienteDetallado(this.getNickname(), this.getEmail(), this.getNombre(), this.getApellido(), this.getFechaNac(), this.getFoto());
+			return c;
+		}
+		
 		public HashMap<Integer, Cantidad> getCarrito(){
 			return this.carrito;
 		}
 		
 		public void agregarProducto(Cantidad prod) {
-			if (this.carrito.containsKey(prod.getProducto().getNumero()));
-			this.carrito.put(prod.getProducto().getNumero(), prod);
+			if (this.carrito.containsKey(prod.getProducto().getNumReferencia()));
+			this.carrito.put(prod.getProducto().getNumReferencia(), prod);
 		}
 		
 		public void quitarProducto(int numProd) {
 			this.carrito.remove(numProd);
 		}
 		
-		public DTClienteDetallado getDTClienteDetallado(){
-			DTClienteDetallado c = new DTClienteDetallado(this.getNickname(), this.getEmail(), this.getNombre(), this.getApellido(), this.getFechaNac(), this.getFoto());
-			return c;
-		}	
+		public void setCarrito(HashMap<Integer, Cantidad> carrito) {
+			this.carrito = carrito;
+		}
+		
+		public HashMap<Integer, DTCantidad> getDTCarrito() {
+			HashMap<Integer, DTCantidad> carrito = new HashMap<>();
+			for (Cantidad cant : this.carrito.values()) {
+				DTCantidad dt = cant.getDTCantidad();
+				carrito.put(dt.getProducto().getNumero(), dt);
+			}
+			return carrito;
+		}
+		
+		public Boolean comproProducto(int numReferencia) {
+			for(OrdenDeCompra orden : this.getOrdenesDeCompras()) {
+				if(orden.tieneProducto(numReferencia)) {
+					return true;
+				}
+			}
+			return false;
+		}
 }

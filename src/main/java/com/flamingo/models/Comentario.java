@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Comentario {
 
-		private String id;
+		private int id;
 		private String contenido;
 		private List<Comentario> comentarios;
 		private Cliente cliente;
@@ -12,10 +12,10 @@ public class Comentario {
 		private DTFecha fecha;
 		private int estrellas;
 		
-		public String getId() {
+		public int getId() {
 			return id;
 		}
-		public void setId(String id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 		public String getContenido() {
@@ -24,7 +24,7 @@ public class Comentario {
 		public void setContenido(String contenido) {
 			this.contenido = contenido;
 		}
-		public Comentario(String id, String contenido) {
+		public Comentario(int id, String contenido) {
 			super();
 			this.id = id;
 			this.contenido = contenido;
@@ -47,7 +47,7 @@ public class Comentario {
 		public void setComentarios(List<Comentario> comentarios) {
 			this.comentarios = comentarios;
 		}
-		public Comentario(String id, String contenido, List<Comentario> comentarios, Cliente cliente,
+		public Comentario(int id, String contenido, List<Comentario> comentarios, Cliente cliente,
 				Producto producto, DTFecha fecha, int estrellas) {
 			super();
 			this.id = id;

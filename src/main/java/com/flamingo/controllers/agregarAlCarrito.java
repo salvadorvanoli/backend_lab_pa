@@ -16,6 +16,7 @@ import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
+import com.flamingo.models.Cantidad;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.Comentario;
 import com.flamingo.models.DTFecha;
@@ -42,7 +43,7 @@ public class agregarAlCarrito extends HttpServlet {
     	    sis = (ISistema) getServletContext().getAttribute("sistema");
     	}
     	
-        String numReferencia = request.getParameter("numReferencia");
+    	int numReferencia = Integer.parseInt(request.getParameter("numReferencia"));
     	
         // Obtén el parámetro como una cadena
         String cantidadStr = request.getParameter("cantidad");
@@ -62,12 +63,18 @@ public class agregarAlCarrito extends HttpServlet {
             }
         }
         
-    	// Revisar que el producto no exista actualmente
+        Cliente cl = (Cliente) sis.getUsuarioActual();
         
-        // NECESITO EL CARRITO
-    	
-        // Tengo que buscar el producto que se agregó dado el número de referencia, y agregarlo al carrito del usuarioActual con la cantidad definida
-    	
+        if(cl.getCarrito().containsKey(numReferencia)) {
+        	response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El usuario ya tiene ese producto en el carrito");
+            return;
+        }
+        
+        Cantidad cant = new Cantidad(sis.getProductoActual(), cantidad);
+        
+        cl.getCarrito().put(sis.getProductoActual().getNumReferencia(), cant);
+        
+        response.sendRedirect("infoProducto");
     }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

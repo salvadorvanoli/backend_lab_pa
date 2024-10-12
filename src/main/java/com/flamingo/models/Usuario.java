@@ -78,4 +78,9 @@ public class Usuario{
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
 	}
+	
+	public String toString() {
+		return this.nombre + " - " + this.apellido;
+	}
+	
 }

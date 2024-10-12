@@ -23,6 +23,7 @@ public class Sistema extends ISistema {
 	private HashMap<String, Categoria> categorias;
 	private Categoria categoriaActual;
 	
+	private List<Producto> productos;
 	private Producto productoActual;
 	
 	private List<Cantidad> listaOrden;
@@ -37,6 +38,7 @@ public class Sistema extends ISistema {
 		this.categoriaActual = null;
 		this.productoActual = null;
 		this.listaOrden = new ArrayList<>(); 
+		this.productos = new ArrayList<>();
 	}
 	
 	@Override
@@ -159,6 +161,7 @@ public class Sistema extends ISistema {
 		proveedor.agregarProducto(prod);
 		this.productoActual = prod;
 		this.agregarProductoACategorias(categorias);
+		this.productos.add(prod);
 		return true;
 	}
 	
@@ -318,7 +321,7 @@ public class Sistema extends ISistema {
 	        OrdenDeCompra nueva = new OrdenDeCompra(codigoOrden, this.getFechaActual(), clienteActual, null);
 	        
 	        for (Cantidad cant : cantidad) {
-	        	nueva.agregarProducto(cant.getProducto(), cant.getCantidad());
+	        	nueva.agregarProducto(cant.getProducto().getDTProducto(), cant.getCantidad());
 	        }
 	        
 	        this.ordenes.put(codigoOrden, nueva);
@@ -346,10 +349,25 @@ public class Sistema extends ISistema {
 		return numero;
 	}
 	
+	@Override
+	public int generarIdComentario() {
+		if (this.productos.isEmpty()) {
+			return 0;
+		}
+		int numero = 0;
+		for (Producto prod : this.productos) {
+			if (prod.getIdComentarioMayor() >= numero) {
+				numero = prod.getIdComentarioMayor() + 1;
+			}
+		}
+		return numero;
+	}
+	
 	// FUNCION DAR ALTA ORDEN DE COMPRA
 	
 	
 	/* ALTERNATIVA A LA FUNCION DAR ALTA ORDEN */
+	/*
 	@Override
 	public DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException {
 		if (this.usuarioActual == null) {
@@ -369,6 +387,7 @@ public class Sistema extends ISistema {
 		this.listaOrden.clear();
 		return ord.getDTOrdenDetallada();
 	}
+	*/
 	
 	
 	
@@ -404,7 +423,7 @@ public class Sistema extends ISistema {
 		if (prod == null) {
 			throw new ProductoNoExisteException("El producto de nombre " + '"' + nombreProducto + '"' + " no existe.");
 		}
-		Cantidad cant = new Cantidad(prod.getDTProducto(), cantidad);
+		Cantidad cant = new Cantidad(prod, cantidad);
 		this.listaOrden.add(cant);
 		return true;
 	}
@@ -712,6 +731,10 @@ public class Sistema extends ISistema {
         img1.add(imagenProducto);
         img1.add(imagenProducto);
         img1.add(imagenProducto);
+
+        List<String> imgs = new ArrayList<>();
+        imgs.add("img1");
+        imgs.add("img2");
         
         List<String> especificaciones = new ArrayList<>();
         especificaciones.add("Buen");
@@ -722,13 +745,13 @@ public class Sistema extends ISistema {
         Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
         Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
         
-        Comentario comentario1 = new Comentario("C001", "Me encanta este producto, muy útil en la cocina.", new ArrayList<>(), cl1, producto2, fecha1, 3);
-        Comentario comentario2 = new Comentario("C002", "No estoy muy satisfecho, esperaba más funciones.", new ArrayList<>(), cl2, producto2, fecha2, 1);
-        Comentario comentario3 = new Comentario("C003", "Lo recomiendo al 100%, excelente calidad.", new ArrayList<>(), cl3, producto2, fecha1, 5);
+        Comentario comentario1 = new Comentario(1, "Me encanta este producto, muy útil en la cocina.", new ArrayList<>(), cl1, producto2, fecha1, 3);
+        Comentario comentario2 = new Comentario(2, "No estoy muy satisfecho, esperaba más funciones.", new ArrayList<>(), cl2, producto2, fecha2, 1);
+        Comentario comentario3 = new Comentario(3, "Lo recomiendo al 100%, excelente calidad.", new ArrayList<>(), cl3, producto2, fecha1, 5);
         
-        Comentario comentario4 = new Comentario("C004", "Estoy de acuerdo", new ArrayList<>(), cl1, producto2, fecha1, 0);
-        Comentario comentario5 = new Comentario("C005", "Estoy en desacuerdo", new ArrayList<>(), cl2, producto2, fecha2, 0);
-        Comentario comentario6 = new Comentario("C006", "Siu", new ArrayList<>(), cl3, producto2, fecha1, 0);
+        Comentario comentario4 = new Comentario(4, "Estoy de acuerdo", new ArrayList<>(), cl1, producto2, fecha1, 0);
+        Comentario comentario5 = new Comentario(5, "Estoy en desacuerdo", new ArrayList<>(), cl2, producto2, fecha2, 0);
+        Comentario comentario6 = new Comentario(6, "Siu", new ArrayList<>(), cl3, producto2, fecha1, 0);
         
         comentario4.agregarRespuesta(comentario5);
         comentario1.agregarRespuesta(comentario4);
@@ -753,10 +776,27 @@ public class Sistema extends ISistema {
         
         this.productoActual = producto2;
         
-        OrdenDeCompra orden1 = new OrdenDeCompra(88, fecha1, cl1, null);
+        this.productos.add(producto1);
+        this.productos.add(producto2);
+        this.productos.add(producto3);
+        
+        DTCantidadProducto cantprod = new DTCantidadProducto(3, producto2.getDTProducto(), 234);
+        
+        List<DTCantidadProducto> listacantprod = new ArrayList<>();
+        listacantprod.add(cantprod);
+        
+        OrdenDeCompra orden1 = new OrdenDeCompra(12332, fecha1, cl1, listacantprod);
         orden1.setPrecioTotal(1350.50f);
         
         cl1.getOrdenesDeCompras().add(orden1);
+        
+        // HashMap<Integer, Cantidad> carrito = new HashMap<>();
+        Cantidad cant1 = new Cantidad(producto1, 4);
+        Cantidad cant2 = new Cantidad(producto2, 13);
+        
+        
+        //cl1.agregarProducto(cant1);
+        //cl1.agregarProducto(cant2);
         
         OrdenDeCompra orden2 = new OrdenDeCompra(77, fecha2, cl2, null);
         orden2.setPrecioTotal(555.75f);
@@ -791,6 +831,42 @@ public class Sistema extends ISistema {
 		
 	}
 	
+	@Override
+	public HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException {
+		for (Usuario user : this.usuarios) {
+			if (user.getNickname().equals(nickname)) {
+				if (user instanceof Cliente) {
+					Cliente cli = (Cliente) user;
+					return cli.getDTCarrito();
+				} else {
+					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+				}
+			}
+		}
+		throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+	}
+	
+	@Override
+	public void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException {
+		for (Usuario user : this.usuarios) {
+			if (user.getNickname().equals(nickname)) {
+				if (user instanceof Cliente) {
+					Cliente cli = (Cliente) user;
+					cli.getCarrito().remove(numReferencia);
+				} else {
+					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+				}
+			}
+		}
+	}
+
+	public List<Producto> getProductos() {
+		return productos;
+	}
+
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
+	}
 	
 	
 }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import com.flamingo.exceptions.CategoriaNoExisteException;
 import com.flamingo.exceptions.ProductoNoExisteException;
 import com.flamingo.exceptions.UsuarioNoExisteException;
+import com.flamingo.models.Cliente;
 import com.flamingo.models.EstadoSesion;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
@@ -36,6 +37,9 @@ public class infoProducto extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
 		ISistema sis;
+		
+		HttpSession session = request.getSession();
+		
 		if (getServletContext().getAttribute("sistema") == null) {
 		    System.out.println("CREO EL SISTEMA");
 		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
@@ -55,12 +59,16 @@ public class infoProducto extends HttpServlet {
 		} catch(UsuarioNoExisteException e) {
 		
 		}
-		request.setAttribute("usuarioActual", sis.getUsuarioActual());
+		
+		session.setAttribute("usuarioActual", sis.getUsuarioActual());
 		request.setAttribute("productoActual", sis.getProductoActual());
 		Object usuario = request.getAttribute("usuarioActual");
 		Object producto = request.getAttribute("productoActual");	
 		
+		Cliente cl = (Cliente) sis.getUsuarioActual();
+		
 		if(usuario == null) {
+			
 			request.setAttribute("usuarioActual", null);
 			
 			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
@@ -68,6 +76,8 @@ public class infoProducto extends HttpServlet {
 		} else {
 			Usuario usr = (Usuario) usuario;
 			request.setAttribute("usuarioActual", usr);
+			
+			System.out.println(usr.toString());
 			
 			Producto prd = (Producto) producto;
 			request.setAttribute("productoActual", prd);

@@ -125,11 +125,11 @@ public class Producto {
     }
     
     // Función para buscar un comentario por ID y agregar respuesta en el comentario correcto.
-    public Comentario getComentario(String id) {
+    public Comentario getComentario(int id) {
         // Recorremos los comentarios principales
         for (Comentario comentario : comentarios) {
             // Si el comentario tiene el ID que estamos buscando
-            if (comentario.getId().equals(id)) {
+            if (comentario.getId() == id) {
                 return comentario; // Comentario encontrado
             }
             
@@ -144,11 +144,11 @@ public class Producto {
     }
 
     // Función auxiliar para buscar el comentario en las respuestas (subcomentarios)
-    private Comentario buscarEnRespuestas(List<Comentario> respuestas, String id) {
+    private Comentario buscarEnRespuestas(List<Comentario> respuestas, int id) {
         // Recorremos las respuestas (subcomentarios)
         for (Comentario respuesta : respuestas) {
             // Si la respuesta tiene el ID que estamos buscando
-            if (respuesta.getId().equals(id)) {
+            if (respuesta.getId() == id) {
                 return respuesta; // Respuesta encontrada
             }
 
@@ -203,6 +203,27 @@ public class Producto {
     @Override
     public String toString() {
         return nombreProducto;  
+    }
+    
+    public int getIdComentarioMayor() {
+        return buscarIdMayorComentarios(comentarios, 0); // Iniciamos la búsqueda desde 0
+    }
+
+    // Método auxiliar para buscar el ID mayor en la lista de comentarios
+    private int buscarIdMayorComentarios(List<Comentario> comentarios, int maxId) {
+        for (Comentario comentario : comentarios) {
+            // Convertimos el ID del comentario actual a un número entero para compararlo
+            int idActual = comentario.getId();
+
+            // Actualizamos el máximo si el ID actual es mayor
+            if (idActual > maxId) {
+                maxId = idActual;
+            }
+
+            // Llamamos recursivamente a la función para buscar en las respuestas del comentario
+            maxId = buscarIdMayorComentarios(comentario.getComentarios(), maxId);
+        }
+        return maxId; // Retornamos el ID mayor encontrado
     }
 
 }

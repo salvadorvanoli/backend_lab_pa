@@ -49,7 +49,7 @@ public class nuevaRespuesta extends HttpServlet {
         try {
             // Obtener los parámetros del formulario
             String textoComentario = request.getParameter("texto");
-            String idComentario = request.getParameter("id");
+            int idComentario = Integer.parseInt(request.getParameter("id"));
             
             System.out.println(textoComentario);
             System.out.println(idComentario);
@@ -64,7 +64,7 @@ public class nuevaRespuesta extends HttpServlet {
 
             List<Comentario> lista = new ArrayList<>();
 
-            Comentario nuevoComentario = new Comentario("9", textoComentario, lista, usuarioActual, sis.getProductoActual(), fechaActual, 0);
+            Comentario nuevoComentario = new Comentario(sis.generarIdComentario(), textoComentario, lista, usuarioActual, sis.getProductoActual(), fechaActual, 0);
 
             Producto productoActual = sis.getProductoActual();
 

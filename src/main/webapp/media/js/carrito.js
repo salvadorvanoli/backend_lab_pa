@@ -260,122 +260,6 @@ function mostrarAlerta(message, type, icon){
 }
 
 
-// Codigo que saque del document.addEventListener:
-
-
-
-// // Cargamos al usuario actual
-
-// localStorage.setItem("usuarioActual", JSON.stringify(
-// {
-//     "nombre": "Salvador",
-//     "apellido": "Vanoli",
-//     "nickname": "salvaelpro777",
-//     "tipo": "proveedor",
-//     "email": "salva@salva.com",
-//     "fecha": "2004-05-01",
-//     "foto": "img/test.jpg",
-//     "web": "salva.com",
-//     "empresa": "salvaEnterprise",
-//     "id": "0",
-//     "ordenes": [
-//         {
-//             "id": 0,
-//             "fecha": "2024-09-24",
-//             "productos": [
-//                 {
-//                     "nombre": "Zucaritas",
-//                     "precio": 300,
-//                     "descripcion": "Muy ricas, sisi muy muy ricas",
-//                     "imagenes": [
-//                       "/img/test.jpg",
-//                       "/img/test.jpg"
-//                     ],
-//                     "id": "777",
-//                     "cantidad": 1
-//                 },
-//                 {
-//                     "nombre": "WATAFAK",
-//                     "precio": 200,
-//                     "descripcion": "sii",
-//                     "imagenes": [
-//                       "/img/test.jpg",
-//                       "/img/test.jpg"
-//                     ],
-//                     "id": "778",
-//                     "cantidad": 5
-//                 }
-//             ]
-//         },
-//         {
-//             "id": 1,
-//             "fecha": "2024-09-27",
-//             "productos": [
-//                 {
-//                     "nombre": "Zucaritas",
-//                     "precio": 400,
-//                     "descripcion": "Muy ricas, sisi muy muy ricas",
-//                     "imagenes": [
-//                       "/img/test.jpg",
-//                       "/img/test.jpg"
-//                     ],
-//                     "id": "777",
-//                     "cantidad": 6
-//                 },
-//                 {
-//                     "nombre": "SSSSSSSSSSSESx",
-//                     "precio": 200,
-//                     "descripcion": "sii",
-//                     "imagenes": [
-//                       "/img/test.jpg",
-//                       "/img/test.jpg"
-//                     ],
-//                     "id": "778",
-//                     "cantidad": 8
-//                 }
-//             ]
-//         },
-//     ],
-//     "productos": [
-//         {
-//             "nombre": "Zucaritas",
-//             "estrellas": 3,
-//             "precio": 300,
-//             "descripcion": "Muy ricas, sisi muy muy ricas",
-//             "id": "777",
-//             "categorias": [
-//                 "Comida",
-//                 "Dulce",
-//                 "Cereales"
-//             ],
-//             "especificacion": [
-//                 "Cereal dulce de maíz",
-//                 "0 proteína 100% lípidos",
-//                 "Totalmente mortal para el cuerpo"
-//             ],
-//             "imagenes": [
-//                 "/img/test.jpg",
-//                 "/img/test.jpg"
-//             ]
-//         }
-//     ]
-// }));
-
-
-const usuarioActual = JSON.parse(localStorage.getItem("usuarioActual"));
-// console.log(usuarioActual);
-
-
-
-// Cargamos al carrito actual
-
-// localStorage.setItem("carritoActual", '[{"nombre":"Zucaritas","precio":300,"descripcion":"Muy ricas, sisi muy muy ricas","imagenes":["/img/test.jpg","/img/test.jpg"],"id":"777","cantidad":7},{"nombre":"Laptop","precio":7000,"descripcion":"Super potente master","imagenes":["img/Zucaritas.webp"],"id":"69","cantidad":4}]')
-
-let carritoActual = JSON.parse(localStorage.getItem('carritoActual'));
-
-// console.log(carritoActual);
-
-
 function checkUsuarioActual(){
     if (usuarioActual == undefined){
         encabezado1.remove();
@@ -697,7 +581,6 @@ departamentos.addEventListener("change", async function(e){
 });
 
 departamentos.value = "";
-
 // document.addEventListener("DOMContentLoaded", async function(e) {
 
 //     // Cargamos al usuario actual

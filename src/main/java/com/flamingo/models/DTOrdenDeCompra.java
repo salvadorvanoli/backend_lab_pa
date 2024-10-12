@@ -7,17 +7,17 @@ public class DTOrdenDeCompra {
 	private DTFecha fecha;
 	private float precioTotal;
 	private Cliente cliente;
-	private List<Cantidad> cantidades;
+	private List<DTCantidadProducto> cantidades;
 	
 	
 	public Cliente getCliente() {
 		return this.cliente;
 	}
 	
-	public List<Cantidad> getCantidades() {
+	public List<DTCantidadProducto> getCantidades() {
 		return cantidades;
 	}
-	public void setCantidades(List<Cantidad> cantidades) {
+	public void setCantidades(List<DTCantidadProducto> cantidades) {
 		this.cantidades = cantidades;
 	}
 	public int getNumero() {
@@ -38,7 +38,7 @@ public class DTOrdenDeCompra {
 	public void setPrecioTotal(float precioTotal) {
 		this.precioTotal = precioTotal;
 	}
-	public DTOrdenDeCompra(int numero, Cliente cliente, float precio, DTFecha fecha, List<Cantidad> cantidades) {
+	public DTOrdenDeCompra(int numero, Cliente cliente, float precio, DTFecha fecha, List<DTCantidadProducto> cantidades) {
 		super();
 		this.numero = numero;
 		this.cliente = cliente;

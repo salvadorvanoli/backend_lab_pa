@@ -64,7 +64,7 @@ public abstract class ISistema{
 	
 	public abstract int generarCodigoOrden();
 
-	public abstract DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException;
+	// public abstract DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException;
 
 	public abstract void cancelarOrdenDeCompra(int numero) throws OrdenDeCompraNoExisteException;
 
@@ -99,5 +99,11 @@ public abstract class ISistema{
 	public abstract OrdenDeCompra agregarOrden(List<Cantidad> cantidad);
 	
 	public abstract void setTodoNull();
+
+	public abstract void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException;
+
+	public abstract HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException;
+
+	public abstract int generarIdComentario();
 
 }

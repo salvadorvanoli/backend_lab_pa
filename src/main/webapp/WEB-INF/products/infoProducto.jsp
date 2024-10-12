@@ -222,25 +222,33 @@
                 Comentarios del producto
             </h2>
 
+			<%
+			    // Obtiene el usuario actual (asumiendo que está almacenado en la sesión)
+			    Cliente usuarioActual = (Cliente) session.getAttribute("usuarioActual");
+			
+			    // Verifica si el usuario ha comprado el producto
+			    boolean haCompradoProducto = (usuarioActual != null && usuarioActual.comproProducto(producto.getNumReferencia()));
+			%>
 
-            <div class="caja-comentario card p-3 mt-3 mb-3 ms-5 me-5" id="respuesta">
-                <div class="form-group">
-                	<form action="nuevoComentario" method="POST">
-	                    <label for="comentarioInput">Escribe tu comentario:</label>
-	                    <input type="text" name="texto" class="form-control" id="comentarioInput" placeholder="Escribe aquí...">
-	                    <input type="number" name="estrellas" class="form-control mt-3" id="cantEstrellas" min="1" placeholder="Inserte la cantidad de estrellas (1-5)">
-	                
-		                <div class="mt-3" id="botonesComentario">
-		                    <input type="submit" class="btn btn-success" value="Enviar">
-		                </div>
-                	</form>
-               	</div>
-            </div>
+
+            <div class="caja-comentario card p-3 mt-3 mb-3 ms-5 me-5 <%= haCompradoProducto ? "" : "d-none" %>" id="respuesta">
+			    <div class="form-group">
+			        <form action="nuevoComentario" method="POST">
+			            <label for="comentarioInput">Escribe tu comentario:</label>
+			            <input type="text" name="texto" class="form-control" id="comentarioInput" placeholder="Escribe aquí...">
+			            <input type="number" name="estrellas" class="form-control mt-3" id="cantEstrellas" min="1" placeholder="Inserte la cantidad de estrellas (1-5)">
+			        
+			            <div class="mt-3" id="botonesComentario">
+			                <input type="submit" class="btn btn-success" value="Enviar">
+			            </div>
+			        </form>
+			    </div>
+			</div>
 
             <div id="comentarios-container" class="contenedor-responsive">
 			    <%
 			        // Renderizar todos los comentarios y respuestas de manera recursiva
-			        String htmlComentarios = ComentarioRenderer.renderComentarios(producto.getComentarios(), 0, 0);
+			        String htmlComentarios = ComentarioRenderer.renderComentarios(producto.getComentarios(), 0, 0, haCompradoProducto);
 			        out.print(htmlComentarios);
 			    %>
 			</div>
@@ -292,30 +300,7 @@
 	    }
     
 	    document.addEventListener("DOMContentLoaded", function() {
-	
-		    
-		
-		    // Lógica para agregar un producto al carrito
-		
-		    function itemYaExiste(item) {
-		        let carritoActual = JSON.parse(localStorage.getItem("carritoActual")) || "";
-		
-		        for(let producto of carritoActual) {
-		            if(item.id == producto.id) {
-		                return true;
-		            }
-		        }
-		        return false;
-		    }
-		
-		    function checkCantidad() {
-		        let cantidad = parseInt(document.getElementById("cantidad-input").value) || 1;
-		        if(cantidad < 1) {
-		            cantidad = 1;
-		        }
-		        return cantidad;
-		    }
-		
+
 		    document.getElementById("agregar-al-carrito").addEventListener("click", () => {
 		        let carritoActual = JSON.parse(localStorage.getItem("carritoActual")) || [];
 		        
@@ -337,31 +322,6 @@
 		        localStorage.setItem("carritoActual", JSON.stringify(carritoActual));
 		    });
 		
-		    function revisarProductoComprado(){
-		        let bool = false;
-		        let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || null;
-		        if(usuarioActual != null){
-		            for(let orden of usuarioActual.ordenes){
-		                for(let item of orden.productos){
-		                    if(item.id == productoSeleccionado.id) {
-		                        bool = true;
-		                    }
-		                }
-		            }
-		        }
-		        
-		        if(!bool){
-		            document.getElementById("respuesta").style.display = "none";
-		            const botonesResponder = document.querySelectorAll('button.btn.btn-primary.mt-2');
-		
-		            botonesResponder.forEach(boton => {
-		                boton.disabled = true;
-		                boton.style.display = "none";
-		            });
-		        }
-		    }
-		
-		    //revisarProductoComprado();
 	    });
     </script>
 

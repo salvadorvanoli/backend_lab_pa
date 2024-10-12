@@ -19,7 +19,6 @@ import com.flamingo.models.Producto;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.Comentario;
 import com.flamingo.models.DTFecha;
-import com.google.gson.Gson;
 
 @WebServlet("/nuevoComentario")
 public class nuevoComentario extends HttpServlet {
@@ -62,7 +61,7 @@ public class nuevoComentario extends HttpServlet {
             List<Comentario> lista = new ArrayList<>();
             
 
-            Comentario nuevoComentario = new Comentario("9", textoComentario, lista, usuarioActual, sis.getProductoActual(), fechaActual, estrellasComentario);
+            Comentario nuevoComentario = new Comentario(sis.generarIdComentario(), textoComentario, lista, usuarioActual, sis.getProductoActual(), fechaActual, estrellasComentario);
 
 
             Producto productoActual = sis.getProductoActual();
