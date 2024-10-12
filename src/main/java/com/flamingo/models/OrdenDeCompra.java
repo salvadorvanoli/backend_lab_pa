@@ -8,7 +8,7 @@ public class OrdenDeCompra {
 	private float precioTotal;
 	private DTFecha fecha;
 	private Cliente cliente;
-	private List<DTCantidadProducto> cantidad;
+	private List<DTCantidad> cantidad;
 	
 	public int getNumero() {
 		return numero;

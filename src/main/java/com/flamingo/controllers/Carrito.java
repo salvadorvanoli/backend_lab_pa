@@ -65,7 +65,7 @@ public class Carrito extends HttpServlet {
 		// Object usuario = session.getAttribute("usuarioActual");
 		request.setAttribute("usuarioActual", sis.getUsuarioActual());
 		session.setAttribute("usuarioActual", sis.getUsuarioActual());
-		Object usuario = request.getAttribute("usuarioActual");	
+		Object usuario = session.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
 			// session.setAttribute("usuarioActual", null);
@@ -75,12 +75,6 @@ public class Carrito extends HttpServlet {
 				
 		} else {
 			Usuario usr = (Usuario) usuario;
-			
-			Gson gson = new GsonBuilder()
-					.registerTypeAdapter(Cantidad.class, new CantidadAdapter())
-	                .create();
-			String cartJson = gson.toJson(usr.getCarrito());
-			System.out.println(cartJson);
 			/*
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");

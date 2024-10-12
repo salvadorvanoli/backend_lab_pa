@@ -1,13 +1,7 @@
 package com.flamingo.models;
 import java.util.List;
-
-import com.flamingo.models.adapters.CantidadAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
-
 import java.util.ArrayList;
 
-@JsonAdapter(CantidadAdapter.class)
 public class Cantidad {
 	private Producto producto;
 	private int cantidad;
@@ -45,7 +39,7 @@ public class Cantidad {
 	}
 	
 	public DTCantidad getDTCantidad() {
-		return new DTCantidad(this.cantidad, this.producto.getDTProducto());
+		return new DTCantidad(this.cantidad, this.producto.getDTProducto(), this.producto.getImagenes());
 	}
 	
 	public DTCantidadProducto getDTCantidadProducto() {
