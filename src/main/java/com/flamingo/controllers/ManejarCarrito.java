@@ -77,19 +77,19 @@ public class ManejarCarrito extends HttpServlet {
 				
 		} else {
 			System.out.println("NOOOOOO Entre a user = null");
-			Usuario usr = (Usuario) usuario;
-			Gson gson = new GsonBuilder()
-					.registerTypeAdapter(Cantidad.class, new CantidadAdapter())
-	                .create();
-			String cartJson = gson.toJson(usr.getCarrito());
-			System.out.println(cartJson);
-			
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			
-			PrintWriter out = response.getWriter();
-			out.print(cartJson);
-			out.flush();
+			try {
+				Gson gson = new Gson();
+				String cartJson = gson.toJson(sis.getCarritoActual("Salva"));
+				System.out.println(cartJson);
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				
+				PrintWriter out = response.getWriter();
+				out.print(cartJson);
+				out.flush();
+			} catch (Exception e) {
+				// Manejar Excepcion
+			}
 		}
 	}
 	

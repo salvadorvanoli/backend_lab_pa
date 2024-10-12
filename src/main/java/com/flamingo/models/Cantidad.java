@@ -44,6 +44,10 @@ public class Cantidad {
 		this.cantidad = cantidad;
 	}
 	
+	public DTCantidad getDTCantidad() {
+		return new DTCantidad(this.cantidad, this.producto.getDTProducto());
+	}
+	
 	public DTCantidadProducto getDTCantidadProducto() {
 		return new DTCantidadProducto(this.cantidad, this.producto.getDTProducto(), this.getSubtotal());
 	}

@@ -100,6 +100,15 @@ public class Usuario{
 		this.carrito = carrito;
 	}
 	
+	public HashMap<Integer, DTCantidad> getDTCarrito() {
+		HashMap<Integer, DTCantidad> carrito = new HashMap<>();
+		for (Cantidad cant : this.carrito.values()) {
+			DTCantidad dt = cant.getDTCantidad();
+			carrito.put(dt.getProducto().getNumero(), dt);
+		}
+		return carrito;
+	}
+	
 	public String toString() {
 		return this.nombre + " - " + this.apellido;
 	}

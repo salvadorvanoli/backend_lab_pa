@@ -731,6 +731,35 @@ public class Sistema extends ISistema {
 		
 	}
 	
+	@Override
+	public HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException {
+		for (Usuario user : this.usuarios) {
+			if (user.getNickname().equals(nickname)) {
+				if (user instanceof Cliente) {
+					Cliente cli = (Cliente) user;
+					return cli.getDTCarrito();
+				} else {
+					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+				}
+			}
+		}
+		throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+	}
+	
+	@Override
+	public void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException {
+		for (Usuario user : this.usuarios) {
+			if (user.getNickname().equals(nickname)) {
+				if (user instanceof Cliente) {
+					Cliente cli = (Cliente) user;
+					cli.getCarrito().remove(numReferencia);
+				} else {
+					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+				}
+			}
+		}
+	}
+	
 	
 	
 }

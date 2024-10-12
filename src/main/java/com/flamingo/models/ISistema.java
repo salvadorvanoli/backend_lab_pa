@@ -99,4 +99,8 @@ public abstract class ISistema{
 	
 	public abstract void setTodoNull();
 
+	public abstract void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException;
+
+	public abstract HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException;
+
 }
