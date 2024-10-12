@@ -9,6 +9,8 @@ public class Comentario {
 		private List<Comentario> comentarios;
 		private Cliente cliente;
 		private Producto producto;
+		private DTFecha fecha;
+		private int estrellas;
 		
 		public String getId() {
 			return id;
@@ -46,16 +48,34 @@ public class Comentario {
 			this.comentarios = comentarios;
 		}
 		public Comentario(String id, String contenido, List<Comentario> comentarios, Cliente cliente,
-				Producto producto) {
+				Producto producto, DTFecha fecha, int estrellas) {
 			super();
 			this.id = id;
 			this.contenido = contenido;
 			this.comentarios = comentarios;
 			this.cliente = cliente;
 			this.producto = producto;
+			this.setFecha(fecha);
+			this.setEstrellas(estrellas);
 		}
 		
+		public DTFecha getFecha() {
+			return fecha;
+		}
 		
+		public void setFecha(DTFecha fecha) {
+			this.fecha = fecha;
+		}
 		
+		public int getEstrellas() {
+			return estrellas;
+		}
 		
+		public void setEstrellas(int estrellas) {
+			this.estrellas = estrellas;
+		}
+		
+		public void agregarRespuesta(Comentario comentario) {
+			this.comentarios.add(comentario);
+		}
 }

@@ -16,6 +16,11 @@ public class Categoria {
     private HashMap<String, Categoria> hijos;
     private boolean tieneProductos;
 
+    
+    public boolean tieneSubcategorias() {
+        return !hijos.isEmpty(); // Devuelve true si tiene subcategorías (si hijos no está vacío)
+    }
+    
     // Constructor
     public Categoria(String nombreCat, boolean tieneProductos, Categoria padre) {
         this.nombreCat = nombreCat;

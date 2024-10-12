@@ -639,23 +639,52 @@ public class Sistema extends ISistema {
 		DTFecha fecha1 = new DTFecha(2, 4, 2024);
         DTFecha fecha2 = new DTFecha(6, 8, 2024);
        
-        Categoria cat1 = new Categoria( "Liquidos", true, null);
-        Categoria cat3 = new Categoria( "Electronicos",  true, null);
-        Categoria cat2 = new Categoria( "Intrumentos Electricos",  true, cat3);
+        Categoria Electronica = new Categoria( "Electrónica", true, null);
+        Categoria Moda = new Categoria( "Moda",  true, null);
+        Categoria HogaryCocina = new Categoria("Hogar y cocina", true, null);
+        Categoria FloresyPlantas = new Categoria("Flores y plantas", true, null);
+        Categoria Farmacia = new Categoria("Farmacia", true, null);
+        Categoria Automotriz = new Categoria("Automotriz", true, null);
+       
         
-        cat3.agregarHijo(cat2.getNombreCat(), cat2);
         
+        
+       
         List<Categoria> c1= new ArrayList<>();
         List<Categoria> c2= new ArrayList<>();
         List<Categoria> c3= new ArrayList<>();
-        c1.add(cat3);
-        c1.add(cat2);
-        c2.add(cat1);
-        c3.add(cat2);
+      
+        this.getCategorias().put(Automotriz.getNombreCat(), Automotriz);
         
-        this.getCategorias().put(cat1.getNombreCat(), cat1);
-        // this.getCategorias().put(cat2.getNombreCat(), cat2);
-        this.getCategorias().put(cat3.getNombreCat(), cat3);
+        // Crear categoría Electrónica y sus subcategorías
+       
+        Categoria Celulares = new Categoria("Celulares", true, Electronica);
+        Categoria Laptops = new Categoria("Laptops", true, Electronica);
+
+        // Crear subcategorías de Celulares
+        Categoria Samsung = new Categoria("Samsung", true, Celulares);
+        Categoria iPhone = new Categoria("iPhone", true, Celulares);
+        Categoria Xiaomi = new Categoria("Xiaomi", true, Celulares);
+
+        // Crear subcategoría de Laptops
+        Categoria Lenovo = new Categoria("Lenovo", true, Laptops);
+
+        // Asociar subcategorías usando agregarHijo (que agrega al HashMap con nombre y categoría)
+        Electronica.agregarHijo("Celulares", Celulares);  // Agrega 'Celulares' como subcategoría de 'Electrónica'
+        Electronica.agregarHijo("Laptops", Laptops);    // Agrega 'Laptops' como subcategoría de 'Electrónica'
+
+        Celulares.agregarHijo("Samsung",Samsung);      // Agrega 'Samsung' como subcategoría de 'Celulares'
+        Celulares.agregarHijo("Iphone", iPhone);       // Agrega 'iPhone' como subcategoría de 'Celulares'
+        Celulares.agregarHijo("Xiaomi", Xiaomi);       // Agrega 'Xiaomi' como subcategoría de 'Celulares'
+
+        Laptops.agregarHijo("Lenovo", Lenovo);         // Agrega 'Lenovo' como subcategoría de 'Laptops'
+
+        this.getCategorias().put(Electronica.getNombreCat(), Electronica);
+        this.getCategorias().put(Moda.getNombreCat(), Moda);
+        this.getCategorias().put(Farmacia.getNombreCat(), Farmacia);
+        this.getCategorias().put(FloresyPlantas.getNombreCat(), FloresyPlantas);
+        this.getCategorias().put(FloresyPlantas.getNombreCat(), FloresyPlantas);
+        this.getCategorias().put(HogaryCocina.getNombreCat(), HogaryCocina);
         
         String imagen1 = "media/images/Chico1.png";
         String imagen2 = "media/images/Chico2.png";
@@ -673,6 +702,7 @@ public class Sistema extends ISistema {
         Proveedor pr1 = new Proveedor("elIsma", "Isma", "Belardo", "lalala@example.com", fecha1, imagen3, "Sugar Cane Bank", "http://SugarCaneBank.com", "WonderWall");
         Proveedor pr2 = new Proveedor("Amy_w", "Amy", "Casadevino", "amy.casadevino@example.com", fecha2, imagen4, "Mary on a cross Enterprise", "http://MaryOnACross.com", "breakingBAld");
         Proveedor pr3 = new Proveedor("Zo3", "Zoe", "Gatusso", "zoe.gatu@example.com", fecha2, imagen6, "Flamin-Go", "http://FlaminGo.com", "Ghost-LOVER");
+       
         
         List<String> img1 = new ArrayList<>();
         img1.add(imagenProducto);
@@ -688,14 +718,34 @@ public class Sistema extends ISistema {
         Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
         Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
         
+        Comentario comentario1 = new Comentario("C001", "Me encanta este producto, muy útil en la cocina.", new ArrayList<>(), cl1, producto2, fecha1, 3);
+        Comentario comentario2 = new Comentario("C002", "No estoy muy satisfecho, esperaba más funciones.", new ArrayList<>(), cl2, producto2, fecha2, 1);
+        Comentario comentario3 = new Comentario("C003", "Lo recomiendo al 100%, excelente calidad.", new ArrayList<>(), cl3, producto2, fecha1, 5);
+        
+        Comentario comentario4 = new Comentario("C004", "Estoy de acuerdo", new ArrayList<>(), cl1, producto2, fecha1, 0);
+        Comentario comentario5 = new Comentario("C005", "Estoy en desacuerdo", new ArrayList<>(), cl2, producto2, fecha2, 0);
+        Comentario comentario6 = new Comentario("C006", "Siu", new ArrayList<>(), cl3, producto2, fecha1, 0);
+        
+        comentario4.agregarRespuesta(comentario5);
+        comentario1.agregarRespuesta(comentario4);
+        comentario1.agregarRespuesta(comentario6);
+        
+        producto2.agregarComentario(comentario1);
+        producto2.agregarComentario(comentario2);
+        producto2.agregarComentario(comentario3);
+        
+        producto1.setEstrellas(3);
+        producto2.setEstrellas(3);
+        producto3.setEstrellas(3);
+        
         pr1.agregarProducto(producto1);
         pr1.agregarProducto(producto2);
         pr1.agregarProducto(producto3);
         
-        cat1.agregarProducto(producto1);
-        cat2.agregarProducto(producto2);
-        cat2.agregarProducto(producto3);
-        cat3.agregarProducto(producto2);
+        Moda.agregarProducto(producto1);
+        Moda.agregarProducto(producto2);
+        Moda.agregarProducto(producto3);
+        Moda.agregarProducto(producto2);
         
         OrdenDeCompra orden1 = new OrdenDeCompra(88, fecha1, cl1, null);
         orden1.setPrecioTotal(1350.50f);
@@ -730,7 +780,7 @@ public class Sistema extends ISistema {
 		this.usuarios.add(cl2);
 		this.usuarios.add(pr1);
 		this.usuarios.add(pr2);
-
+		
        
 		
 	}

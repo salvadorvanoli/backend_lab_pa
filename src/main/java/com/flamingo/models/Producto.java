@@ -12,6 +12,7 @@ public class Producto {
     private List<Categoria> categorias;
     private Proveedor proveedor;
     private int cantEstrellas;
+    private List <Comentario> comentarios;
 
     // Constructor
     public Producto(String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
@@ -23,12 +24,33 @@ public class Producto {
         
         this.imagenes = new ArrayList<>();
         this.categorias = new ArrayList<>();
+        this.comentarios = new ArrayList<>();
         
         this.imagenes = imagenes;
         this.categorias = categorias;
         this.proveedor = proveedor;
         
         this.cantEstrellas = 0;
+    }
+    
+    public List<Comentario> getComentarios() {
+    	return this.comentarios;
+    }
+    
+    public void setComentarios(List<Comentario> comentarios) {
+    	this.comentarios = comentarios;
+    }
+    
+    public void agregarComentario(Comentario nuevo) {
+    	this.comentarios.add(nuevo);
+    }
+    
+    public int getEstrellas() {
+    	return this.cantEstrellas;
+    }
+    
+    public void setEstrellas(int estrellas) {
+    	this.cantEstrellas = estrellas;
     }
 
     // Setters
