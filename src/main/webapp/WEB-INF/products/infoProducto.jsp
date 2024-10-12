@@ -167,9 +167,13 @@
                     </div>
 
                     <div id="">
-                        <input type="number" id="cantidad-input" min="1" value="1">
-                        <input type="button" value="Agregar al carrito" class="siguiente-button btn btn-danger" id="agregar-al-carrito" data-toggle="modal" data-target="#modalCarrito">
-
+                    	
+                    	<form action="agregarAlCarrito">
+                    		<input type="text" name="numReferencia" value="<%= producto.getNumReferencia() %>" class="d-none">
+                    		<input type="number" name="cantidad" id="cantidad-input" min="1" value="1">
+                        	<input type="submit" value="Agregar al carrito" class="siguiente-button btn btn-danger" id="agregar-al-carrito" data-toggle="modal" data-target="#modalCarrito">
+                    	</form>
+                    
                     </div>
                 </div>
             </div>
@@ -221,19 +225,22 @@
 
             <div class="caja-comentario card p-3 mt-3 mb-3 ms-5 me-5" id="respuesta">
                 <div class="form-group">
-                    <label for="comentarioInput">Escribe tu comentario:</label>
-                    <input type="text" class="form-control" id="comentarioInput" placeholder="Escribe aquí...">
-                    <input type="number" class="form-control mt-3" id="cantEstrellas" min="1" placeholder="Inserte la cantidad de estrellas (1-5)">
-                </div>
-                <div class="mt-3" id="botonesComentario">
-                    <button class="btn btn-success" onclick="agregarComentario()">Enviar</button>
-                </div>
+                	<form action="nuevoComentario" method="POST">
+	                    <label for="comentarioInput">Escribe tu comentario:</label>
+	                    <input type="text" name="texto" class="form-control" id="comentarioInput" placeholder="Escribe aquí...">
+	                    <input type="number" name="estrellas" class="form-control mt-3" id="cantEstrellas" min="1" placeholder="Inserte la cantidad de estrellas (1-5)">
+	                
+		                <div class="mt-3" id="botonesComentario">
+		                    <input type="submit" class="btn btn-success" value="Enviar">
+		                </div>
+                	</form>
+               	</div>
             </div>
 
             <div id="comentarios-container" class="contenedor-responsive">
 			    <%
 			        // Renderizar todos los comentarios y respuestas de manera recursiva
-			        String htmlComentarios = ComentarioRenderer.renderComentarios(producto.getComentarios(), 0);
+			        String htmlComentarios = ComentarioRenderer.renderComentarios(producto.getComentarios(), 0, 0);
 			        out.print(htmlComentarios);
 			    %>
 			</div>
@@ -270,114 +277,27 @@
 
     <script type="text/javascript">
 
+	    function cancelarComentario(contador) {
+	    	
+	        document.getElementById("respuesta" + contador).classList.add("d-none");
+	    }
+	    
+	    function mostrarCajaRespuesta(contador, id) {
+
+	    	contador++;
+	    	
+	        document.getElementById("respuesta" + contador).classList.remove("d-none");
+	        
+	        document.getElementById("comentarioId" + contador).value = id;
+	    }
+	
+	    function aceptarComentario(contador, id) {
+			
+	    }
+    
 	    document.addEventListener("DOMContentLoaded", function() {
 	
-		    function mostrarCajaRespuesta(contador, id) {
-		        document.getElementById("respuesta" + contador).classList.remove("d-none");
-		        document.getElementById("botonesComentario" + contador).innerHTML = `
-		            <button class="btn btn-success" onclick="aceptarComentario(${contador}, ${id})">Aceptar</button>
-		            <button class="btn btn-danger" onclick="cancelarComentario(${contador})">Cancelar</button>
-		        `;
-		    }
-		
-		    function cancelarComentario(contador) {
-		        document.getElementById("respuesta" + contador).classList.add("d-none");
-		    }
-		
-		    function aceptarComentario(contador, id) {
-		
-		        let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || null;
-		
-		        if(usuarioActual == null || usuarioActual == ""){
-		            mostrarAlerta("No se puede escribir un comentario si no se tiene la sesión iniciada");
-		            return;
-		        }
-		
-		        function buscarComentario(comentarios) {
-		            for (let comentario of comentarios) {
-		                if (comentario.id === id) {
-		                    return comentario;
-		                }
-		                let respuestaEncontrada = buscarComentario(comentario.respuestas);
-		                if (respuestaEncontrada) {
-		                    return respuestaEncontrada;
-		                }
-		            }
-		            return null;
-		        }
-		        
-		        for (let producto of productos) {
-		            if (producto.id == productoSeleccionado.id) {
-		
-		                let comentario = buscarComentario(producto.comentarios);
-		                if (comentario) {
-		                    // Obtenemos la fecha actual
-		                    const fechaActual = new Date();
-		                    const dia = String(fechaActual.getDate()).padStart(2, '0'); // Asegura que el día tenga dos dígitos
-		                    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque getMonth() empieza en 0
-		                    const anio = fechaActual.getFullYear();
-		                    const fechaFormateada = `${dia}/${mes}/${anio}`;
-		                    const nuevoComentario = document.getElementById("comentarioInput" + contador).value.trim();
-		
-		                    if (nuevoComentario) {
-		                        // Agregamos la nueva respuesta al comentario
-		                        comentario.respuestas.push({
-		                            usuario: usuarioActual.nombre,
-		                            comentario: nuevoComentario,
-		                            foto: usuarioActual.img,
-		                            fecha: fechaFormateada,
-		                            id: obtenerNuevoId(), // Asegúrate de que esta función retorne un ID único
-		                            respuestas: []
-		                        });
-		
-		                        // Guardamos los cambios en localStorage
-		                        localStorage.setItem("productos", JSON.stringify(productos));
-		                        localStorage.setItem("productoSeleccionado", JSON.stringify(producto));
-		
-		                        // Recargamos la página para mostrar los nuevos comentarios
-		                        location.reload();
-		                    } else {
-		                        alert("El comentario no puede estar vacío");
-		                    }
-		                }
-		            }
-		        }
-		    }
-		
-		    function agregarComentario(){
-		        let usuarioActual = JSON.parse(localStorage.getItem("usuarioActual")) || null;
-		
-		        if(usuarioActual == null || usuarioActual == ""){
-		            mostrarAlerta("No se puede escribir un comentario si no se tiene la sesión iniciada");
-		            return;
-		        }
-		
-		        let texto = document.getElementById("comentarioInput").value;
-		        let cantEstrellas = document.getElementById("cantEstrellas").value;
-		        const fechaActual = new Date();
-		        const dia = String(fechaActual.getDate()).padStart(2, '0');
-		        const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
-		        const anio = fechaActual.getFullYear();
-		        
-		        console.log(dia);
-		        console.log(mes);
-		        console.log(dia);
-		        
-		        
-		        const fechaFormateada = `${dia}/${mes}/${anio}`;
-		
-		        if(texto == "" || texto == null || texto == undefined) {
-		            mostrarAlerta("No se puede agregar un comentario vacío");
-		            return;
-		        }
-		
-		        if(cantEstrellas < 0 || cantEstrellas > 5) {
-		            mostrarAlerta("La cantidad de estrellas no es válida");
-		            return;
-		        }
-		
-		        
-		    }
+		    
 		
 		    // Lógica para agregar un producto al carrito
 		
@@ -445,7 +365,7 @@
 		        }
 		    }
 		
-		    revisarProductoComprado();
+		    //revisarProductoComprado();
 	    });
     </script>
 

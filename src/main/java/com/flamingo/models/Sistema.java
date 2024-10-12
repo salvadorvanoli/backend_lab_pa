@@ -25,7 +25,7 @@ public class Sistema extends ISistema {
 	
 	private Producto productoActual;
 	
-	private List<Cantidad> listaOrden; // ESTO ES RE ILEGAL
+	private List<Cantidad> listaOrden;
 	// private List<Producto> listaOrden;
 	
 	public Sistema() {
@@ -346,7 +346,6 @@ public class Sistema extends ISistema {
 		return numero;
 	}
 	
-	
 	// FUNCION DAR ALTA ORDEN DE COMPRA
 	
 	
@@ -646,10 +645,6 @@ public class Sistema extends ISistema {
         Categoria Farmacia = new Categoria("Farmacia", true, null);
         Categoria Automotriz = new Categoria("Automotriz", true, null);
        
-        
-        
-        
-       
         List<Categoria> c1= new ArrayList<>();
         List<Categoria> c2= new ArrayList<>();
         List<Categoria> c3= new ArrayList<>();
@@ -668,6 +663,15 @@ public class Sistema extends ISistema {
 
         // Crear subcategoría de Laptops
         Categoria Lenovo = new Categoria("Lenovo", true, Laptops);
+
+        HashMap<String, Categoria> categorias = new HashMap<>();
+        
+        // Agregar categorías al HashMap
+        categorias.put("C001", Electronica);
+        categorias.put("C002", Celulares);
+        categorias.put("C003", Laptops);
+        
+        this.categorias = categorias;
 
         // Asociar subcategorías usando agregarHijo (que agrega al HashMap con nombre y categoría)
         Electronica.agregarHijo("Celulares", Celulares);  // Agrega 'Celulares' como subcategoría de 'Electrónica'
@@ -746,6 +750,8 @@ public class Sistema extends ISistema {
         Moda.agregarProducto(producto2);
         Moda.agregarProducto(producto3);
         Moda.agregarProducto(producto2);
+        
+        this.productoActual = producto2;
         
         OrdenDeCompra orden1 = new OrdenDeCompra(88, fecha1, cl1, null);
         orden1.setPrecioTotal(1350.50f);

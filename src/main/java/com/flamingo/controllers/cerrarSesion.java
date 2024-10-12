@@ -39,9 +39,6 @@ public class cerrarSesion extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		ISistema sis = SistemaFactory.getInstancia().getISistema();
-		sis.setTodoNull();
 		
 	}
 	
@@ -56,6 +53,8 @@ public class cerrarSesion extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ISistema sis = SistemaFactory.getInstancia().getISistema();
+		sis.setTodoNull();
 		processRequest(request, response);
 	}
 

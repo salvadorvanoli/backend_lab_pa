@@ -35,16 +35,23 @@ public class infoProducto extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
-		ISistema sis = SistemaFactory.getInstancia().getISistema();
-		sis.crearCasos();
+		ISistema sis;
+		if (getServletContext().getAttribute("sistema") == null) {
+		    System.out.println("CREO EL SISTEMA");
+		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
+		    sis = (ISistema) getServletContext().getAttribute("sistema");
+		    sis.crearCasos();
+		} else {
+		    sis = (ISistema) getServletContext().getAttribute("sistema");
+		}
 		
 		String productoSeleccionado = request.getParameter("productoSeleccionado");
 		
 		try {
 			//sis.elegirProveedor("elIsma");
 			sis.elegirCliente("Salva");
-			sis.elegirCategoria("Intrumentos Electricos");
-			sis.elegirProducto("Guitarra"); // Acá entre paréntesis tendría que ir "productoSeleccionado".
+			//sis.elegirCategoria("Electrónica");
+			//sis.elegirProducto("Guitarra"); // Acá entre paréntesis tendría que ir "productoSeleccionado".
 		} catch(UsuarioNoExisteException e) {
 		
 		}

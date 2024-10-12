@@ -123,6 +123,44 @@ public class Producto {
     public DTProducto getDTProducto() {
         return new DTProducto(nombreProducto, numReferencia, descripcion, precio);
     }
+    
+    // Función para buscar un comentario por ID y agregar respuesta en el comentario correcto.
+    public Comentario getComentario(String id) {
+        // Recorremos los comentarios principales
+        for (Comentario comentario : comentarios) {
+            // Si el comentario tiene el ID que estamos buscando
+            if (comentario.getId().equals(id)) {
+                return comentario; // Comentario encontrado
+            }
+            
+            // Si no es el comentario principal, revisamos las respuestas
+            Comentario respuestaEncontrada = buscarEnRespuestas(comentario.getComentarios(), id);
+            if (respuestaEncontrada != null) {
+                return respuestaEncontrada;
+            }
+        }
+        // Si no se encontró, retornamos null
+        return null;
+    }
+
+    // Función auxiliar para buscar el comentario en las respuestas (subcomentarios)
+    private Comentario buscarEnRespuestas(List<Comentario> respuestas, String id) {
+        // Recorremos las respuestas (subcomentarios)
+        for (Comentario respuesta : respuestas) {
+            // Si la respuesta tiene el ID que estamos buscando
+            if (respuesta.getId().equals(id)) {
+                return respuesta; // Respuesta encontrada
+            }
+
+            // Revisamos si esta respuesta tiene más respuestas anidadas
+            Comentario respuestaAnidada = buscarEnRespuestas(respuesta.getComentarios(), id);
+            if (respuestaAnidada != null) {
+                return respuestaAnidada; // Respuesta anidada encontrada
+            }
+        }
+        // Si no se encontró, retornamos null
+        return null;
+    }
 
     // Método para obtener los datos detallados del producto
     public DTProductoDetallado getDTProductoDetallado() {
