@@ -130,7 +130,7 @@ public class Sistema extends ISistema {
 	
 	
 	@Override
-	public boolean registrarProducto(String titulo, int numReferencia, String descrip, String especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
+	public boolean registrarProducto(String titulo, int numReferencia, String descrip, List<String> especificaciones, float precio, List<Categoria> categorias, List<String> imagenes) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
 		if (this.usuarioActual == null || ! (this.usuarioActual instanceof Proveedor)) {
 			throw new NullPointerException("No se ha elegido un proveedor previamente.");
 		}
@@ -560,7 +560,7 @@ public class Sistema extends ISistema {
 	}
 	
 	@Override
-	public void modificarDatosProducto(String nombreProd, int numReferencia, String descripcion, float precio, String especificacion) throws ProductoRepetidoException {
+	public void modificarDatosProducto(String nombreProd, int numReferencia, String descripcion, float precio, List<String> especificacion) throws ProductoRepetidoException {
 		if (this.productoActual == null) {
 			throw new NullPointerException("No se ha elegido un producto previamente.");
 		}
@@ -709,9 +709,14 @@ public class Sistema extends ISistema {
         img1.add(imagenProducto);
         img1.add(imagenProducto);
         
-        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", "Mineralizada", 999, 72.5f, img1, c2,  pr3);
-        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", "Hambucker Doble", 998, 16500.0f, img1, c1,  pr2);
-        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", "Pilas AAA", 997, 350.20f, img1, c3,  pr1);
+        List<String> especificaciones = new ArrayList<>();
+        especificaciones.add("Buen");
+        especificaciones.add("Producto");
+        especificaciones.add("!!!!");
+        
+        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3);
+        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2);
+        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1);
         
         pr1.agregarProducto(producto1);
         pr1.agregarProducto(producto2);

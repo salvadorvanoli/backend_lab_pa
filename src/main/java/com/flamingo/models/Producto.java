@@ -5,15 +5,16 @@ import java.util.List;
 public class Producto {
     private String nombreProducto;
     private String descripcion;
-    private String especificacion;
+    private List<String> especificacion;
     private int numReferencia;
     private float precio;
     private List<String> imagenes;
     private List<Categoria> categorias;
     private Proveedor proveedor;
+    private int cantEstrellas;
 
     // Constructor
-    public Producto(String nombreProducto, String descripcion, String especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
+    public Producto(String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.especificacion = especificacion;
@@ -26,6 +27,8 @@ public class Producto {
         this.imagenes = imagenes;
         this.categorias = categorias;
         this.proveedor = proveedor;
+        
+        this.cantEstrellas = 0;
     }
 
     // Setters
@@ -37,7 +40,7 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public void setEspecificacion(String especificacion) {
+    public void setEspecificacion(List<String> especificacion) {
         this.especificacion = especificacion;
     }
 
@@ -70,7 +73,7 @@ public class Producto {
         return descripcion;
     }
 
-    public String getEspecificacion() {
+    public List<String> getEspecificacion() {
         return especificacion;
     }
 
@@ -106,6 +109,11 @@ public class Producto {
         for (Categoria categoria : categorias) {
             nombresCategorias.add(categoria.getNombreCat());
         }
+        
+        List<String> nombresEspecificaciones = new ArrayList<>();
+        for(String esp : especificacion) {
+        	nombresCategorias.add(esp);
+        }
 
         // Crear el objeto DTProveedor a partir del Proveedor
         DTProveedor dtProveedor = proveedor.getDTProveedor();
@@ -116,7 +124,7 @@ public class Producto {
             descripcion,
             precio,
             numReferencia,
-            especificacion,
+            nombresEspecificaciones,
             nombresCategorias,
             dtProveedor,
             imagenes
@@ -124,7 +132,7 @@ public class Producto {
     }
 
     // Método para modificar los datos del producto
-    public void modificarDatosProducto(String tituloProducto, int numReferencia, String descripcion, float precio, String especificacion) {
+    public void modificarDatosProducto(String tituloProducto, int numReferencia, String descripcion, float precio, List<String> especificacion) {
         this.nombreProducto = tituloProducto;
         this.numReferencia = numReferencia;
         this.descripcion = descripcion;

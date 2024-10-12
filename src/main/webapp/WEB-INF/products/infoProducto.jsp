@@ -114,6 +114,14 @@
 
             <div id="especificaciones-container">
                 
+                <% 
+		        for (String especificacion : producto.getEspecificacion()) { 
+		        %>
+		            <li><%= especificacion %></li>
+		        <%
+		        }
+		        %>
+                
             </div>
 
         </section>
