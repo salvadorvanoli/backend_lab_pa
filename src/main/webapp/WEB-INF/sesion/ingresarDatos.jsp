@@ -285,7 +285,8 @@ function validarUrl(url) {
 document.addEventListener('DOMContentLoaded', function() {
     const buttonElegirImagen = document.getElementById('buttonElegirImagen');
     const inputImagen = document.getElementById('inputImagen');
-    const iconoUsuario = document.getElementById('icono-usuario2'); 
+    const iconoUsuario = document.getElementById('icono-usuario2');
+    const imagenUrlInput = document.getElementById('imagenUrl');
     
     // Al hacer clic en el botón para elegir la imagen
     buttonElegirImagen.onclick = function() {
@@ -307,14 +308,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 imagenUrlInput.value = urlImagen;
             	
                 const img = document.createElement('img'); // Crea un elemento img
-                img.src = e.target.result; // Asigna la imagen en base64 al src de img
+                img.src = e.target.result; 
                 img.style.width = '100%'; 
                 img.style.height = '100%'; 
-                img.style.borderRadius = '50%'; // Redondea la imagen para que parezca un icono circular
-                img.style.objectFit = 'cover'; // Asegura que la imagen cubra todo el contenedor
+                img.style.borderRadius = '50%'; 
+                img.style.objectFit = 'cover'; 
                 img.style.display = 'block'; 
                 img.style.margin = 'auto'; 
-                img.style.maxWidth = '150px'; // Establece un tamaño máximo
+                img.style.maxWidth = '150px'; 
                 img.style.maxHeight = '150px'; 
 
                 // Reemplaza el icono anterior con la nueva imagen seleccionada
