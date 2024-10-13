@@ -532,28 +532,42 @@
 	<jsp:include page="/WEB-INF/template/footer.jsp"/>
     <script type="text/javascript">
     	
+    	let carritoActual;
+    
     	async function getCarrito(URL) {
     		try {
     	        const response = await fetch(URL);
     	        const data = await response.json();
-    	        console.log('Datos recibidos:', data);
+    	        console.log('Datos recibidos: ', data);
     	        return data;
     	    } catch (error) {
-    	        console.error('Hubo un problema con la solicitud:', error);
+    	        console.error('Hubo un problema con la solicitud: ', error);
     	    }
     	}
     	
-    	async function updateCantidad(URL, body) {
+    	async function updateCarrito(URL, body, tipo) {
     		try {
+    			
+    			console.log(body);
+    			
     	        const response = await fetch(URL, {
     	            method: 'POST',
     	            headers: {
-    	                'Content-Type': 'application/json'
+    	                'Content-Type': 'application/json',
+    	                'tipo': tipo
     	            },
-    	            body: JSON.stringify(body);
+    	            body: JSON.stringify(body)
     	        });
-    	        const data = await response.json();
-    	        console.log('Datos recibidos:', data);
+
+    	        
+    	        if (!response.ok) {
+    	            throw new Error("Error en la solicitud: " + respuesta.status);
+    	        }
+
+    	        const result = await response.json();
+    	        console.log("Datos recibidos del servidor: ", result);
+    	        return result;
+    	        
     	    } catch (error) {
     	        console.error('Hubo un problema con la solicitud:', error);
     	    }
@@ -616,7 +630,7 @@
 	        }
 	    }
 	
-	    function cargarElementosCarrito(array, carritoActual) {
+	    function cargarElementosCarrito(array) {
 	        if (array == undefined || ! Object.keys(array).length > 0){
 	            manejarCarritoVacio();
 	        } else {
@@ -644,14 +658,14 @@
 	                        <div class="col-3">
 	                            <div class="col-12">
 	                                <label for="cantidad">Cantidad</label>
-	                                <input type="number" name="cantidad" class="cantidad-producto" min="1" required value="` + array[element].cantidad + `" onchange="manejarCantidad(this, ` + array[element].producto.numReferencia + `, ` + carritoActual + `)">
+	                                <input type="number" name="cantidad" class="cantidad-producto" min="1" required value="` + array[element].cantidad + `" onchange="manejarCantidad(this, ` + array[element].producto.numReferencia + `)">
 	                                <div class="invalid-feedback">
 	                                    <i class="fa-solid fa-triangle-exclamation"></i> Valor inválido.
 	                                </div>
 	                            </div>
 	                            <br>
 	                            <div class="col-12">    
-	                                <button type="button" class="btn btn-danger text-nowrap" onclick="eliminarItem(` + array[element].producto.numReferencia + `, ` + carritoActual + `)"><i class="fa-solid fa-trash-can"></i></button>
+	                                <button type="button" class="btn btn-danger text-nowrap" onclick="eliminarItem(` + array[element].producto.numReferencia + `)"><i class="fa-solid fa-trash-can"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>`;
@@ -667,16 +681,16 @@
 	                        imagen = array[element].imagenes;
 	                    }
 	                    itemContenedor.innerHTML =
-	                        `<div class="row my-3 d-flex align-items-center producto-secundario` + array[element].id + `">
+	                        `<div class="row my-3 d-flex align-items-center producto-secundario` + array[element].producto.numReferencia + `">
 	                            <div class="col-4 d-flex align-items-center justify-content-center">
 	                                <img class="w-75" src="` + imagen + `" alt="Zucaritas">
 	                            </div>
 	                            <div class="col-4">
 	                                <div class="row titulo-producto">
-	                                    <p>` + array[element].nombre + `</p>
+	                                    <p>` + array[element].producto.nombre + `</p>
 	                                </div>
 	                                <div class="row precio-producto">
-	                                    <p>$` + array[element].precio + `</p>
+	                                    <p>$` + array[element].producto.precio + `</p>
 	                                </div>
 	                            </div>
 	                            <div class="col-3">
@@ -690,14 +704,14 @@
 	                    contenedor.appendChild(itemContenedor);
 	                });
 	
-	                subtotal += array[element].producto.precio * array[element].cantidad;
+	                subtotal += Math.round(array[element].producto.precio * array[element].cantidad);
 	
 	            }
 	
 	            modificarTextos(subtotales, "$" + subtotal);
 	            modificarTextos(envios, "GRATIS");
-	            modificarTextos(impuestos, "$" + subtotal * 0.02);
-	            modificarTextos(totales, "$" + subtotal * 1.02);
+	            modificarTextos(impuestos, "$" + Math.round(subtotal * 0.02));
+	            modificarTextos(totales, "$" + Math.round(subtotal * 1.02));
 	
 	        }
 	    }
@@ -705,24 +719,26 @@
 	
 	    function modificarAllTextos(array){
 	        let subtotal = 0;
+	        
+	        console.log(array);
 	
-	        array.forEach(item => {
-	            subtotal += item.precio * item.cantidad;
-	        });
+	        for(let element in array){
+	            subtotal += array[element].producto.precio * array[element].cantidad;
+	        }
 	
-	        modificarTextos(subtotales, "$" + subtotal);
+	        modificarTextos(subtotales, "$" + Math.round(subtotal));
 	        if (envioGratis.checked){
 	            modificarTextos(envios, "GRATIS");
 	        } else {
 	            modificarTextos(envios, "$20");
 	            subtotal += 20;
 	        }
-	        modificarTextos(impuestos, "$" + subtotal * 0.02);
-	        modificarTextos(totales, "$" + subtotal * 1.02);
+	        modificarTextos(impuestos, "$" + Math.round(subtotal * 0.02));
+	        modificarTextos(totales, "$" + Math.round(subtotal * 1.02));
 	    }
 	
 	
-	    function manejarCantidad(input, id, carritoActual){
+	    function manejarCantidad(input, id){
 	        const cantidad = Number.parseInt(input.value);
 	        if ( !(Number.isInteger(cantidad)) || cantidad < 1){
 	            input.value = 1;
@@ -730,7 +746,7 @@
 	
 	        // const carritoActual = JSON.parse(localStorage.getItem('carritoActual'));
 	
-	        for (let num in carritoActual.keys()){
+	        for (let num in carritoActual){
 	            if (num == id){
 	                carritoActual[num].cantidad = Number.parseInt(input.value);
 	                break;
@@ -748,22 +764,19 @@
 	        // localStorage.setItem("carritoActual", JSON.stringify(carritoActual)); // HAY QUE HACER UN POST
 	
 	        modificarAllTextos(carritoActual);
+	        
+	        updateCarrito("/backend_lab_pa/manejarcarrito", [Number.parseInt(id), Number.parseInt(input.value)], "manejarCantidad");
 	
 	    }
 	
 	
-	    function eliminarItem(id, carritoActual){
+	    function eliminarItem(id){
 	
 	        // const carritoActual = JSON.parse(localStorage.getItem("carritoActual"));
 	        
-	        for (let i = 0; i < carritoActual.length; i++){
-	            if (carritoActual[i].id == id){
-	                carritoActual.splice(i, 1);
-	                break;
-	            }
-	        }
+	        delete carritoActual[id];
 	
-	        if (carritoActual.keys() == 0){
+	        if (Object.keys(carritoActual) == 0){
 	            encabezado1.remove();
 	            seccion1.remove();
 	            encabezado2.remove();
@@ -788,6 +801,8 @@
 	        itemsSecundarios.forEach(itemSecundario => {
 	            itemSecundario.remove();
 	        });
+	        
+	        updateCarrito("/backend_lab_pa/manejarcarrito", id, "eliminarItem");
 	
 	    }
 	
@@ -795,20 +810,20 @@
 	    function modificarEnvio(){
 	        // const carritoActual = JSON.parse(localStorage.getItem("carritoActual"));
 	        let subtotal = 0;
-	        carritoActual.forEach(element => {
-	            subtotal += element.precio * element.cantidad;
-	        });
+	        for (let element in carritoActual) {
+	            subtotal += carritoActual[element].producto.precio * carritoActual[element].cantidad;
+	        }
 	
 	        // console.log(envioGratis.checked);
 	
 	        if (envioGratis.checked){
 	            modificarTextos(envios, "GRATIS");
-	            modificarTextos(impuestos, "$" + (subtotal) * 0.02)
-	            modificarTextos(totales, "$" + ((subtotal) + (subtotal) * 0.02));
+	            modificarTextos(impuestos, "$" + Math.round(subtotal * 0.02));
+	            modificarTextos(totales, "$" + Math.round(subtotal + (subtotal * 0.02)));
 	        } else {
 	            modificarTextos(envios, "$20");
-	            modificarTextos(impuestos, "$" + (subtotal + 20) * 0.02)
-	            modificarTextos(totales, "$" + ((subtotal + 20) + (subtotal + 20) * 0.02));
+	            modificarTextos(impuestos, "$" + Math.round((subtotal + 20) * 0.02));
+	            modificarTextos(totales, "$" + Math.round(subtotal + 20 + ((subtotal + 20) * 0.02)));
 	        }
 	    }
 	
@@ -1147,7 +1162,7 @@
 	    // departamentos.value = "";
 	    
 	    document.addEventListener("DOMContentLoaded", async function(){
-	    	const carritoActual = await getCarrito("/backend_lab_pa/manejarcarrito");
+	    	carritoActual = await getCarrito("/backend_lab_pa/manejarcarrito");
 	    	console.log(carritoActual);
 	    	
 	    	cargarElementosCarrito(carritoActual);

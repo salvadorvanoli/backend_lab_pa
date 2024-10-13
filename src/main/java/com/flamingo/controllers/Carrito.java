@@ -19,7 +19,6 @@ import com.flamingo.models.Cantidad;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
-import com.flamingo.models.adapters.CantidadAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

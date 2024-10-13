@@ -3,7 +3,6 @@ package com.flamingo.models;
 import java.util.HashMap;
 
 import com.flamingo.models.DTFecha;
-import com.google.gson.annotations.Expose;
 
 public class Usuario{
     private String nickname;

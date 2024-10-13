@@ -66,6 +66,12 @@ public class Cliente extends Usuario{
 			this.carrito = carrito;
 		}
 		
+		public void modificarCantidadItemCarrito(int numReferencia, int cantidad) {
+			Cantidad cant = this.carrito.get(numReferencia);
+			cant.setCantidad(cantidad);
+			this.carrito.put(numReferencia, cant);
+		}
+		
 		public HashMap<Integer, DTCantidad> getDTCarrito() {
 			HashMap<Integer, DTCantidad> carrito = new HashMap<>();
 			for (Cantidad cant : this.carrito.values()) {
