@@ -16,10 +16,11 @@ import jakarta.servlet.http.HttpSession;
 // import com.flamingo.exceptions.UsuarioNoEncontrado;
 import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.models.Cantidad;
+import com.flamingo.models.Cliente;
 import com.flamingo.models.ISistema;
+import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
-import com.flamingo.models.adapters.CantidadAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -75,6 +76,11 @@ public class Carrito extends HttpServlet {
 				
 		} else {
 			Usuario usr = (Usuario) usuario;
+			Cliente cli = (Cliente) sis.getUsuarioActual();
+			System.out.println(System.lineSeparator() + System.lineSeparator() + System.lineSeparator() + "ORDENES DE COMPRAS" + System.lineSeparator() + System.lineSeparator() + System.lineSeparator());
+			for (OrdenDeCompra ord : cli.getOrdenesDeCompras()) {
+				System.out.println(ord.toString());
+			}
 			/*
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");

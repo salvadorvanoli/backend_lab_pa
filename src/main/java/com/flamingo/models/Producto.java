@@ -121,7 +121,7 @@ public class Producto {
 
     // Método para obtener los datos básicos del producto
     public DTProducto getDTProducto() {
-        return new DTProducto(nombreProducto, numReferencia, descripcion, precio);
+        return new DTProducto(nombreProducto, numReferencia, descripcion, precio, imagenes);
     }
     
     // Función para buscar un comentario por ID y agregar respuesta en el comentario correcto.

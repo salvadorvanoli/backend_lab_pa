@@ -7,14 +7,16 @@ public class DTProducto {
 	private String descripcion;
 	private float precio;
 	private int numReferencia;
+	private List<String> imagenes;
 	
 	
-	public DTProducto(String nombre, int num, String descripcion, float precio) {
+	public DTProducto(String nombre, int num, String descripcion, float precio, List<String> imagenes) {
 		super();
 		this.nombre = nombre;
 		this.numReferencia = num;
 		this.descripcion = descripcion;
 		this.precio = precio;
+		this.imagenes = imagenes;
 	}
 	
 	public String getNombre() {
@@ -38,6 +40,10 @@ public class DTProducto {
 	
 	public int getNumero() {
 		return this.numReferencia;
+	}
+	
+	public List<String> getImagenes() {
+		return this.imagenes;
 	}
 	
 	public String toString() {

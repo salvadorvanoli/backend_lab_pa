@@ -329,6 +329,7 @@ public class Sistema extends ISistema {
 	        List<OrdenDeCompra> ordenes = clienteActual.getOrdenesDeCompras();
 	        ordenes.add(nueva);
 	        clienteActual.setOrdenesDeCompras(ordenes);
+	        System.out.println(nueva);
 	        return nueva;
 	    } else {
 	        throw new IllegalArgumentException("El usuario actual no es un cliente.");
@@ -650,6 +651,14 @@ public class Sistema extends ISistema {
 		this.usuarioActual = null;
 		this.listaOrden.clear();
 	}
+	
+	public List<Producto> getProductos() {
+		return productos;
+	}
+
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
+	}
 
 	@Override
 	public void crearCasos() {
@@ -780,9 +789,9 @@ public class Sistema extends ISistema {
         this.productos.add(producto2);
         this.productos.add(producto3);
         
-        DTCantidadProducto cantprod = new DTCantidadProducto(3, producto2.getDTProducto(), 234);
+        DTCantidad cantprod = new DTCantidad(3, producto2.getDTProducto());
         
-        List<DTCantidadProducto> listacantprod = new ArrayList<>();
+        List<DTCantidad> listacantprod = new ArrayList<>();
         listacantprod.add(cantprod);
         
         OrdenDeCompra orden1 = new OrdenDeCompra(12332, fecha1, cl1, listacantprod);
@@ -832,40 +841,99 @@ public class Sistema extends ISistema {
 	}
 	
 	@Override
-	public HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException {
-		for (Usuario user : this.usuarios) {
-			if (user.getNickname().equals(nickname)) {
-				if (user instanceof Cliente) {
-					Cliente cli = (Cliente) user;
-					return cli.getDTCarrito();
-				} else {
-					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
-				}
+	public HashMap<Integer, DTCantidad> getCarritoActual() throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				return cli.getDTCarrito();
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 			}
 		}
-		throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
+		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 	}
 	
 	@Override
-	public void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException {
-		for (Usuario user : this.usuarios) {
-			if (user.getNickname().equals(nickname)) {
-				if (user instanceof Cliente) {
-					Cliente cli = (Cliente) user;
-					cli.getCarrito().remove(numReferencia);
-				} else {
-					throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " no es un Cliente.");
-				}
+	public void eliminarItemCarrito(int numReferencia) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				cli.getCarrito().remove(numReferencia);
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 			}
 		}
 	}
-
-	public List<Producto> getProductos() {
-		return productos;
+	
+	@Override
+	public void modificarCantidadItemCarrito(int numReferencia, int cantidad) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				cli.modificarCantidadItemCarrito(numReferencia, cantidad);
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+	}
+	
+	/*
+	
+	@Override
+	public Producto getProducto(int numReferencia) {
+		for (Categoria categoria : this.categorias.values()) {
+			return getProductoEnCategoria(categoria, numReferencia);
+	    }
+		return null;
 	}
 
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
+	//@Override
+	private Producto getProductoEnCategoria(Categoria categoria, int numReferencia) { // Hay que probar esto
+	    for (Producto producto : categoria.getProductos()) {
+	        if (producto.getNumReferencia() == numReferencia){
+        		return producto;
+	        }
+	    }
+
+	    for (Categoria subcategoria : categoria.getHijos().values()) {
+			return getProductoEnCategoria(subcategoria, numReferencia);
+	    }
+	    return null;
+	}
+	
+	@Override
+	public void actualizarCarritoActual(HashMap<Integer, DTCantidad> DTCarrito) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				HashMap<Integer, Cantidad> nuevoCarrito = new HashMap<>();
+				for (DTCantidad dt : DTCarrito.values()) {
+					Producto prod = this.getProducto(dt.getProducto().getNumero());
+					Cantidad cant = new Cantidad(prod, dt.getCantidad());
+					nuevoCarrito.put(prod.getNumReferencia(), cant);
+				}
+				cli.setCarrito(nuevoCarrito);
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+	}
+	
+	*/
+	
+	public void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				ord.setCliente(cli);
+				cli.vincularOrdenDeCompra(ord);
+				cli.setCarrito(new HashMap<>());
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+		throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
 	}
 	
 	

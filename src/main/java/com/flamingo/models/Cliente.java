@@ -28,6 +28,10 @@ public class Cliente extends Usuario{
 			this.OrdenesDeCompras.remove(ord);
 		}
 		
+		public void vincularOrdenDeCompra(OrdenDeCompra ord) {
+			this.OrdenesDeCompras.add(ord);
+		}
+		
 		public void setOrdenesDeCompras(List <OrdenDeCompra> OrdenesDeCompras){
 			this.OrdenesDeCompras = OrdenesDeCompras;
 		}
@@ -64,6 +68,12 @@ public class Cliente extends Usuario{
 		
 		public void setCarrito(HashMap<Integer, Cantidad> carrito) {
 			this.carrito = carrito;
+		}
+		
+		public void modificarCantidadItemCarrito(int numReferencia, int cantidad) {
+			Cantidad cant = this.carrito.get(numReferencia);
+			cant.setCantidad(cantidad);
+			this.carrito.put(numReferencia, cant);
 		}
 		
 		public HashMap<Integer, DTCantidad> getDTCarrito() {

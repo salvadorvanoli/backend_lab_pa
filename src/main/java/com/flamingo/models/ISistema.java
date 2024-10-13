@@ -100,9 +100,19 @@ public abstract class ISistema{
 	
 	public abstract void setTodoNull();
 
-	public abstract void eliminarItemCarrito(int numReferencia, String nickname) throws UsuarioNoExisteException;
+	public abstract void eliminarItemCarrito(int numReferencia) throws UsuarioNoExisteException;
+	
+	public abstract void modificarCantidadItemCarrito(int numReferencia, int cantidad) throws UsuarioNoExisteException;
 
-	public abstract HashMap<Integer, DTCantidad> getCarritoActual(String nickname) throws UsuarioNoExisteException;
+	public abstract HashMap<Integer, DTCantidad> getCarritoActual() throws UsuarioNoExisteException;
+	
+	/*
+	public abstract Producto getProducto(int numReferencia);
+	
+	public abstract void actualizarCarritoActual(HashMap<Integer, DTCantidad> nuevoCarrito) throws UsuarioNoExisteException;
+	*/
+	
+	public abstract void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException;
 
 	public abstract int generarIdComentario();
 
