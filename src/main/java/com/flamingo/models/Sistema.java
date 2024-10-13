@@ -839,6 +839,12 @@ public class Sistema extends ISistema {
        
 		
 	}
+
+	@Override
+	public void iniciarSesion(Usuario usuarioEncontrado) {
+		this.usuarioActual = usuarioEncontrado;
+		
+	}
 	
 	@Override
 	public HashMap<Integer, DTCantidad> getCarritoActual() throws UsuarioNoExisteException {

@@ -115,5 +115,7 @@ public abstract class ISistema{
 	public abstract void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException;
 
 	public abstract int generarIdComentario();
+	
+	public abstract void iniciarSesion(Usuario usuarioEncontrado);
 
 }

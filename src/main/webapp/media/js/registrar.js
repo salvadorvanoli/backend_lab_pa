@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { 
     const buttonRegistrar = document.querySelector('.button-registrar');
     const emailInput = document.getElementById('floatingInput');
     const nicknameInput = document.getElementById('floatingInputNickname');
     const emailWarning = document.getElementById('emailWarning');
     const nicknameWarning = document.getElementById('nicknameWarning');
+    const iniciarSesionButton = document.getElementById('IniciarSesion');
 
     // Función para validar el formato de correo electrónico
     function esCorreoValido(email) {
@@ -11,11 +12,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return regex.test(email);
     }
 
+    // Obtener usuarios registrados desde el sistema
+    let usuariosRegistrados = [];
+    fetch(`${contextPath}/usuarios`)
+        .then(response => response.json())
+        .then(data => {
+            usuariosRegistrados = data; // Supongo que la respuesta es un arreglo de usuarios
+        })
+        .catch(error => console.error('Error al obtener usuarios:', error));
+
     // Verificar email
     emailInput.addEventListener('input', function() {
         const email = emailInput.value.trim();
-        const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
         const emailExiste = usuariosRegistrados.some(user => user.email === email);
 
         if (!esCorreoValido(email)) {
@@ -33,8 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar nickname
     nicknameInput.addEventListener('input', function() {
         const nickname = nicknameInput.value.trim();
-        const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
         const nicknameExiste = usuariosRegistrados.some(user => user.nickname === nickname);
 
         if (nicknameExiste) {
@@ -46,16 +52,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Redirigir a la página de inicio de sesión
+    iniciarSesionButton.onclick = function() {
+        window.location.href = `${contextPath}/iniciarsesion`; 
+    };
+
+    // Verificación y redirección para el registro
     buttonRegistrar.onclick = function() {
         const email = emailInput.value.trim();
         const nickname = nicknameInput.value.trim();
-
 
         if (!email || !nickname) {
             alert('Por favor, completa todos los campos.');
             return;
         }
-
 
         if (!esCorreoValido(email)) {
             alert('Por favor, introduce un correo electrónico válido.');
@@ -63,31 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-
         const usuarioExistente = usuariosRegistrados.find(user => user.email === email || user.nickname === nickname);
 
         if (usuarioExistente) {
             alert('Ya existe un usuario registrado con ese email o nickname.');
         } else {
-    
-            const credencialesTemp = {
-                email: email,
-                nickname: nickname
-            };
-            localStorage.setItem('credencialesTemp', JSON.stringify(credencialesTemp));
-
-            alert('Credenciales temporales guardadas. Procede al siguiente paso.');
-            window.location.href = 'ingresarDatos.html';
+            // Redirigir con los parámetros email y nickname para el controlador
+            window.location.href = `${contextPath}/ingresardatos?email=${encodeURIComponent(email)}&nickname=${encodeURIComponent(nickname)}`;
         }
-    };
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const IniciarSesion = document.getElementById('IniciarSesion');
-
-    IniciarSesion.onclick = function() {
-        window.location.href = 'iniciarSesion.html';
     };
 });
