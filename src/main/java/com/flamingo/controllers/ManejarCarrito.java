@@ -22,6 +22,7 @@ import com.flamingo.models.Cantidad;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.DTCantidad;
 import com.flamingo.models.ISistema;
+import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.DTCantidad;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
@@ -171,10 +172,8 @@ public class ManejarCarrito extends HttpServlet {
 					
 				} else if (tipoPOST.equals("realizarCompra")) {
 					
-					System.out.println(jsonBuilder.toString());
-					
-					Cliente cli = (Cliente) sis.getUsuarioActual();
-					// sis.realizarCompra();
+					OrdenDeCompra orden = gson.fromJson(jsonBuilder.toString(), OrdenDeCompra.class);
+					sis.realizarCompra(orden);
 					
 				}
 				// Puedes enviar una respuesta si lo deseas

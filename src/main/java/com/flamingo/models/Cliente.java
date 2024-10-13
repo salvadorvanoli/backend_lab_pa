@@ -28,6 +28,10 @@ public class Cliente extends Usuario{
 			this.OrdenesDeCompras.remove(ord);
 		}
 		
+		public void vincularOrdenDeCompra(OrdenDeCompra ord) {
+			this.OrdenesDeCompras.add(ord);
+		}
+		
 		public void setOrdenesDeCompras(List <OrdenDeCompra> OrdenesDeCompras){
 			this.OrdenesDeCompras = OrdenesDeCompras;
 		}

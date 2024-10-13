@@ -8,7 +8,7 @@ public class OrdenDeCompra {
 	private float precioTotal;
 	private DTFecha fecha;
 	private Cliente cliente;
-	private List<DTCantidadProducto> cantidad;
+	private List<DTCantidad> cantidad;
 	private FormaPago formaPago;
 	private DetallesEnvio detallesEnvio;
 	
@@ -36,10 +36,10 @@ public class OrdenDeCompra {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	public List<DTCantidadProducto> getCantidad() {
+	public List<DTCantidad> getCantidad() {
 		return cantidad;
 	}
-	public void setCantidad(List<DTCantidadProducto> cantidad) {
+	public void setCantidad(List<DTCantidad> cantidad) {
 		this.cantidad = cantidad;
 	}
 	
@@ -64,15 +64,14 @@ public class OrdenDeCompra {
 	}
 	
 	public void agregarProducto(DTProducto producto, int cantidad) {
-		DTCantidadProducto nueva = new DTCantidadProducto(cantidad, producto, cantidad*producto.getPrecio());
-		nueva.setProducto(producto);
-		List<DTCantidadProducto> lista = this.getCantidad();
+		DTCantidad nueva = new DTCantidad(cantidad, producto);
+		List<DTCantidad> lista = this.getCantidad();
 		lista.add(nueva);
 		this.setCantidad(lista);
 	}
 	
 
-	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidadProducto> cantidades) {
+	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidad> cantidades) {
 		super();
 		this.numero = numero;
 		this.fecha = fecha;
@@ -80,7 +79,7 @@ public class OrdenDeCompra {
 		if (cantidades != null && !(cantidades.isEmpty())) {
 			this.cantidad = cantidades;
 			float sumPrecio = 0;
-			for (DTCantidadProducto can : cantidades) {
+			for (DTCantidad can : cantidades) {
 				float subtotal = can.getCantidad() * can.getProducto().getPrecio();
 				sumPrecio += subtotal;
 			}
@@ -91,7 +90,7 @@ public class OrdenDeCompra {
 		}
 	}
 	
-	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidadProducto> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
+	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidad> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
 		super();
 		this.numero = numero;
 		this.fecha = fecha;
@@ -101,7 +100,7 @@ public class OrdenDeCompra {
 		if (cantidades != null && !(cantidades.isEmpty())) {
 			this.cantidad = cantidades;
 			float sumPrecio = 0;
-			for (DTCantidadProducto can : cantidades) {
+			for (DTCantidad can : cantidades) {
 				float subtotal = can.getCantidad() * can.getProducto().getPrecio();
 				sumPrecio += subtotal;
 			}
@@ -120,7 +119,7 @@ public class OrdenDeCompra {
 	                + "Nombre cliente: " + this.cliente.getNickname() + System.lineSeparator()
 	                + System.lineSeparator() +  "-------------------- PRODUCTOS --------------------" + System.lineSeparator() + System.lineSeparator();
 	    Integer i = 1;
-	    for (DTCantidadProducto prod : this.cantidad){
+	    for (DTCantidad prod : this.cantidad){
 	        retorno += "Producto número " + i.toString() + ": "  + System.lineSeparator() + prod.toString() + System.lineSeparator();
 	        i++;
 	    }
@@ -134,9 +133,10 @@ public class OrdenDeCompra {
 	
 	public DTOrdenDeCompraDetallada getDTOrdenDetallada() {
 		List<DTCantidadProducto> lista = new ArrayList<>();
-		for(DTCantidadProducto cant : this.cantidad) {
+		for(DTCantidad cant : this.cantidad) {
 			// DTCantidadProducto nuevo = cant.getDTCantidadProducto();
-			lista.add(cant);
+			DTCantidadProducto cantProd = new DTCantidadProducto(cant.getCantidad(), cant.getProducto(), cant.getProducto().getPrecio() * cant.getCantidad());
+			lista.add(cantProd);
 		}
 		return new DTOrdenDeCompraDetallada(this.numero, this.cliente, this.precioTotal, this.fecha, this.cantidad, lista);
 	}

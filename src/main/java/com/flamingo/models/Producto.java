@@ -98,7 +98,7 @@ public class Producto {
 
     // Método para obtener los datos básicos del producto
     public DTProducto getDTProducto() {
-        return new DTProducto(nombreProducto, numReferencia, descripcion, precio);
+        return new DTProducto(nombreProducto, numReferencia, descripcion, precio, imagenes);
     }
 
     // Método para obtener los datos detallados del producto

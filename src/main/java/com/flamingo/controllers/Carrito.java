@@ -77,6 +77,7 @@ public class Carrito extends HttpServlet {
 		} else {
 			Usuario usr = (Usuario) usuario;
 			Cliente cli = (Cliente) sis.getUsuarioActual();
+			System.out.println(System.lineSeparator() + System.lineSeparator() + System.lineSeparator() + "ORDENES DE COMPRAS" + System.lineSeparator() + System.lineSeparator() + System.lineSeparator());
 			for (OrdenDeCompra ord : cli.getOrdenesDeCompras()) {
 				System.out.println(ord.toString());
 			}

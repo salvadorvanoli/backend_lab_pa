@@ -39,7 +39,7 @@ public class Cantidad {
 	}
 	
 	public DTCantidad getDTCantidad() {
-		return new DTCantidad(this.cantidad, this.producto.getDTProducto(), this.producto.getImagenes());
+		return new DTCantidad(this.cantidad, this.producto.getDTProducto());
 	}
 	
 	public DTCantidadProducto getDTCantidadProducto() {

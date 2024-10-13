@@ -111,6 +111,6 @@ public abstract class ISistema{
 	public abstract void actualizarCarritoActual(HashMap<Integer, DTCantidad> nuevoCarrito) throws UsuarioNoExisteException;
 	*/
 	
-	public abstract void realizarCompra();
+	public abstract void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException;
 
 }

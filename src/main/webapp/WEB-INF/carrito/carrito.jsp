@@ -646,7 +646,7 @@
 	                itemCarrito.innerHTML =
 	                    `<div class="row my-3 d-flex align-items-center" id="producto` + array[element].producto.numReferencia + `">
 	                        <div class="col-sm-3 col-4 d-flex align-items-center justify-content-center" onclick="cargarProducto(` + array[element].producto.numReferencia + `)">
-	                            <img class="w-75" src="` + array[element].imagenesProd[0] + `" alt="` + array[element].producto.nombre + `">
+	                            <img class="w-75" src="` + array[element].producto.imagenes[0] + `" alt="` + array[element].producto.nombre + `">
 	                        </div>
 	                        <div class="col-sm-6 col-4">
 	                            <div class="row titulo-producto">
@@ -680,10 +680,10 @@
 	                contenedoresSecundarios.forEach(contenedor => {
 	                    let imagen;
 	                    let itemContenedor = document.createElement("div");
-	                    if (Array.isArray(array[element].imagenes)){
-	                        imagen = array[element].imagenes[0];
+	                    if (Array.isArray(array[element].producto.imagenes)){
+	                        imagen = array[element].producto.imagenes[0];
 	                    } else {
-	                        imagen = array[element].imagenes;
+	                        imagen = array[element].producto.imagenes;
 	                    }
 	                    itemContenedor.innerHTML =
 	                        `<div class="row my-3 d-flex align-items-center producto-secundario` + array[element].producto.numReferencia + `">
@@ -915,11 +915,13 @@
 	    async function agregarOrdenCompra() {
 	        let idOrden = await getCarrito("/backend_lab_pa/manejarcarrito", "getIDOrden");
 
-	        
+	        let subtotal = 0;
 	        
 	        // IMPORTANTE!!! Hacer un objeto a mano "Orden de Compra" con todos los datos (fecha, id, List<Cantidad>, FormaPago, DetallesEnvio). Despues, enviar ese objeto mediante POST.
 	        
-	        
+	        for(let element in carritoActual){
+	            subtotal += carritoActual[element].producto.precio * carritoActual[element].cantidad;
+	        }
 	        
 	        const nombre = document.querySelector("#nombre").value;
 	        const apellido = document.querySelector("#apellido").value;
@@ -927,17 +929,18 @@
 	        const direccion2 = document.querySelector("#direccion2").value;
 	        const departamento = document.querySelector("#departamento").value;
 	        const ciudad = document.querySelector("#ciudad").value;
-	        const codPostal = document.querySelector("#codPostal").value;
-	        const numTelefono = document.querySelector("#numTelefono").value;
+	        const codPostal = document.querySelector("#codPostal").value.toString();
+	        const numTelefono = document.querySelector("#numTelefono").value.toString();
 	
 	        let tipoEnvio;
 	        let precioEnvio;
 	        if (document.querySelector("#envioGratis").checked) {
 	            tipoEnvio = document.querySelector("#envioGratis").value;
-	            precioEnvio = 0;
+	            precioEnvio = '0';
 	        } else {
 	            tipoEnvio = document.querySelector("#envioVip").value;
-	            precioEnvio = 20;
+	            precioEnvio = '20';
+	            subtotal += 20;
 	        }
 	
 	        const detallesEnvio = {
@@ -970,18 +973,28 @@
 	        } else {
 	            // Manejar el pago con PayPal
 	        }
-	
-	        const nuevaOrden = {
-	            "id": idOrden,
-	            // "fecha": fechaActual,
-	            "productos": carritoActual,
-	            "detallesEnvio": detallesEnvio,
-	            "formaPago": formaPago
+	        
+	        const date = new Date();
+	        
+	        const fechaActual = {
+	        		"dia": Number.parseInt(date.getUTCDate()),
+	        		"mes": Number.parseInt(date.getUTCMonth() + 1),
+	        		"anio": Number.parseInt(date.getUTCFullYear())
 	        }
 	        
-	        const valuesCarrito = Object.values(carritoActual);
+	    	const total = Math.round(subtotal * 1.02)
+	
+	        const nuevaOrden = {
+	            "numero": Number.parseInt(idOrden),
+	            "precioTotal": Number.parseFloat(total),
+	            "fecha": fechaActual,
+	            "cliente": null,
+	            "cantidad": Object.values(carritoActual),
+	            "formaPago": formaPago,
+	            "detallesEnvio": detallesEnvio
+	        }
 
-	        updateCarrito("/backend_lab_pa/manejarcarrito", valuesCarrito, "realizarCompra");
+	        updateCarrito("/backend_lab_pa/manejarcarrito", nuevaOrden, "realizarCompra");
 	
 	        /*
 	        usuarioActual.ordenes.push(nuevaOrden);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class DTOrdenDeCompraDetallada extends DTOrdenDeCompra{
 	private List<DTCantidadProducto> productosCantidad;
 
-	public DTOrdenDeCompraDetallada(int numero, Cliente cliente, float precio, DTFecha fecha, List<DTCantidadProducto> cantidad, List<DTCantidadProducto> lista) {
+	public DTOrdenDeCompraDetallada(int numero, Cliente cliente, float precio, DTFecha fecha, List<DTCantidad> cantidad, List<DTCantidadProducto> lista) {
 		super(numero, cliente, precio, fecha, cantidad);
 		this.productosCantidad = lista;
 	}

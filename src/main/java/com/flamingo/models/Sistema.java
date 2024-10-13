@@ -814,6 +814,20 @@ public class Sistema extends ISistema {
 	
 	*/
 	
+	public void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				ord.setCliente(cli);
+				cli.vincularOrdenDeCompra(ord);
+				cli.setCarrito(new HashMap<>());
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+		throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
+	}
+	
 	
 	
 	
