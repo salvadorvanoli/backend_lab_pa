@@ -24,7 +24,7 @@ public class IngresarDatos extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirigir al JSP para mostrar el formulario
+        // Redirigir al JSP para el form
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/ingresarDatos.jsp");
         dispatcher.forward(request, response);
     }
@@ -37,10 +37,8 @@ public class IngresarDatos extends HttpServlet {
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
         String nickname = (String) session.getAttribute("nickname");
-        System.out.println("ingdatos Email: " + email);
-        System.out.println("ingdatos Nickname: " + nickname);
-
-        // Verificar si el formulario realmente se ha enviado
+    
+     
         if (request.getParameter("nombre") != null && !request.getParameter("nombre").isEmpty()) {
             
             // Procesar los parámetros solo si el nombre no es nulo o vacío
@@ -55,7 +53,6 @@ public class IngresarDatos extends HttpServlet {
             String compañia = request.getParameter("compania");
             String foto = request.getParameter("imagenUrl");
             
-            System.out.println("General: " + nickname + " " + email+ " " + nombre+ " " + apellido+ " " + fecha+ " " + compañia+ " " + sitioWeb+ " " + foto+ " " + contraseña+ " " + repetirContraseña);
             
             // Validaciones
             if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
@@ -89,13 +86,11 @@ public class IngresarDatos extends HttpServlet {
                 request.setAttribute("errores", errores);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/ingresarDatos.jsp");
                 dispatcher.forward(request, response);
-                System.out.println("No hay errores: " + nickname + " " + email+ " " + nombre+ " " + apellido+ " " + fecha+ " " + compañia+ " " + sitioWeb+ " " + foto+ " " + contraseña+ " " + repetirContraseña);
 
             } else {
                 // Procesar el registro en el sistema
                 ISistema sis = SistemaFactory.getInstancia().getISistema();
                 try {
-                    System.out.println("Entre al TRY: " + nickname + " " + email+ " " + nombre+ " " + apellido+ " " + fecha+ " " + compañia+ " " + sitioWeb+ " " + foto+ " " + contraseña+ " " + repetirContraseña);
 
                     // Procesar la fecha y registrar el usuario
                     String[] partes = fecha.split("-");
@@ -105,11 +100,9 @@ public class IngresarDatos extends HttpServlet {
 
                     DTFecha fechaDT = new DTFecha(dia, mes, anio);
                     if ("Proveedor".equals(tipoUsuario.trim())) {
-                        System.out.println("soy proveedor " + nickname + " " + email+ " " + nombre+ " " + apellido+ " " + fecha+ " " + compañia+ " " + sitioWeb+ " " + foto+ " " + contraseña+ " " + repetirContraseña);
 
                         sis.altaUsuarioProveedor(nickname, email, nombre, apellido, fechaDT, compañia, sitioWeb, foto, contraseña, repetirContraseña);
                     } else if ("Cliente".equals(tipoUsuario.trim())) {
-                        System.out.println("soy cliente " + nickname + " " + email+ " " + nombre+ " " + apellido+ " " + fecha+ " " + compañia+ " " + sitioWeb+ " " + foto+ " " + contraseña+ " " + repetirContraseña);
 
                         sis.altaUsuarioCliente(nickname, email, nombre, apellido, fechaDT, foto, contraseña, repetirContraseña);
                     }

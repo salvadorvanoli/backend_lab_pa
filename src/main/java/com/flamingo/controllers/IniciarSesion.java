@@ -45,10 +45,10 @@ public class IniciarSesion extends HttpServlet {
         
         
      // Imprimir todos los usuarios registrados en la consola
-        System.out.println("Usuarios registrados:");
+        /*System.out.println("Usuarios registrados:");
         for (Usuario usuario : usuariosRegistrados) {
             System.out.println("Nickname: " + usuario.getNickname() + ", Email: " + usuario.getEmail() + ", Contrasenia: " + usuario.getContrasenia());
-        }
+        }*/
         
         
         for (Usuario usr : usuariosRegistrados) {
@@ -63,12 +63,9 @@ public class IniciarSesion extends HttpServlet {
             request.setAttribute("error", "Correo electrónico/nickname o contraseña incorrectos.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp");
             dispatcher.forward(request, response);
-        } else {
-            // Inicio de sesión exitoso: Establecer el usuario actual en ISistema
-        	//System.out.println("te encontramos " + usuarioEncontrado.getEmail());
+        } else { //inicio de sesion exitoso
+        	
             sis.iniciarSesion(usuarioEncontrado);
-        	//System.out.println("te encontramos " + sis.getUsuarioActual().getEmail());
-            // HAY QUE IMPLEMENTARLO EN SISTEMAAA
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/home");
             dispatcher.forward(request, response);
