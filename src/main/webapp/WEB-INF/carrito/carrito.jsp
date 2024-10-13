@@ -622,17 +622,7 @@
 	    }
 	
 	    function cargarProducto(id) {
-	        const productos = JSON.parse(localStorage.getItem("productos"));
-	        let productoSeleccionado;
-	        for (let i = 0; i < productos.length; i++){
-	            if (productos[i].id == id){
-	                productoSeleccionado = productos[i];
-	            }
-	        }
-	        if (productoSeleccionado != undefined) {
-	            localStorage.setItem("productoSeleccionado", JSON.stringify(productoSeleccionado));
-	            window.location.href = "infoProducto.html";
-	        }
+            window.location.href = "/backend_lab_pa/infoProducto?productoSeleccionado=" + id;
 	    }
 	
 	    function cargarElementosCarrito(array) {
@@ -1061,11 +1051,9 @@
 	                        disableInputs();
 	                        agregarOrdenCompra();
 	                        mostrarAlerta("¡Compra realizada de manera exitosa! Serás redirigido al inicio.", "alert-success", '<i class="fa-solid fa-circle-check me-3"></i>');
-	                        /*
 	                        setTimeout(function () {
-	                            window.location.href = "index.html";
+	                            window.location.href = "/backend_lab_pa/home";
 	                        }, 5000);
-	                        */
 	                    } else {
 	                        mensajeError = "Se encontraron errores de validación en el Carrito de Compra."
 	                        // formulariosValidos = false;
