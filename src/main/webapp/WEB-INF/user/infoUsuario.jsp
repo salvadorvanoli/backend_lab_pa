@@ -19,7 +19,7 @@
     	Usuario usuarioActual = (Usuario) request.getAttribute("usuarioActual");
 	
 		if(usuarioActual == null) {
-			response.sendRedirect("backend_lab_pa/iniciarSesion");
+			response.sendRedirect("backend_lab_pa/iniciarsesion");
 	        return;
 		}
 	%>

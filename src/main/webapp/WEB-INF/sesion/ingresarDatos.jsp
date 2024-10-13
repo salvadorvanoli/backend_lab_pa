@@ -285,7 +285,8 @@ function validarUrl(url) {
 document.addEventListener('DOMContentLoaded', function() {
     const buttonElegirImagen = document.getElementById('buttonElegirImagen');
     const inputImagen = document.getElementById('inputImagen');
-    const iconoUsuario = document.getElementById('icono-usuario2'); 
+    const iconoUsuario = document.getElementById('icono-usuario2');
+    const imagenUrlInput = document.getElementyById('imagenUrl');
     
     // Al hacer clic en el botón para elegir la imagen
     buttonElegirImagen.onclick = function() {

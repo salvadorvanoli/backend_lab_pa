@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('usuarios', JSON.stringify(usuariosRegistrados));
 
                 alert('Registro exitoso.');
-                window.location.href = 'iniciarSesion.html';
+                window.location.href = 'iniciarSesion';
             } else {
                 alert('Por favor, corrija los errores antes de continuar.');
             }
