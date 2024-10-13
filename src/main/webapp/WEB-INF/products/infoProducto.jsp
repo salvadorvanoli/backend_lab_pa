@@ -299,30 +299,6 @@
 	        document.getElementById("comentarioId" + contador).value = id;
 	    }
     
-	    document.addEventListener("DOMContentLoaded", function() {
-
-		    document.getElementById("agregar-al-carrito").addEventListener("click", () => {
-		        let carritoActual = JSON.parse(localStorage.getItem("carritoActual")) || [];
-		        
-		        if(itemYaExiste(productoSeleccionado)) {
-		            mostrarAlerta("El item elegido ya existe en el carrito, no se volvió a agregar");
-		            document.getElementById("modalTitle").innerHTML = "El item elegido ya existe en el carrito, no se volvió a agregar";
-		        } else {
-		            document.getElementById("modalTitle").innerHTML = "¡Producto agregado con éxito!";
-		            carritoActual.push({
-		                "nombre": productoSeleccionado.nombre || "",
-		                "precio": productoSeleccionado.precio || 0,
-		                "descripcion": productoSeleccionado.descripcion || "",
-		                "imagenes": productoSeleccionado.imagenes || [],
-		                "id": productoSeleccionado.id || 0,
-		                "cantidad": checkCantidad() || 1
-		            });
-		        }
-		
-		        localStorage.setItem("carritoActual", JSON.stringify(carritoActual));
-		    });
-		
-	    });
     </script>
 
 </html>
