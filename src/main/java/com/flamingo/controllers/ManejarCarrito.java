@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 // import com.flamingo.exceptions.UsuarioNoEncontrado;
 import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.models.Cantidad;
+import com.flamingo.models.Cliente;
 import com.flamingo.models.DTCantidad;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.DTCantidad;
@@ -89,15 +91,28 @@ public class ManejarCarrito extends HttpServlet {
 		} else {
 			System.out.println("NOOOOOO Entre a user = null");
 			try {
+				
+				String tipoGET = request.getHeader("tipo");
+				
 				Gson gson = new Gson();
-				String cartJson = gson.toJson(sis.getCarritoActual());
-				System.out.println(cartJson);
+				
+				String result = "";
+				
+				if (tipoGET.equals("getIDOrden")) {
+					result = gson.toJson(sis.generarCodigoOrden());
+					System.out.println(result);
+				} else if (tipoGET.equals("getCarrito")) {
+					result = gson.toJson(sis.getCarritoActual());
+					System.out.println(result);
+				}
+				
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				
 				PrintWriter out = response.getWriter();
-				out.print(cartJson);
+				out.print(result);
 				out.flush();
+				
 			} catch (Exception e) {
 				// Manejar Excepcion
 			}
@@ -129,7 +144,6 @@ public class ManejarCarrito extends HttpServlet {
 					forward(request, response);
 				
 		} else {
-			System.out.println("NOOOOOO Entre a user = null");
 			try {
 				// Leer el cuerpo de la solicitud (donde está el JSON)
 				String tipoPOST = request.getHeader("tipo");
@@ -148,14 +162,19 @@ public class ManejarCarrito extends HttpServlet {
 			        int numReferencia = gson.fromJson(jsonBuilder.toString(), int.class);
 			        
 			        System.out.println(numReferencia);
-			        
 			        sis.eliminarItemCarrito(numReferencia);
 			        
 				} else if (tipoPOST.equals("manejarCantidad")) {
 					
 					int[] elementos = gson.fromJson(jsonBuilder.toString(), int[].class);
-					
 			        sis.modificarCantidadItemCarrito(elementos[0], elementos[1]);
+					
+				} else if (tipoPOST.equals("realizarCompra")) {
+					
+					System.out.println(jsonBuilder.toString());
+					
+					Cliente cli = (Cliente) sis.getUsuarioActual();
+					// sis.realizarCompra();
 					
 				}
 				// Puedes enviar una respuesta si lo deseas

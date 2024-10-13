@@ -105,8 +105,12 @@ public abstract class ISistema{
 
 	public abstract HashMap<Integer, DTCantidad> getCarritoActual() throws UsuarioNoExisteException;
 	
+	/*
 	public abstract Producto getProducto(int numReferencia);
 	
 	public abstract void actualizarCarritoActual(HashMap<Integer, DTCantidad> nuevoCarrito) throws UsuarioNoExisteException;
+	*/
+	
+	public abstract void realizarCompra();
 
 }

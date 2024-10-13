@@ -9,6 +9,8 @@ public class OrdenDeCompra {
 	private DTFecha fecha;
 	private Cliente cliente;
 	private List<DTCantidadProducto> cantidad;
+	private FormaPago formaPago;
+	private DetallesEnvio detallesEnvio;
 	
 	public int getNumero() {
 		return numero;
@@ -41,6 +43,22 @@ public class OrdenDeCompra {
 		this.cantidad = cantidad;
 	}
 	
+	public FormaPago getFormaPago() {
+		return this.formaPago;
+	}
+	
+	public void setFormaPago(FormaPago formaPago) {
+		this.formaPago = formaPago;
+	}
+	
+	public DetallesEnvio getDetallesEnvio() {
+		return this.detallesEnvio;
+	}
+	
+	public void setDetallesEnvio(DetallesEnvio detallesEnvio) {
+		this.detallesEnvio = detallesEnvio;
+	}
+	
 	public void desvincularCliente () {
 		this.cliente.desvincularOrdenDeCompra(this);
 	}
@@ -59,6 +77,27 @@ public class OrdenDeCompra {
 		this.numero = numero;
 		this.fecha = fecha;
 		this.cliente = cliente;
+		if (cantidades != null && !(cantidades.isEmpty())) {
+			this.cantidad = cantidades;
+			float sumPrecio = 0;
+			for (DTCantidadProducto can : cantidades) {
+				float subtotal = can.getCantidad() * can.getProducto().getPrecio();
+				sumPrecio += subtotal;
+			}
+			this.precioTotal = sumPrecio;
+		} else {
+			this.cantidad = new ArrayList<>();
+			this.precioTotal = 0;
+		}
+	}
+	
+	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidadProducto> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
+		super();
+		this.numero = numero;
+		this.fecha = fecha;
+		this.cliente = cliente;
+		this.formaPago = formaPago;
+		this.detallesEnvio = detallesEnvio;
 		if (cantidades != null && !(cantidades.isEmpty())) {
 			this.cantidad = cantidades;
 			float sumPrecio = 0;

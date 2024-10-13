@@ -326,6 +326,7 @@ public class Sistema extends ISistema {
 	        List<OrdenDeCompra> ordenes = clienteActual.getOrdenesDeCompras();
 	        ordenes.add(nueva);
 	        clienteActual.setOrdenesDeCompras(ordenes);
+	        System.out.println(nueva);
 	        return nueva;
 	    } else {
 	        throw new IllegalArgumentException("El usuario actual no es un cliente.");
@@ -768,6 +769,8 @@ public class Sistema extends ISistema {
 		}
 	}
 	
+	/*
+	
 	@Override
 	public Producto getProducto(int numReferencia) {
 		for (Categoria categoria : this.categorias.values()) {
@@ -808,6 +811,9 @@ public class Sistema extends ISistema {
 		}
 		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 	}
+	
+	*/
+	
 	
 	
 	

@@ -534,9 +534,14 @@
     	
     	let carritoActual;
     
-    	async function getCarrito(URL) {
+    	async function getCarrito(URL, tipo) {
     		try {
-    	        const response = await fetch(URL);
+    	        const response = await fetch(URL, {
+    	            method: 'GET',
+    	            headers: {
+    	                'tipo': tipo
+    	            }
+    	        });
     	        const data = await response.json();
     	        console.log('Datos recibidos: ', data);
     	        return data;
@@ -564,7 +569,7 @@
     	            throw new Error("Error en la solicitud: " + respuesta.status);
     	        }
 
-    	        const result = await response.json();
+    	        const result = await response.text();
     	        console.log("Datos recibidos del servidor: ", result);
     	        return result;
     	        
@@ -758,10 +763,6 @@
 	        itemsSecundarios.forEach(itemSecundario => {
 	            itemSecundario.querySelector(".cantidad-producto").value = input.value;
 	        });
-	        
-	        
-	
-	        // localStorage.setItem("carritoActual", JSON.stringify(carritoActual)); // HAY QUE HACER UN POST
 	
 	        modificarAllTextos(carritoActual);
 	        
@@ -770,13 +771,14 @@
 	    }
 	
 	
-	    function eliminarItem(id){
+	    async function eliminarItem(id){
 	
 	        // const carritoActual = JSON.parse(localStorage.getItem("carritoActual"));
 	        
 	        delete carritoActual[id];
 	
 	        if (Object.keys(carritoActual) == 0){
+	        	
 	            encabezado1.remove();
 	            seccion1.remove();
 	            encabezado2.remove();
@@ -785,24 +787,27 @@
 	            seccion3.remove();
 	            const texto = document.createElement("div");
 	            texto.classList.add("text-center", "fs-1", "m-5");
-	            texto.innerHTML = "No hay productos en el carrito actualmente";
+	            texto.innerHTML = "No hay productos en el carrito actualmente.";
 	            document.querySelector("main").appendChild(texto);
-	        }
-	
-	        // localStorage.setItem("carritoActual", JSON.stringify(carritoActual)); Llamar a la funcion para hacer POST
-	
-	        modificarAllTextos(carritoActual);
-	
-	        const item = document.querySelector("#producto" + id);
-	        item.remove();
-	
-	        const itemsSecundarios = document.querySelectorAll(".producto-secundario" + id);
-	
-	        itemsSecundarios.forEach(itemSecundario => {
-	            itemSecundario.remove();
-	        });
+	            
+	        } else {
+		
+		        modificarAllTextos(carritoActual);
+		        
+		        console.log(document.querySelector("#producto" + id));
+		
+		        const item = document.querySelector("#producto" + id);
+		        item.remove();
+		
+		        const itemsSecundarios = document.querySelectorAll(".producto-secundario" + id);
+		
+		        itemsSecundarios.forEach(itemSecundario => {
+		            itemSecundario.remove();
+		        });
 	        
-	        updateCarrito("/backend_lab_pa/manejarcarrito", id, "eliminarItem");
+	        }
+	        
+	        await updateCarrito("/backend_lab_pa/manejarcarrito", id, "eliminarItem");
 	
 	    }
 	
@@ -907,21 +912,15 @@
 	    }, false);
 	
 	
-	    function agregarOrdenCompra() {
-	        let idOrden = 1;
-	        const usuarios = JSON.parse(localStorage.getItem("usuarios"));
-	        usuarios.forEach(usuario => {
-	            if (usuario.hasOwnProperty("ordenes")){
-	                usuario.ordenes.forEach(orden => {
-	                    if (idOrden <= orden.id){
-	                        idOrden = orden.id + 1;
-	                    }
-	                });
-	            }
-	        });
-	
-	        const fechaActual = new Date().toJSON().slice(0, 10);
-	
+	    async function agregarOrdenCompra() {
+	        let idOrden = await getCarrito("/backend_lab_pa/manejarcarrito", "getIDOrden");
+
+	        
+	        
+	        // IMPORTANTE!!! Hacer un objeto a mano "Orden de Compra" con todos los datos (fecha, id, List<Cantidad>, FormaPago, DetallesEnvio). Despues, enviar ese objeto mediante POST.
+	        
+	        
+	        
 	        const nombre = document.querySelector("#nombre").value;
 	        const apellido = document.querySelector("#apellido").value;
 	        const direccion1 = document.querySelector("#direccion1").value;
@@ -972,20 +971,19 @@
 	            // Manejar el pago con PayPal
 	        }
 	
-	        // carritoActual = JSON.parse(localStorage.getItem("carritoActual"));
-	
 	        const nuevaOrden = {
 	            "id": idOrden,
-	            "fecha": fechaActual,
+	            // "fecha": fechaActual,
 	            "productos": carritoActual,
 	            "detallesEnvio": detallesEnvio,
 	            "formaPago": formaPago
 	        }
+	        
+	        const valuesCarrito = Object.values(carritoActual);
+
+	        updateCarrito("/backend_lab_pa/manejarcarrito", valuesCarrito, "realizarCompra");
 	
-	        if (!usuarioActual.hasOwnProperty("ordenes")){
-	            usuarioActual.ordenes = [];
-	        }
-	
+	        /*
 	        usuarioActual.ordenes.push(nuevaOrden);
 	
 	        localStorage.setItem("usuarioActual", JSON.stringify(usuarioActual));
@@ -997,6 +995,8 @@
 	        }
 	        localStorage.setItem("usuarios", JSON.stringify(usuarios));
 	        localStorage.setItem("carritoActual", "[]");
+	        */
+	        
 	
 	    }
 	
@@ -1048,9 +1048,11 @@
 	                        disableInputs();
 	                        agregarOrdenCompra();
 	                        mostrarAlerta("¡Compra realizada de manera exitosa! Serás redirigido al inicio.", "alert-success", '<i class="fa-solid fa-circle-check me-3"></i>');
+	                        /*
 	                        setTimeout(function () {
 	                            window.location.href = "index.html";
 	                        }, 5000);
+	                        */
 	                    } else {
 	                        mensajeError = "Se encontraron errores de validación en el Carrito de Compra."
 	                        // formulariosValidos = false;
@@ -1162,7 +1164,7 @@
 	    // departamentos.value = "";
 	    
 	    document.addEventListener("DOMContentLoaded", async function(){
-	    	carritoActual = await getCarrito("/backend_lab_pa/manejarcarrito");
+	    	carritoActual = await getCarrito("/backend_lab_pa/manejarcarrito", "getCarrito");
 	    	console.log(carritoActual);
 	    	
 	    	cargarElementosCarrito(carritoActual);
