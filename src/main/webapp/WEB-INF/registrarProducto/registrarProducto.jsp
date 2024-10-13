@@ -308,23 +308,23 @@
 
 
 
-	<!-- MODAL -->
+<!-- MODAL -->
 	<div class="modal fade" id="modalCarrito" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
 	    <div class="modal-dialog" role="document">
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <h5 class="modal-title" id="modalTitle">¡Producto agregado con éxito!</h5>
 	            </div>
-	            <div class="modal-body">
-	                <p>¿Qué deseas hacer ahora?</p>
-	            </div>
+	            
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-secondary" onclick="reloadPage()">Agregar otro producto</button>
+	                <button type="button" class="btn btn-secondary">Aceptar</button>
 	                
 	            </div>
 	        </div>
 	    </div>
 	</div>
+
+
 
 
 	<form id="formProducto" action="/backend_lab_pa/registrarProducto" method="POST" style="display:none;">
@@ -334,21 +334,24 @@
     <input type="hidden" name="categorias" id="productoCategorias">
     <input type="hidden" name="especificaciones" id="productoEspecificaciones">
     <input type="hidden" name="imagenes" id="productoImagenes">
+    <input type="hidden" name="numero" id="productoNumero">
+     <input type="hidden" name="descripcion" id="productoDescripcion">
 	</form>
 
-
+	
 
 	<script>
 	
 	function cargarProductoEnFormulario() {
 	    // Asignar los valores del objeto nuevoProducto al formulario
 	    document.getElementById('productoId').value = nuevoProducto.id;
+	    document.getElementById('productoNumero').value = nuevoProducto.numeroRef;
 	    document.getElementById('productoNombre').value = nuevoProducto.nombre;
 	    document.getElementById('productoPrecio').value = nuevoProducto.precio;
 	    document.getElementById('productoCategorias').value = JSON.stringify(nuevoProducto.categorias);
 	    document.getElementById('productoEspecificaciones').value = JSON.stringify(nuevoProducto.especificaciones);
 	    document.getElementById('productoImagenes').value = JSON.stringify(nuevoProducto.imagenes);
-	    
+	    document.getElementById('productoDescripcion').value = nuevoProducto.descripcion;
 	}
 	
 	
@@ -389,7 +392,8 @@
 	    categorias: [],
 	    especificaciones: [],
 	    imagenes: [],
-	    comentarios: []
+	    comentarios: [],
+		descripcion: ""
 	};
 
 
@@ -504,6 +508,16 @@
 	        console.log(`Categoría "${categoria}" eliminada del producto.`);
 	    }
 	    
+	    
+	  
+	   /* const productos = [
+	        <c:forEach var="producto" items="${productos}">
+	            {
+	                numeroReferencia: "${producto.numeroReferencia}"
+	            }<c:if test="${!producto.last}">,</c:if>
+	        </c:forEach>
+	    ]; */
+	
 	 // Se asegura de que los datos del formulario sean válidos
 	    function revisarDatosProducto() {
 	        const inputTitulo = document.getElementById("tituloProducto");
@@ -549,7 +563,21 @@
 	            mostrarAlerta("El precio debe ser un número válido con hasta dos decimales.");
 	            return false;
 	        }
-
+	        
+	        
+	        // Validar que el precio sea un número válido con hasta dos decimales
+	        if (!regexPrecio.test(inputReferencia.value)) {
+	            mostrarAlerta("El número de referencia debe ser un número.");
+	            return false;
+	        }
+	        
+	     /* Validar si el número de referencia ya existe en la lista de productos
+	        const referenciaExiste = productos.some(producto => producto.numeroReferencia === inputReferencia.value);
+	        if (referenciaExiste) {
+	            mostrarAlerta("El número de referencia ya existe. Elige otro.");
+	            return false;
+	        }
+		*/
 	        return true;
 	    }
 	 
@@ -578,7 +606,9 @@
 	    
 	    
 	 // Escuchar el clic en el botón "Registrar"
-	    document.querySelector('.registrar').addEventListener('click', function() {
+	    document.querySelector('.registrar').addEventListener('click', function(event) {
+	        event.preventDefault(); // Evitar que el formulario se envíe inmediatamente
+
 	        // Validar los datos del producto
 	        if (!revisarDatosProducto()) return;
 
@@ -593,7 +623,8 @@
 	        nuevoProducto.referencia = document.getElementById("numeroReferencia").value;
 	        nuevoProducto.precio = parseFloat(document.getElementById("precioProducto").value);
 	        nuevoProducto.descripcion = document.getElementById("descripcionProducto").value;
-	        console.log(nuevoProducto);
+	        nuevoProducto.numeroRef = document.getElementById("numeroReferencia").value;
+
 	        // Agregar especificaciones
 	        nuevoProducto.especificaciones = []; // Reiniciar las especificaciones
 	        const especificacionesInputs = document.querySelectorAll('.tabla input[type="text"]');
@@ -603,46 +634,48 @@
 	            }
 	        });
 
-	        // Construir el mensaje de éxito
-	        let mensajeExito = `<strong>Resumen</strong><br>`;
-	        mensajeExito += `Nombre: ${nuevoProducto.nombre}<br>`;
-	        mensajeExito += `Número de referencia: ${nuevoProducto.referencia}<br>`;
-	        mensajeExito += `Precio: $${nuevoProducto.precio.toFixed(2)}<br>`;
-	        mensajeExito += `Descripción: ${nuevoProducto.descripcion}<br>`;
-	        mensajeExito += `Especificaciones: <br>`;
-	        if (nuevoProducto.especificaciones.length > 0) {
-	            mensajeExito += nuevoProducto.especificaciones.map(espec => `- ${espec}`).join('<br>');
-	        } else {
-	            mensajeExito += 'Ninguna';
-	        }
-	        mensajeExito += '<br>';
-
-	     // Mostrar las categorías seleccionadas en el mensaje de éxito
-	        mensajeExito += `Categorías: `;
-	        if (nuevoProducto.categorias.length > 0) {
-	            mensajeExito += nuevoProducto.categorias.join(', ');
-	        } 
-	        mensajeExito += '<br>';
-
-	        
-	        // Mostrar el mensaje en el modal
-	        document.querySelector('#modalCarrito .modal-body').innerHTML = mensajeExito;
-
-	        // Mostrar el modal de éxito
+	        // Mostrar el modal
 	        $('#modalCarrito').modal('show');
-	        console.log(nuevoProducto.precio);
-	        console.log(nuevoProducto.nombre);
-	        console.log(nuevoProducto.categorias);
-	        console.log(nuevoProducto.especificaciones);
-	        
-	    	
-	        cargarProductoEnFormulario(); // Asegúrate de que los datos estén en el formulario
-	        document.getElementById('formProducto').submit(); // Envía el formulario
-	        
-	        // Reiniciar el objeto nuevoProducto para futuros registros
-	        reiniciarNuevoProducto();
+	    });
+	 
+	    window.addEventListener('pageshow', function(event) {
+	        if (event.persisted) {  // Si la página se cargó desde el caché
+	            location.reload();  // Fuerza la recarga de la página
+	        }
 	    });
 
+
+	 // Reiniciar el objeto nuevoProducto después del submit
+	    function reiniciarNuevoProducto() {
+	        nuevoProducto = {
+	            id: generarIdRandom(),
+	            nombre: "",
+	            precio: 0,
+	            numeroRef: "",
+	            categorias: [],
+	            especificaciones: [],
+	            imagenes: [],
+	            descripcion: ""
+	        };
+	    }
+
+	    document.addEventListener('DOMContentLoaded', function() {
+	        // Escuchar el clic en el botón "Aceptar" del modal
+	        document.querySelector('#modalCarrito .btn-secondary').addEventListener('click', function() {
+	            // Cargar los datos del producto en el formulario
+	            cargarProductoEnFormulario();
+
+	            // Enviar el formulario
+	            const form = document.getElementById('formProducto');
+	            form.submit(); // Envía el formulario
+	            
+	            // Redirigir a la nueva página después de un pequeño retraso
+	            setTimeout(function() {
+	                reiniciarNuevoProducto(); // Reinicia el objeto
+	                window.location.href = 'infoUsuario'; // Redirige a la nueva página
+	            }, 100); 
+	        });
+	    });
 
 
 	</script>
