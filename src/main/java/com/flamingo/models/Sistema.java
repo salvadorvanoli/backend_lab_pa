@@ -150,7 +150,7 @@ public class Sistema extends ISistema {
 				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el nickname " + '"' + nickname + '"' + '.');
 			}
 		}
-		return false;
+		return true;
 		}
 	
 	@Override // NO ES NECESARIO QUE SEA BOOL

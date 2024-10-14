@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonElegirImagen = document.getElementById('buttonElegirImagen');
     const inputImagen = document.getElementById('inputImagen');
     const iconoUsuario = document.getElementById('icono-usuario2');
-    const imagenUrlInput = document.getElementyById('imagenUrl');
+    const imagenUrlInput = document.getElementById('imagenUrl');
     
     // Al hacer clic en el botón para elegir la imagen
     buttonElegirImagen.onclick = function() {
