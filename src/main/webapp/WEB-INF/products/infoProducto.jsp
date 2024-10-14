@@ -223,11 +223,22 @@
             </h2>
 
 			<%
-			    // Obtiene el usuario actual (asumiendo que está almacenado en la sesión)
-			    Cliente usuarioActual = (Cliente) session.getAttribute("usuarioActual");
 			
-			    // Verifica si el usuario ha comprado el producto
-			    boolean haCompradoProducto = (usuarioActual != null && usuarioActual.comproProducto(producto.getNumReferencia()));
+				boolean haCompradoProducto;
+			
+				Usuario usuario = (Usuario) session.getAttribute("usuarioActual");
+				
+				if (usuario instanceof Proveedor) {
+					haCompradoProducto = false;
+				} else {
+					// Obtiene el usuario actual (asumiendo que está almacenado en la sesión)
+				    Cliente usuarioActual = (Cliente) usuario;
+				
+				    // Verifica si el usuario ha comprado el producto
+				    haCompradoProducto = (usuarioActual != null && usuarioActual.comproProducto(producto.getNumReferencia()));
+				}
+			
+			    
 			%>
 
 
