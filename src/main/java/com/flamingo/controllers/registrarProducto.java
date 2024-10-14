@@ -36,9 +36,14 @@ public class registrarProducto extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static EstadoSesion getEstado(HttpServletRequest request)
-	{
-		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
+    public static void initSession(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("paginas_navegadas") == null) {
+			session.setAttribute("paginas_navegadas", 0);
+		}
+		if (session.getAttribute("estado_sesion") == null) {
+			session.setAttribute("estado_sesion", EstadoSesion.NO_LOGIN);
+		}
 	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -53,12 +58,7 @@ public class registrarProducto extends HttpServlet {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
 
-		try {
-			sis.elegirProveedor("elIsma");
-					
-		} catch(UsuarioNoExisteException e) {
-			
-		}
+	
 		request.setAttribute("usuarioActual", sis.getUsuarioActual());
 		request.setAttribute("categorias", sis.getCategorias());
 		Object usuario = request.getAttribute("usuarioActual");
@@ -230,7 +230,7 @@ public class registrarProducto extends HttpServlet {
 		    
 		    
 		    
-		    Producto nuevoProducto = new Producto(null, null, null, 0, 0, null, null, null, null);
+		    Producto nuevoProducto = new Producto(null, null,null, 0, 0, null, null, null, null);
 
 		    
 		  //////////////////////Link categorias/////////////////////////////////////////
@@ -274,12 +274,12 @@ public class registrarProducto extends HttpServlet {
 	    
 		    List<String> op = new ArrayList<>();
 
-		 // Agregar los strings "a" y "b" a la lista
+		 // Agregar los strings "a" y "b" a la lista, imagenes
 		 op.add("p");
 		 op.add("q");
 		    
 		    try {
-				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(), op, null);
+				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  op, ((Proveedor) sis.getUsuarioActual()).getnomCompania());         
 			} catch (ProductoRepetidoException | CategoriaNoPuedeTenerProductosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -322,7 +322,7 @@ public class registrarProducto extends HttpServlet {
 	    
 	   
 
-	    
+	    response.sendRedirect("infoUsuario");
 	}
 
 	
