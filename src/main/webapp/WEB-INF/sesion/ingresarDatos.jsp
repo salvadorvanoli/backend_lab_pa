@@ -7,15 +7,15 @@
     <title>Continuar registro</title>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+3' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/media/css/ingresarDatos.css">
+    <link rel="stylesheet" href="media/css/ingresarDatos.css">
     <title>Registro de Usuario</title>
 </head>
 <body>
 <main class="container-fluid p-0">
-    <form class="rectangle-1 text-wrap" id="form-registrar" action="${pageContext.request.contextPath}/ingresardatos" method="POST">
+    <form class="rectangle-1 text-wrap" id="form-registrar" action="ingresardatos" method="POST">
 
         <!-- Imagen del registro -->
-        <img src="${pageContext.request.contextPath}/media/images/Flamin-Go.webp" alt="Flamin-Go" class="image-placeholder-1">
+        <img src="media/images/Flamin-Go.webp" alt="Flamin-Go" class="image-placeholder-1">
         <h1 class="w-100 tituloComDato"> Completar datos </h1>
 
         <!-- Icono de usuario y botón de elegir imagen -->
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttonElegirImagen = document.getElementById('buttonElegirImagen');
     const inputImagen = document.getElementById('inputImagen');
     const iconoUsuario = document.getElementById('icono-usuario2');
-    const imagenUrlInput = document.getElementyById('imagenUrl');
+    const imagenUrlInput = document.getElementById('imagenUrl');
     
     // Al hacer clic en el botón para elegir la imagen
     buttonElegirImagen.onclick = function() {
