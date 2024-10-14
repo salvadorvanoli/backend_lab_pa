@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validarCampoTexto(input, minLength, fieldName) {
         if (input.value.trim().length < minLength) {
-            errores[fieldName] = `${fieldName} debe tener al menos ${minLength} caracteres.`;
+            errores[fieldName] = fieldName + `debe tener al menos` + minLength + `caracteres.`;
             input.classList.add('is-invalid');
         } else {
             delete errores[fieldName];
