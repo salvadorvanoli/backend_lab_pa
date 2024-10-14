@@ -45,6 +45,13 @@ public class infoProducto extends HttpServlet {
 		}
 		
 		String numReferenciaStr = request.getParameter("productoSeleccionado");
+		
+		if(numReferenciaStr.isBlank() || numReferenciaStr.isEmpty()) {
+			request.getRequestDispatcher("/WEB-INF/home/home.jsp").
+			forward(request, response);
+			return;
+		}
+		
 		int numReferencia = Integer.parseInt(numReferenciaStr);
 		Producto productoSeleccionado = null;
 		
@@ -69,7 +76,7 @@ public class infoProducto extends HttpServlet {
 			
 			session.setAttribute("usuarioActual", null);
 			
-			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
+			request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp").
 					forward(request, response);
 		} else {
 			Usuario usr = (Usuario) usuario;
