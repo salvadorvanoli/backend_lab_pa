@@ -44,7 +44,7 @@ a.nav-link{
 
 .select-1 {
     float: right;
-	width: 280px;
+	width: 60%;
     height: 32px;
     padding: 4px 8px 4px 8px;
     background: #F7F6F6;
@@ -57,8 +57,7 @@ a.nav-link{
     font-weight: 400;
     font-size: 14px;
     text-align: left;
-    margin-right: 35px; 
-    margin-left: 35px;   
+    margin-right: 15px;   
 }
 
 .select-2 {
@@ -99,11 +98,10 @@ a.nav-link{
 }
 
 .rectangle-1 {
-    width: 90%;
-    height: 270px;
+    width: 95%;
     margin-top: 0px;
     margin-bottom: 20px;
-    margin-left: 20px;
+    margin-left: 10px;
     margin-right: 20px;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -119,12 +117,9 @@ a.nav-link{
 
 .aside-1 {
     background: #ff5252;
-    width: 225px;
     height: 530px;
     margin-top: 0px;
     margin-bottom: 40px;
-    margin-left: 50px;
-    margin-right: 20px;
     padding: 0px;
     background: #E6E6E6;
     color: #7A7A7A;
@@ -183,18 +178,12 @@ a.nav-link{
     display: block; /* Mostrar subopciones si el checkbox está marcado */
 }
 .image-1 {
-    width: 22%;
-    height: 90%;
     background: #FFFFFF;
     border-color: #AAAAAA;
     border-width: 2px;
     border-style: solid;
     border-radius: 4px 4px 4px 4px;
     float: left;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .todo-lodemas{
@@ -224,16 +213,11 @@ a.nav-link{
 }
 
 .tienda-x {
-    width: 102%;
-    height: 10%;
     color: #444444;
-    font-family: "Open Sans";
     font-weight: 600;
     font-size: 18px;
     text-align: left;
     float:left;
-    padding: 0;
-    margin: 0;
 }
 
 .fa-star{
@@ -242,39 +226,26 @@ a.nav-link{
 }
 
 .conjunto_estrellas{
-    width: 100%;
-    height: 100%;
     float:left;
     color : #c0c0c0;
     .checked {
         color: #6b6b6b;
     }
     padding: 0px;
-    font-size: 30px;
-    text-align: right;
-    justify-content: space-between;
+    font-size: 150%;
+    /* font-size: 30px; */
+    /*justify-content: space-between;*/
 }
 
 .precio{
-    width: 35%;
-    height: 85%;
     color: #444444;
-    font-family: "DM Sans";
     font-weight: 400;
-    font-size: 40px;
-    text-align: left;
-    padding: 0;
-    margin-right: 50%;
+    font-size: 150%;
 }
 
 .carrito{
-    width: 35%;
-    height: 85%;
     color: #B8635F;
-    padding: 0px;
-    margin: 0px;
-    margin-top: 18px;
-    font-size: 300%;
+    font-size: 250%;
     text-align: right;
     justify-content: end;
 }
@@ -448,48 +419,13 @@ a.nav-link{
     text-align: left; 
 }
 
-@media (max-width: 1233px) {
-    
-    .conjunto_estrellas{
-        font-size: 22px;
-    }
-    
-    .precio{
-        font-size: 30px
-    }
-}
+/* ESTILOS DE VALENTIN */
 
-@media (max-width: 941px) {
-    
-    .conjunto_estrellas{
-        font-size: 17px;
-    }
-}
-
-@media (max-width: 768px) {
-    
-    .item-1{
-        font-size: 30px;
-    }
-
-    .tienda-x{
-        font-size: 20px;
-    }
-
-    .precio{
-        font-size: 26px;
-    }
-
-    .carrito{
-        font-size: 40px;
-    }
-    
-}
-
-@media (max-width: 517px) {
-    .conjunto_estrellas{
-        font-size: 15px;
-    }
+.titulo-producto {
+    color: #A45D7F;
+    font-weight: bold;
+    font-size: 200%;
+    text-align: left;
 }
 
 

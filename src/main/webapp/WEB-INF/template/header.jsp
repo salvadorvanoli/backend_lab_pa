@@ -31,5 +31,3 @@
         </div>
     </div>
 </nav>
-
-<script>debugger</script>
