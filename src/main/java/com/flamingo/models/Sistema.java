@@ -798,7 +798,6 @@ public class Sistema extends ISistema {
         Moda.agregarProducto(producto1);
         Moda.agregarProducto(producto2);
         Moda.agregarProducto(producto3);
-        Moda.agregarProducto(producto2);
         
         this.productoActual = producto2;
         

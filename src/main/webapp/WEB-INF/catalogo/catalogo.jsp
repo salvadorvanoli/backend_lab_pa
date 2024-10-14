@@ -261,17 +261,7 @@
 	}
 	
 	function cargarProducto(id) {
-	    const productos = JSON.parse(localStorage.getItem("productos"));
-	    let productoSeleccionado;
-	    for (let i = 0; i < productos.length; i++){
-	        if (productos[i].id == id){
-	            productoSeleccionado = productos[i];
-	        }
-	    }
-	    if (productoSeleccionado != undefined) {
-	        localStorage.setItem("productoSeleccionado", JSON.stringify(productoSeleccionado));
-	        window.location.href = "/backend_lab_pa/infoProducto?productoSeleccionado=" + id;
-	    }
+	    window.location.href = "/backend_lab_pa/infoProducto?productoSeleccionado=" + id;
 	}
 	
 	// Función para cargar el catálogo
@@ -309,18 +299,18 @@
 	
 	        const producto = document.createElement("div");
 	        producto.innerHTML =
-	            `<div class="col-12 row my-3 d-flex align-items-center justify-content-center pe-sm-5 pe-2 rectangle-1 product" id="producto${element.id}" onclick="cargarProducto(${element.id})">
+	            `<div class="col-12 row my-3 d-flex align-items-center justify-content-center pe-sm-5 pe-2 rectangle-1 product" id="producto` + element.numReferencia + `" onclick="cargarProducto(` + element.numReferencia + `)">
 	                <div class="col-lg-4 col-sm-6 col-12 d-flex align-items-center justify-content-center">
-	                    <img class="w-xs-75 w-50 image-1" src="${element.imagenes[0]}" alt="${element.nombre}">
+	                    <img class="w-xs-75 w-50 image-1" src="` + element.imagenes[0] + `" alt="` + element.nombre + `">
 	                </div>
 	                <div class="col-lg-8 col-sm-6 col-10">
 	                    <div class="row">
-	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center">${element.nombre}</p>
+	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center">` + element.nombre + `</p>
 	                        ${contenedorEstrellas.innerHTML}
-	                        <p class="col-12 mb-3 px-0 m-0 tienda-x text-break text-sm-start text-center">${element.tienda}</p>
+	                        <p class="col-12 mb-3 px-0 m-0 tienda-x text-break text-sm-start text-center">` + element.tienda + `</p>
 	                    </div>
 	                    <div class="row precio-producto d-flex align-items-end">
-	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center">$${element.precio}</p>
+	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center">$` + element.precio + `</p>
 	                        <div class="col carrito fa-solid fa-cart-shopping m-2 d-none d-sm-block" aria-hidden="true" onclick=""></div>
 	                    </div>
 	                </div>
