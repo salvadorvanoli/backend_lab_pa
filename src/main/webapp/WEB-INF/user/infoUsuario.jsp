@@ -160,7 +160,7 @@
 			        if (productos != null) {
 			            for (Producto producto : productos) {
 			    %>
-			                <div class="container-md container-fluid product-card">
+			                <div class="container-md container-fluid product-card" onclick="window.location.href='infoProducto?productoSeleccionado=<%= producto.getNumReferencia() %>'">
 			                    <div class="row">
 			                        <div class="col-md-3 col-12">
 			                            <img src="<%= producto.getImagenes().get(0) %>" alt="Imagen producto" class="img-producto">
