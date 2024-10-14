@@ -48,7 +48,7 @@
 		if(orden != null ){
 	%>
 	
-	
+		<main class="container-fluid">
 		<%
 			for (DTProducto prod : productos) {
 				cantidad = 0;
@@ -56,8 +56,8 @@
 			
 		%>
 		
-				<main class="container-fluid">
-			        <div class="rectangle-1">
+				
+			        <div class="rectangle-1" onclick="window.location.href='infoProducto?productoSeleccionado=<%= prod.getNumero() %>'">
 			        
 			            <div class="rectangle-2">
 			                <div class="row"> 
@@ -67,12 +67,12 @@
 			                        </div>   
 			                    </div>
 			                    <div class="col-md-4 d-flex flex-column justify-content-start p-0">
-			                        <h1 class="nombresProductos text-start mt-3" style="cursor: pointer;" onclick="irADetalleProducto(<%= prod.getNumero() %>)"><%= prod.getNombre() %></h1>    
+			                        <h1 class="nombresProductos text-start mt-3" style="cursor: pointer;"></h1>    
 			                        <h2 class="descripcionProductos text-start m-0"><%= prod.getDescripcion() %></h2>
 			                        <h2 class="precioProductos text-start mt-3">$ <%= prod.getPrecio() %></h2>
 			                    </div>
 			                    <div class="col-md-4">
-			                        <h1 class="numProducto text-start mt-3"><%= prod.getNumero() %></h1>
+			                        <h1 class="numProducto text-start mt-3">N° referencia: <%= prod.getNumero() %></h1>
 			                        <div class="stepper-container d-flex align-items-end">
 			                             
 			                             
@@ -112,9 +112,9 @@
 			            </div>
 			        </div>
         
-	        <%
-					}	
-	        %>
+        <%
+				}	
+        %>
         
 	        <div class="rectangle-3 row">
 	            <h1 class="textoResumen"> Resumen </h1>
@@ -145,7 +145,7 @@
 	                <h1 class="total2">$ <%= subtotalTodo + subtotalTodo * 0.02 %></h1>
 	            </div>
 	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
-	                <button type="button" class="button-volver" id="volver"> Volver </button>
+	                <button type="button" class="button-volver" id="volver" onclick="window.location.href='infoUsuario'"> Volver </button>
 	            </div>
 	    
 	        </div>   

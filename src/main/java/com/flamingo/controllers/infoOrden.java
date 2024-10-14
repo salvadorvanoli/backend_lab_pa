@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
@@ -33,7 +34,16 @@ public class infoOrden extends HttpServlet {
 
    
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, OrdenDeCompraNoExisteException {
-        ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	ISistema sis;
+		
+		if (getServletContext().getAttribute("sistema") == null) {
+		    System.out.println("CREO EL SISTEMA");
+		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
+		    sis = (ISistema) getServletContext().getAttribute("sistema");
+		    sis.crearCasos();
+		} else {
+		    sis = (ISistema) getServletContext().getAttribute("sistema");
+		}
        
         /*borrar luego:
         	
@@ -75,8 +85,6 @@ public class infoOrden extends HttpServlet {
         	
         Usuario user = sis.getUsuarioActual();
         
-        sis.crearCasos();
-        
         String num = request.getParameter("ordenId");
         
         if(num == null) {
@@ -87,7 +95,7 @@ public class infoOrden extends HttpServlet {
         
         id = Integer.parseInt(num);
 
-        Cliente cliente = new Cliente(user.getNickname(), user.getNombre(), user.getApellido(), user.getEmail(), user.getFechaNac(), user.getFoto(), user.getContrasenia());
+        Cliente cliente = (Cliente) sis.getUsuarioActual();
         
         
         List<OrdenDeCompra> ordenes = cliente.getOrdenesDeCompras();

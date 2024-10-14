@@ -23,16 +23,6 @@ public class infoUsuario extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static void initSession(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("paginas_navegadas") == null) {
-			session.setAttribute("paginas_navegadas", 0);
-		}
-		if (session.getAttribute("estado_sesion") == null) {
-			session.setAttribute("estado_sesion", EstadoSesion.NO_LOGIN);
-		}
-	}
-	
 	public static EstadoSesion getEstado(HttpServletRequest request)
 	{
 		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
