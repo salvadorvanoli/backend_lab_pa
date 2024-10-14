@@ -29,11 +29,6 @@ public class infoProducto extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static EstadoSesion getEstado(HttpServletRequest request)
-	{
-		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-	}
-
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
 		ISistema sis;
@@ -61,41 +56,30 @@ public class infoProducto extends HttpServlet {
 		}
 		
 		if(productoSeleccionado == null) {
-			request.setAttribute("usuarioActual", null);
+			session.setAttribute("usuarioActual", null);
 			request.getRequestDispatcher("/WEB-INF/user/ERROR.jsp").
 					forward(request, response);
 		}
-		
-		try {
-			//sis.elegirProveedor("elIsma");
-			sis.elegirCliente("Salva");
-			//sis.elegirCategoria("Electrónica");
-			//sis.elegirProducto("Guitarra"); // Acá entre paréntesis tendría que ir "productoSeleccionado".
-		} catch(UsuarioNoExisteException e) {
-		
-		}
-		
-		session.setAttribute("usuarioActual", sis.getUsuarioActual());
+
 		request.setAttribute("productoActual", productoSeleccionado);
-		Object usuario = request.getAttribute("usuarioActual");
+		Object usuario = session.getAttribute("usuarioActual");
 		Object producto = request.getAttribute("productoActual");	
-		
-		Cliente cl = (Cliente) sis.getUsuarioActual();
 		
 		if(usuario == null) {
 			
-			request.setAttribute("usuarioActual", null);
+			session.setAttribute("usuarioActual", null);
 			
 			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
 					forward(request, response);
 		} else {
 			Usuario usr = (Usuario) usuario;
-			request.setAttribute("usuarioActual", usr);
+			session.setAttribute("usuarioActual", usr);
 			
 			System.out.println(usr.toString());
 			
 			Producto prd = (Producto) producto;
 			request.setAttribute("productoActual", prd);
+			sis.setProductoActual(prd);
 			
 
 			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").

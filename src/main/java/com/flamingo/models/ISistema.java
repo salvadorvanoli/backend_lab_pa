@@ -122,4 +122,6 @@ public abstract class ISistema{
 	
 	public abstract void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado;
 
+	public abstract void setProductoActual(Producto prd);
+
 }

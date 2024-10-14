@@ -71,21 +71,14 @@ public class ManejarCarrito extends HttpServlet {
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
 		
-		try {
-			sis.elegirCliente("Salva");
-		} catch(UsuarioNoExisteException e) {
-			// Manejar error
-		}
+		HttpSession session = request.getSession();
 		
-		// HttpSession session = request.getSession();
-		// Object usuario = session.getAttribute("usuarioActual");
-		request.setAttribute("usuarioActual", sis.getUsuarioActual());
-		Object usuario = request.getAttribute("usuarioActual");	
+		Object usuario = session.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
 			System.out.println("Entre a user = null");
 			// session.setAttribute("usuarioActual", null);
-			request.setAttribute("usuarioActual", null);
+			session.setAttribute("usuarioActual", null);
 			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
 					forward(request, response);
 				

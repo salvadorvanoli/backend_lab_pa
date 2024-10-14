@@ -44,15 +44,7 @@ public class IniciarSesion extends HttpServlet {
         List<Usuario> usuariosRegistrados = sis.getUsuarios();
 
         Usuario usuarioEncontrado = null;
-        
-        
-     // Imprimir todos los usuarios registrados en la consola
-        /*System.out.println("Usuarios registrados:");
-        for (Usuario usuario : usuariosRegistrados) {
-            System.out.println("Nickname: " + usuario.getNickname() + ", Email: " + usuario.getEmail() + ", Contrasenia: " + usuario.getContrasenia());
-        }*/
-        
-        
+ 
         for (Usuario usr : usuariosRegistrados) {
             if (usr.getEmail().equals(emailOrNickname) || usr.getNickname().equals(emailOrNickname)) {
                 usuarioEncontrado = usr;

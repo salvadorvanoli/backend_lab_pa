@@ -168,7 +168,7 @@
 
                     <div id="">
                     	
-                    	<form action="agregarAlCarrito">
+                    	<form action="agregarAlCarrito" method="POST">
                     		<input type="text" name="numReferencia" value="<%= producto.getNumReferencia() %>" class="d-none">
                     		<input type="number" name="cantidad" id="cantidad-input" min="1" value="1">
                         	<input type="submit" value="Agregar al carrito" class="siguiente-button btn btn-danger" id="agregar-al-carrito" data-toggle="modal" data-target="#modalCarrito">

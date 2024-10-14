@@ -90,6 +90,10 @@ public class Sistema extends ISistema {
         return new DTFecha(dia, mes, anio);
 	}
 	
+	public void setProductoActual(Producto prod) {
+		this.productoActual = prod;
+	}
+	
 	@Override // NO ES NECESARIO QUE SEA BOOL
 	public boolean altaUsuarioCliente(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String imagen,  String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException {
 		// Lista para almacenar los errores

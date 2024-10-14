@@ -65,16 +65,16 @@ public class agregarAlCarrito extends HttpServlet {
         
         Cliente cl = (Cliente) sis.getUsuarioActual();
         
-        if(cl.getCarrito().containsKey(numReferencia)) {
-        	response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El usuario ya tiene ese producto en el carrito");
-            return;
-        }
+        //if(cl.getCarrito().containsKey(numReferencia)) {
+        //	response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El usuario ya tiene ese producto en el carrito");
+        //    return;
+        //}
         
         Cantidad cant = new Cantidad(sis.getProductoActual(), cantidad);
         
         cl.getCarrito().put(sis.getProductoActual().getNumReferencia(), cant);
         
-        response.sendRedirect("infoProducto");
+        response.sendRedirect("infoProducto?productoSeleccionado=" + numReferencia);
     }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

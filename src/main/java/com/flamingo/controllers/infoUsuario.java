@@ -34,13 +34,15 @@ public class infoUsuario extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		
-		sis.crearCasos();
-		try {
-			//sis.elegirProveedor("elIsma");
-			sis.elegirCliente("Salva");
-		} catch(UsuarioNoExisteException e) {
-		
+		if (getServletContext().getAttribute("sistema") == null) {
+			System.out.println("CREO EL SISTEMA");
+			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
+			sis = (ISistema) getServletContext().getAttribute("sistema");
+			sis.crearCasos();
+		} else {
+			sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
+
 		
 		Object usuario = session.getAttribute("usuarioActual");	
 		
