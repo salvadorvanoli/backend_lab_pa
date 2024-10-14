@@ -60,12 +60,19 @@ public class Carrito extends HttpServlet {
 				
 		} else {
 			Usuario usr = (Usuario) usuario;
-			Cliente cli = (Cliente) sis.getUsuarioActual();
 			
-			session.setAttribute("usuarioActual", usr);
+			if (usr instanceof Cliente) {
+				Cliente cli = (Cliente) sis.getUsuarioActual();
+				session.setAttribute("usuarioActual", usr);
 
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
-					forward(request, response);
+				request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
+						forward(request, response);
+			} else {
+				session.setAttribute("usuarioActual", usr);
+
+				request.getRequestDispatcher("/WEB-INF/home/home.jsp").
+						forward(request, response);
+			}
 		}
 	}
 	
