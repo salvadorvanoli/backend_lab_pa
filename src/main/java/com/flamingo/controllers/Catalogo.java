@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
@@ -28,17 +29,29 @@ public class Catalogo extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-        	ISistema sis = SistemaFactory.getInstancia().getISistema();
         	
-            List<Producto> listaDeProductos = null;
-            List<Categoria> listaDeCategorias = null;
+        	ISistema sis;
+    		
+    		HttpSession session = request.getSession();
+    		
+    		if (getServletContext().getAttribute("sistema") == null) {
+    		    System.out.println("CREO EL SISTEMA");
+    		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
+    		    sis = (ISistema) getServletContext().getAttribute("sistema");
+    		    sis.crearCasos();
+    		} else {
+    		    sis = (ISistema) getServletContext().getAttribute("sistema");
+    		}
+        	
+            List<Producto> listaDeProductos = sis.getProductos();
+            HashMap<String, Categoria> listaDeCategorias = sis.getCategorias();
 
             // Asegurarse de que las listas no sean nulas
             if (listaDeProductos == null) {
                 listaDeProductos = new ArrayList<>();
             }
             if (listaDeCategorias == null) {
-                listaDeCategorias = new ArrayList<>();
+                listaDeCategorias = new HashMap<>();
             }
 
             request.setAttribute("productos", listaDeProductos);
@@ -59,7 +72,7 @@ public class Catalogo extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la solicitud.");
         }
     }
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
 			processRequest(request, response);
@@ -77,16 +90,19 @@ public class Catalogo extends HttpServlet {
     }
     
     
-    private String ListaCategoriasToJson(List<Categoria> categorias) {
+    private String ListaCategoriasToJson(HashMap<String, Categoria> categorias) {
         StringBuilder jsonBuilder = new StringBuilder("[");
+
+        int size = 0;
         
-        for (int i = 0; i < categorias.size(); i++) {
-            Categoria cat = categorias.get(i);
-            jsonBuilder.append(categoriaToJson(cat)); // Convertir cada categoría a JSON
-            
-            if (i < categorias.size() - 1) {
-                jsonBuilder.append(","); // Agregar coma entre categorías
-            }
+        for(Categoria cat : categorias.values()) {
+        	jsonBuilder.append(categoriaToJson(cat));
+        	
+        	if(size < categorias.size() - 1) {
+        		jsonBuilder.append(",");
+        	}
+        	
+        	size++;
         }
         
         jsonBuilder.append("]");

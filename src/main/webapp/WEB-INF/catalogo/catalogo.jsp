@@ -28,8 +28,8 @@
 
     <%
 	    List<Producto> productos = (List<Producto>) request.getAttribute("productos");
-    	String categoriasJSON = (String) request.getAttribute("categoriasJSOn");;
-    	String productosJSON = (String) request.getAttribute("productosJSON");;
+    	String categoriasJSON = (String) request.getAttribute("categoriasJSON");
+    	String productosJSON = (String) request.getAttribute("productosJSON");
 	
 	    // Obtener el parámetro 'orden' de la URL (si existe)
 	    String ordenSeleccionado = request.getParameter("orden");
@@ -85,14 +85,14 @@
 
 	<aside id="aside" class="aside-1 scrolleable col-3 row">
 	    <%
-	        List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+	        HashMap<String, Categoria> categorias = (HashMap<String, Categoria>) request.getAttribute("categorias");
 	
 	        if (categorias == null) {
 	    %>
 	        <p>No hay categorías disponibles.</p>
 	    <%
 	        } else {
-	            for (Categoria categoria : categorias) {
+	            for (Categoria categoria : categorias.values()) {
 	    %>
 	    <div class="dropdown">
 	        <button class="dropbtn" aria-haspopup="true" aria-expanded="false">&#9654; <%= categoria.getNombreCat() %></button>

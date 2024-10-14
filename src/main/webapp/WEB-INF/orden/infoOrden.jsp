@@ -67,7 +67,7 @@
 			                        </div>   
 			                    </div>
 			                    <div class="col-md-4 d-flex flex-column justify-content-start p-0">
-			                        <h1 class="nombresProductos text-start mt-3" style="cursor: pointer;"></h1>    
+			                        <h1 class="nombresProductos text-start mt-3" style="cursor: pointer;"><%= prod.getNombre() %></h1>    
 			                        <h2 class="descripcionProductos text-start m-0"><%= prod.getDescripcion() %></h2>
 			                        <h2 class="precioProductos text-start mt-3">$ <%= prod.getPrecio() %></h2>
 			                    </div>

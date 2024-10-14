@@ -51,6 +51,20 @@ public class infoProducto extends HttpServlet {
 		
 		String numReferenciaStr = request.getParameter("productoSeleccionado");
 		int numReferencia = Integer.parseInt(numReferenciaStr);
+		Producto productoSeleccionado = null;
+		
+		for(Producto prod : sis.getProductos()) {
+			if(prod.getNumReferencia() == numReferencia) {
+				productoSeleccionado = prod;
+				break;
+			}
+		}
+		
+		if(productoSeleccionado == null) {
+			request.setAttribute("usuarioActual", null);
+			request.getRequestDispatcher("/WEB-INF/user/ERROR.jsp").
+					forward(request, response);
+		}
 		
 		try {
 			//sis.elegirProveedor("elIsma");

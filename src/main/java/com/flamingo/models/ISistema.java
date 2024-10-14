@@ -12,6 +12,8 @@ public abstract class ISistema{
 	
 	// También agrego los getters
 	
+	public abstract List<Producto> getProductos();
+	
 	public abstract List<Usuario> getUsuarios();
 	
 	public abstract HashMap<Integer, OrdenDeCompra> getOrdenes();

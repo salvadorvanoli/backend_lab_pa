@@ -750,11 +750,9 @@ public class Sistema extends ISistema {
         especificaciones.add("Producto");
         especificaciones.add("!!!!");
         
-        //String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, String nombreTienda
-        
-        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3, "DD Water");
-        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2, "Bellardo");
-        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1, "Vamo");
+        Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3, "Tienda1");
+        Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2, "Tienda2");
+        Producto producto3 = new Producto("Control Remoto", "Util para televisores de alta calidad.", especificaciones, 997, 350.20f, img1, c3,  pr1, "Tienda3");
         
         Comentario comentario1 = new Comentario(1, "Me encanta este producto, muy útil en la cocina.", new ArrayList<>(), cl1, producto2, fecha1, 3);
         Comentario comentario2 = new Comentario(2, "No estoy muy satisfecho, esperaba más funciones.", new ArrayList<>(), cl2, producto2, fecha2, 1);
