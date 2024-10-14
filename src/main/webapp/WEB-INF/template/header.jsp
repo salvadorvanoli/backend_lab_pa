@@ -19,7 +19,7 @@
                     <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="catalogo">Catálogo</a>
+                    <a class="nav-link" href="Catalogo">Catálogo</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="infoUsuario"><i class="fa-solid fa-circle-user" id="icono-usuario"></i></a>
