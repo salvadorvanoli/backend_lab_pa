@@ -11,26 +11,32 @@ public class Producto {
     private List<String> imagenes;
     private List<Categoria> categorias;
     private Proveedor proveedor;
-    private int cantEstrellas;
-    private List <Comentario> comentarios;
+	private int estrellas;
+	private int cantCompras;
+    private String nombreTienda;
+    private List<Comentario> comentarios;
+
 
     // Constructor
-    public Producto(String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor) {
+
+
+    public Producto(String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, String nombreTienda) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.especificacion = especificacion;
         this.numReferencia = numReferencia;
         this.precio = precio;
+        this.estrellas = 0;
+        this.nombreTienda = nombreTienda;
+        this.cantCompras = 0;
         
-        this.imagenes = new ArrayList<>();
-        this.categorias = new ArrayList<>();
+        
         this.comentarios = new ArrayList<>();
         
         this.imagenes = imagenes;
         this.categorias = categorias;
         this.proveedor = proveedor;
         
-        this.cantEstrellas = 0;
     }
     
     public List<Comentario> getComentarios() {
@@ -46,11 +52,11 @@ public class Producto {
     }
     
     public int getEstrellas() {
-    	return this.cantEstrellas;
+    	return this.estrellas;
     }
     
     public void setEstrellas(int estrellas) {
-    	this.cantEstrellas = estrellas;
+    	this.estrellas = estrellas;
     }
 
     // Setters
@@ -84,6 +90,14 @@ public class Producto {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+    
+    public void setNombreTienda(String nombreTienda) {
+    	this.nombreTienda = nombreTienda;
+    }
+    
+    public void setCantCompras(int cantCompras) {
+    	this.cantCompras = cantCompras;
     }
 
     // Getters
@@ -161,6 +175,14 @@ public class Producto {
         // Si no se encontró, retornamos null
         return null;
     }
+    
+    public String getNombreTienda() {
+    	return this.nombreTienda;
+    }
+    
+    public int getCantCompras() {
+    	return this.cantCompras;
+    }
 
     // Método para obtener los datos detallados del producto
     public DTProductoDetallado getDTProductoDetallado() {
@@ -227,4 +249,3 @@ public class Producto {
     }
 
 }
-
