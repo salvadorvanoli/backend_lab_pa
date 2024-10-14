@@ -23,16 +23,6 @@ public class infoUsuario extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static void initSession(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("paginas_navegadas") == null) {
-			session.setAttribute("paginas_navegadas", 0);
-		}
-		if (session.getAttribute("estado_sesion") == null) {
-			session.setAttribute("estado_sesion", EstadoSesion.NO_LOGIN);
-		}
-	}
-	
 	public static EstadoSesion getEstado(HttpServletRequest request)
 	{
 		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
@@ -41,6 +31,9 @@ public class infoUsuario extends HttpServlet {
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ISistema sis = SistemaFactory.getInstancia().getISistema();
+		
+		HttpSession session = request.getSession();
+		
 		sis.crearCasos();
 		try {
 			//sis.elegirProveedor("elIsma");
@@ -48,14 +41,13 @@ public class infoUsuario extends HttpServlet {
 		} catch(UsuarioNoExisteException e) {
 		
 		}
-		request.setAttribute("usuarioActual", sis.getUsuarioActual());
-		Object usuario = request.getAttribute("usuarioActual");	
+		
+		Object usuario = session.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
 			request.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/user/infoUsuario.jsp").
+			request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp").
 					forward(request, response);
-				
 		} else {
 			Usuario usr = (Usuario) usuario;
 			request.setAttribute("usuarioActual", usr);

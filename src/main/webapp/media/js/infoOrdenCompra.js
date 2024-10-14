@@ -1,5 +1,7 @@
 let usuarioActual = JSON.parse(localStorage.getItem('usuarioActual'));
 let productos = JSON.parse(localStorage.getItem('productos'));
+
+
 // Si el usuario actual y las órdenes existen
 if (usuarioActual && usuarioActual.ordenes && usuarioActual.ordenes.length > 0) {
     const orden = usuarioActual.ordenes[0];
@@ -36,9 +38,7 @@ if (usuarioActual && usuarioActual.ordenes && usuarioActual.ordenes.length > 0) 
         }
     }
     
-    
-    
-    
+    /*
     // Iterar sobre los productos de la orden
     orden.productos.forEach(producto => {
         const rectangle2 = document.createElement('div');
@@ -88,7 +88,10 @@ if (usuarioActual && usuarioActual.ordenes && usuarioActual.ordenes.length > 0) 
     console.log("No se encontraron órdenes de compra.");
 }
 
-// Evento para volver a la página anterior
-document.getElementById("volver").addEventListener("click", function() {
-    window.location.href = "infoUsuario.html";
-});
+*/
+
+	// Evento para volver a la página anterior
+	document.getElementById("volver").addEventListener("click", function() {
+	    window.location.href = "infoUsuario.html";
+	});
+}

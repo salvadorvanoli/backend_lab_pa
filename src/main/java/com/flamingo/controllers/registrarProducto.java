@@ -230,7 +230,7 @@ public class registrarProducto extends HttpServlet {
 		    
 		    
 		    
-		    Producto nuevoProducto = new Producto(null, null, null, 0, 0, null, null, null);
+		    Producto nuevoProducto = new Producto(null, null, null, 0, 0, null, null, null, null);
 
 		    
 		  //////////////////////Link categorias/////////////////////////////////////////
@@ -279,7 +279,7 @@ public class registrarProducto extends HttpServlet {
 		 op.add("q");
 		    
 		    try {
-				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(), op);
+				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(), op, null);
 			} catch (ProductoRepetidoException | CategoriaNoPuedeTenerProductosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

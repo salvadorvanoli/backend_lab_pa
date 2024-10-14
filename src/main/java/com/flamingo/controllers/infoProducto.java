@@ -49,7 +49,22 @@ public class infoProducto extends HttpServlet {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
 		
-		String productoSeleccionado = request.getParameter("productoSeleccionado");
+		String numReferenciaStr = request.getParameter("productoSeleccionado");
+		int numReferencia = Integer.parseInt(numReferenciaStr);
+		Producto productoSeleccionado = null;
+		
+		for(Producto prod : sis.getProductos()) {
+			if(prod.getNumReferencia() == numReferencia) {
+				productoSeleccionado = prod;
+				break;
+			}
+		}
+		
+		if(productoSeleccionado == null) {
+			request.setAttribute("usuarioActual", null);
+			request.getRequestDispatcher("/WEB-INF/user/ERROR.jsp").
+					forward(request, response);
+		}
 		
 		try {
 			//sis.elegirProveedor("elIsma");
@@ -61,7 +76,7 @@ public class infoProducto extends HttpServlet {
 		}
 		
 		session.setAttribute("usuarioActual", sis.getUsuarioActual());
-		request.setAttribute("productoActual", sis.getProductoActual());
+		request.setAttribute("productoActual", productoSeleccionado);
 		Object usuario = request.getAttribute("usuarioActual");
 		Object producto = request.getAttribute("productoActual");	
 		

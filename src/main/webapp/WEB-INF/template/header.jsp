@@ -16,7 +16,7 @@
             </form>
             <ul class="d-flex align-items-md-center justify-content-between w-75 navbar-nav ms-lg-5 ms-3 me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
+                    <a class="nav-link active" aria-current="page" href="home">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Catalogo">Catálogo</a>

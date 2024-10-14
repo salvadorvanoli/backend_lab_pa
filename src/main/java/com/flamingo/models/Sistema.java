@@ -906,11 +906,13 @@ public class Sistema extends ISistema {
         
         cl2.getOrdenesDeCompras().add(orden2);
         cl1.getOrdenesDeCompras().add(orden2);
+        cl1.getOrdenesDeCompras().add(orden1);
         
         OrdenDeCompra orden3 = new OrdenDeCompra(66, fecha1, cl3, null);
         orden3.setPrecioTotal(625.50f);
         
         cl3.getOrdenesDeCompras().add(orden3);
+        cl1.getOrdenesDeCompras().add(orden3);
         
         orden1.agregarProducto(producto1.getDTProducto(), 15);
         orden1.agregarProducto(producto2.getDTProducto(), 3);

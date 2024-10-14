@@ -46,6 +46,14 @@ public class Catalogo extends HttpServlet {
             List<Producto> listaDeProductos = sis.getProductos();
             HashMap<String, Categoria> listaDeCategorias = sis.getCategorias();
 
+            // Asegurarse de que las listas no sean nulas
+            if (listaDeProductos == null) {
+                listaDeProductos = new ArrayList<>();
+            }
+            if (listaDeCategorias == null) {
+                listaDeCategorias = new HashMap<>();
+            }
+
             request.setAttribute("productos", listaDeProductos);
             request.setAttribute("categorias", listaDeCategorias);
             
