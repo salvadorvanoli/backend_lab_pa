@@ -273,7 +273,7 @@
             </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='carrito.html'">Ver carrito</button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='carrito'">Ver carrito</button>
                 </div>
             </div>
         </div>
