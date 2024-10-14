@@ -42,6 +42,8 @@ public abstract class ISistema{
 
 	public abstract boolean registrarProducto(String titulo, int numReferencia, String descrip, List<String> especificaciones, float precio, List<Categoria> categorias, List<String> imagenes, String nombreTienda) throws ProductoRepetidoException, CategoriaNoPuedeTenerProductosException;
 	
+	public abstract boolean registro(String nickname, String email) throws UsuarioRepetidoException;
+	
 	public abstract DTProductoDetallado verInformacionProducto();
 
 	public abstract List<DTCategoria> listarCategorias();
@@ -120,6 +122,8 @@ public abstract class ISistema{
 
 	public abstract int generarIdComentario();
 	
-	public abstract void iniciarSesion(Usuario usuarioEncontrado);
+	public abstract void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado;
+
+	public abstract void setProductoActual(Producto prd);
 
 }

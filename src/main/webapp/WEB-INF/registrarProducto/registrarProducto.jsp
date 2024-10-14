@@ -669,11 +669,7 @@
 	            const form = document.getElementById('formProducto');
 	            form.submit(); // Envía el formulario
 	            
-	            // Redirigir a la nueva página después de un pequeño retraso
-	            setTimeout(function() {
-	                reiniciarNuevoProducto(); // Reinicia el objeto
-	                window.location.href = 'infoUsuario'; // Redirige a la nueva página
-	            }, 100); 
+	            
 	        });
 	    });
 

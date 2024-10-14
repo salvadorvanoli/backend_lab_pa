@@ -1,6 +1,11 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
+
+import com.flamingo.exceptions.UsuarioRepetidoException;
+import com.flamingo.models.ISistema;
+import com.flamingo.models.SistemaFactory;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,11 +31,18 @@ public class Registro extends HttpServlet {
         System.out.println("registro Email: " + email);
         System.out.println("registro Nickname: " + nickname);
         
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        try {
+			sis.registro(nickname, email);
+		} catch (UsuarioRepetidoException e) {
+			e.printStackTrace();
+		}
+        
         // Guardar estos valores en la sesión
         HttpSession session = request.getSession();
         session.setAttribute("email", email);
         session.setAttribute("nickname", nickname);
-
+        
         response.sendRedirect(request.getContextPath() + "/ingresardatos"); 
     }
 }

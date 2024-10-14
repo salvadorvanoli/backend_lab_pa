@@ -53,14 +53,13 @@ public class IngresarDatos extends HttpServlet {
             String compañia = request.getParameter("compania");
             String foto = request.getParameter("imagenUrl");
             
-            
             // Validaciones
             if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
                 errores.add("El nombre debe tener al menos 3 caracteres y no puede contener números.");
             }
 
-            if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3) {
-                errores.add("El apellido debe tener al menos 3 caracteres.");
+            if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3 || !validarNombreSinNumeros(apellido)) {
+                errores.add("El apellido debe tener al menos 3 caracteres y no puede contener numeros.");
             }
 
             if (contraseña == null || contraseña.length() < 8) {
@@ -73,14 +72,16 @@ public class IngresarDatos extends HttpServlet {
                 errores.add("Se debe ingresar una fecha.");
             }
 
-            if (sitioWeb != null && !sitioWeb.trim().isEmpty() && !validarUrl(sitioWeb)) {
-                errores.add("La URL del sitio web no es válida.");
-            }
+            if(tipoUsuario == "Proveedor") {
+            	if (sitioWeb == null || sitioWeb.trim().isEmpty() || !validarUrl(sitioWeb)) {
+                    errores.add("La URL del sitio web no es válida.");
+                }
 
-            if (compañia == null || compañia.trim().isEmpty()) {
-                errores.add("La compañía es obligatoria.");
+                if (compañia == null || compañia.trim().isEmpty()) {
+                    errores.add("La compañía es obligatoria.");
+                }
             }
-
+            
             // Si hay errores, redirigir de vuelta al formulario con mensajes de error
             if (!errores.isEmpty()) {
                 request.setAttribute("errores", errores);

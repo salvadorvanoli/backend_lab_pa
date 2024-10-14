@@ -24,6 +24,11 @@
     width: 80px;
 }
 
+#comentarios-section {
+	overflow-x: auto;
+    max-width: 100%;
+}
+
 h2 {
     margin-left: 5%;
     margin-bottom: 20px;
@@ -99,13 +104,13 @@ h2 {
 }
 
 .carta-comentarios.respuesta {
-    width: 90%;
+    width: 100%;
     margin-left: 10%;
 }
 
 @media only screen and (max-width: 768px) {
     .carta-comentarios {
-        width: 95%;
+        width: 100%;
         margin-left: 0;
     }
 
@@ -114,7 +119,7 @@ h2 {
     }
 
     .carta-comentarios.respuesta {
-        width: 90%;
+        width: 100%;
         margin-left: 5%;
     }
 

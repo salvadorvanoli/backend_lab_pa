@@ -168,11 +168,11 @@
 
                     <div id="">
                     	
-                    	<form action="agregarAlCarrito">
-                    		<input type="text" name="numReferencia" value="<%= producto.getNumReferencia() %>" class="d-none">
-                    		<input type="number" name="cantidad" id="cantidad-input" min="1" value="1">
-                        	<input type="submit" value="Agregar al carrito" class="siguiente-button btn btn-danger" id="agregar-al-carrito" data-toggle="modal" data-target="#modalCarrito">
-                    	</form>
+                    	<form id="carrito-form" action="agregarAlCarrito" method="POST">
+						    <input type="text" name="numReferencia" value="<%= producto.getNumReferencia() %>" class="d-none">
+						    <input type="number" name="cantidad" id="cantidad-input" min="1" value="1">
+						    <button type="button" class="siguiente-button btn btn-danger" id="agregar-al-carrito" data-toggle="modal" data-target="#modalCarrito">Agregar al carrito</button>
+						</form>
                     
                     </div>
                 </div>
@@ -223,11 +223,22 @@
             </h2>
 
 			<%
-			    // Obtiene el usuario actual (asumiendo que está almacenado en la sesión)
-			    Cliente usuarioActual = (Cliente) session.getAttribute("usuarioActual");
 			
-			    // Verifica si el usuario ha comprado el producto
-			    boolean haCompradoProducto = (usuarioActual != null && usuarioActual.comproProducto(producto.getNumReferencia()));
+				boolean haCompradoProducto;
+			
+				Usuario usuario = (Usuario) session.getAttribute("usuarioActual");
+				
+				if (usuario instanceof Proveedor) {
+					haCompradoProducto = false;
+				} else {
+					// Obtiene el usuario actual (asumiendo que está almacenado en la sesión)
+				    Cliente usuarioActual = (Cliente) usuario;
+				
+				    // Verifica si el usuario ha comprado el producto
+				    haCompradoProducto = (usuarioActual != null && usuarioActual.comproProducto(producto.getNumReferencia()));
+				}
+			
+			    
 			%>
 
 
@@ -263,21 +274,21 @@
 
     <!-- MODAL -->
     <div class="modal fade" id="modalCarrito" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">¡Producto agregado con éxito!</h5>
-                </div>
-            <div class="modal-body">
-                Pulse ver carrito para abrirlo
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='carrito.html'">Ver carrito</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    	<div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="modalTitle">¡Producto agregado con éxito!</h5>
+	            </div>
+	            <div class="modal-body">
+	                Pulse "Agregar" para confirmar o "Cerrar" para cancelar.
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	                <button type="button" class="btn btn-primary" id="confirmar-agregar">Agregar</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
     <!-- /MODAL -->
 
     <jsp:include page="/WEB-INF/template/footer.jsp" />
@@ -299,6 +310,9 @@
 	        document.getElementById("comentarioId" + contador).value = id;
 	    }
     
+	    document.getElementById('confirmar-agregar').addEventListener('click', function() {
+	        document.getElementById('carrito-form').submit();
+	    });
     </script>
 
 </html>

@@ -29,11 +29,6 @@ public class infoProducto extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static EstadoSesion getEstado(HttpServletRequest request)
-	{
-		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-	}
-
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
 		ISistema sis;
@@ -49,38 +44,49 @@ public class infoProducto extends HttpServlet {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
 		
-		String productoSeleccionado = request.getParameter("productoSeleccionado");
+		String numReferenciaStr = request.getParameter("productoSeleccionado");
 		
-		try {
-			//sis.elegirProveedor("elIsma");
-			sis.elegirCliente("Salva");
-			//sis.elegirCategoria("Electrónica");
-			//sis.elegirProducto("Guitarra"); // Acá entre paréntesis tendría que ir "productoSeleccionado".
-		} catch(UsuarioNoExisteException e) {
-		
+		if(numReferenciaStr.isBlank() || numReferenciaStr.isEmpty()) {
+			request.getRequestDispatcher("/WEB-INF/home/home.jsp").
+			forward(request, response);
+			return;
 		}
 		
-		session.setAttribute("usuarioActual", sis.getUsuarioActual());
-		request.setAttribute("productoActual", sis.getProductoActual());
-		Object usuario = request.getAttribute("usuarioActual");
-		Object producto = request.getAttribute("productoActual");	
+		int numReferencia = Integer.parseInt(numReferenciaStr);
+		Producto productoSeleccionado = null;
 		
-		Cliente cl = (Cliente) sis.getUsuarioActual();
+		for(Producto prod : sis.getProductos()) {
+			if(prod.getNumReferencia() == numReferencia) {
+				productoSeleccionado = prod;
+				break;
+			}
+		}
+		
+		if(productoSeleccionado == null) {
+			session.setAttribute("usuarioActual", null);
+			request.getRequestDispatcher("/WEB-INF/user/ERROR.jsp").
+					forward(request, response);
+		}
+
+		request.setAttribute("productoActual", productoSeleccionado);
+		Object usuario = session.getAttribute("usuarioActual");
+		Object producto = request.getAttribute("productoActual");	
 		
 		if(usuario == null) {
 			
-			request.setAttribute("usuarioActual", null);
+			session.setAttribute("usuarioActual", null);
 			
-			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").
+			request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp").
 					forward(request, response);
 		} else {
 			Usuario usr = (Usuario) usuario;
-			request.setAttribute("usuarioActual", usr);
+			session.setAttribute("usuarioActual", usr);
 			
 			System.out.println(usr.toString());
 			
 			Producto prd = (Producto) producto;
 			request.setAttribute("productoActual", prd);
+			sis.setProductoActual(prd);
 			
 
 			request.getRequestDispatcher("/WEB-INF/products/infoProducto.jsp").

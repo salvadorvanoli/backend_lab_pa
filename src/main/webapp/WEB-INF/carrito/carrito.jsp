@@ -24,7 +24,7 @@
 
 	<main>
 	<%	
-		Object obj = request.getAttribute("usuarioActual");
+		Object obj = session.getAttribute("usuarioActual");
 		if (obj != null) {
 			if (obj instanceof Usuario) {
 				Usuario user = (Usuario) obj;

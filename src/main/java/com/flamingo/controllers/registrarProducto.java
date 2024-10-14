@@ -36,14 +36,12 @@ public class registrarProducto extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	public static EstadoSesion getEstado(HttpServletRequest request)
-	{
-		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-	}
-
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
 		ISistema sis;
+		
+		HttpSession session = request.getSession();
+
 		if (getServletContext().getAttribute("sistema") == null) {
 		    System.out.println("CREO EL SISTEMA");
 		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
@@ -52,26 +50,20 @@ public class registrarProducto extends HttpServlet {
 		} else {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
-
-		try {
-			sis.elegirProveedor("elIsma");
-					
-		} catch(UsuarioNoExisteException e) {
-			
-		}
-		request.setAttribute("usuarioActual", sis.getUsuarioActual());
+	
+		session.setAttribute("usuarioActual", sis.getUsuarioActual());
 		request.setAttribute("categorias", sis.getCategorias());
 		Object usuario = request.getAttribute("usuarioActual");
 		Object categorias = request.getAttribute("categorias");	
 		
 		if(usuario == null) {
-			request.setAttribute("usuarioActual", null);
+			session.setAttribute("usuarioActual", null);
 			
 			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
 					forward(request, response);
 		} else {
 			Usuario usr = (Usuario) usuario;
-			request.setAttribute("usuarioActual", usr);
+			session.setAttribute("usuarioActual", usr);
 			
 			HashMap<String, Categoria> ctg = (HashMap<String, Categoria>) categorias;
 			request.setAttribute("categorias", ctg);
@@ -105,6 +97,8 @@ public class registrarProducto extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		HttpSession session = request.getSession();
+		
 		ISistema sis;
 		if (getServletContext().getAttribute("sistema") == null) {
 		    System.out.println("CREO EL SISTEMA");
@@ -114,7 +108,7 @@ public class registrarProducto extends HttpServlet {
 		} else {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
-
+		
 		// Configurar el encoding para manejar caracteres especiales (por si es necesario)
 	    request.setCharacterEncoding("UTF-8");
 	    
@@ -230,7 +224,7 @@ public class registrarProducto extends HttpServlet {
 		    
 		    
 		    
-		    Producto nuevoProducto = new Producto(null, null, null, 0, 0, null, null, null);
+		    Producto nuevoProducto = new Producto(null, null,null, 0, 0, null, null, null, null);
 
 		    
 		  //////////////////////Link categorias/////////////////////////////////////////
@@ -274,12 +268,12 @@ public class registrarProducto extends HttpServlet {
 	    
 		    List<String> op = new ArrayList<>();
 
-		 // Agregar los strings "a" y "b" a la lista
+		 // Agregar los strings "a" y "b" a la lista, imagenes
 		 op.add("p");
 		 op.add("q");
 		    
 		    try {
-				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(), op);
+				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  op, ((Proveedor) sis.getUsuarioActual()).getnomCompania());         
 			} catch (ProductoRepetidoException | CategoriaNoPuedeTenerProductosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -320,9 +314,9 @@ public class registrarProducto extends HttpServlet {
 	        }
 	    }
 	    
-	   
+	   session.setAttribute("usuarioActual", sis.getUsuarioActual());
 
-	    
+	    response.sendRedirect("infoUsuario");
 	}
 
 	

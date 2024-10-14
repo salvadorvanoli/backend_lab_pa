@@ -1,3 +1,19 @@
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.Collections"%>
+<%@ page import="java.util.stream.Collectors"%>
+<%@ page import="java.util.Comparator"%>
+<%@ page import="java.util.Arrays"%>
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="com.flamingo.models.Producto" %>
+<%@ page import="com.flamingo.models.OrdenDeCompra" %>
+<%@ page import="com.flamingo.models.Usuario" %>
+<%@ page import="com.flamingo.models.DTCantidad" %>
+<%@ page import="com.flamingo.models.DTProducto" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,93 +25,148 @@
     <link rel="stylesheet" href="media/css/infoOrdenCompra.css">
 </head>
 <body>
-
-     <!-- NAVBAR -->
+	
 	<jsp:include page="/WEB-INF/template/header.jsp"/>
-
-	<%@ page import="com.flamingo.models.Producto" %>
-	<%@ page import="com.flamingo.models.Usuario" %>
-	<%@ page import="java.util.List" %>
- 
-   	<%
-	    // Obtener el usuario y la lista de productos desde el request
-	    Usuario usuarioActual = (Usuario) request.getAttribute("usuarioActual");
-	    List<Producto> productos = (List<Producto>) request.getAttribute("productos");
+	
+	<%
+		Usuario usuarioActual = (Usuario) request.getAttribute("usuarioActual");
+		List<DTProducto> productos = (List<DTProducto>) request.getAttribute("productos");
+		OrdenDeCompra orden = (OrdenDeCompra) request.getAttribute("orden");
+		int cantidad = 0;
+		float subtotal = 0f;
+		
+		
+		float subtotalTodo = 0;
+		int impuestosTodo = 0;
+		
+		DecimalFormat df = new DecimalFormat("#.#");
+		
+		
 	%>
-
-	<main class="container-fluid">
-	    <div class="rectangle-1">
-	        <div class="rectangle-2">
-	            <div class="row">
-	                <div class="col-md-2 d-flex flex-column">
-	                    <!-- Comprobar si hay productos disponibles -->
-	                    <% if (productos != null && !productos.isEmpty()) { %>
-	                        <% for (Producto producto : productos) { %>
-	                            <div class="fotosProductos">
-	                                <!-- Iterar sobre la lista de imï¿½genes -->
-	                                <% 
-	                                    List<String> imagenes = producto.getImagenes(); // Asumiendo que tienes un mï¿½todo getImagenes()
-	                                    if (imagenes != null && !imagenes.isEmpty()) {
-	                                        for (String imagen : imagenes) { 
-	                                %>
-	                                            <img src="<%= imagen != null ? imagen : "media/images/default.webp" %>" alt="Imagen del Producto">
-	                                <% 
-	                                        }
-	                                    } else { 
-	                                %>
-	                                        <img src="media/images/default.webp" alt="Imagen del Producto no disponible">
-	                                <% 
-	                                    } 
-	                                %>
-	                            </div>
-	                            <h1 class="nombresProductos text-start mt-3"><%= producto.getNombreProducto() != null ? producto.getNombreProducto() : "Nombre no disponible" %></h1>
-	                            <h2 class="descripcionProductos text-start m-0"><%= producto.getDescripcion() != null ? producto.getDescripcion() : "Descripciï¿½n no disponible" %></h2>
-	                            <h2 class="precioProductos text-start mt-3">$<%= producto.getPrecio() >= 0 ? producto.getPrecio() : "0" %></h2>
-								<h1 class="numProducto text-start mt-3">Nro. Producto: <%= producto.getNumReferencia() > 0 ? producto.getNumReferencia() : "N/A" %></h1>
-	                            <h1 class="precioProductosSubt mt-3"></h1>
-	                        <% } %>
-	                    <% } else { %>
-	                        <h1>No hay productos disponibles.</h1>
-	                    <% } %>
+	
+	<% 
+		if(orden != null ){
+	%>
+	
+		<main class="container-fluid">
+		<%
+			for (DTProducto prod : productos) {
+				cantidad = 0;
+				subtotal = 0f;
+			
+		%>
+		
+				
+			        <div class="rectangle-1" onclick="window.location.href='infoProducto?productoSeleccionado=<%= prod.getNumero() %>'">
+			        
+			            <div class="rectangle-2">
+			                <div class="row"> 
+			                    <div class="col-md-2 d-flex">
+			                        <div class="fotosProductos">
+			                        	<img src="<%= (prod != null && prod.getImagenes() != null && !prod.getImagenes().isEmpty()) ? prod.getImagenes().get(0) : "media/images/default.webp" %>" alt="<%= (prod != null) ? prod.getNombre() : "Imagen no disponible" %>" class="imagenProducto" onerror="this.onerror=null; this.src='/media/images/default.webp';">
+			                        </div>   
+			                    </div>
+			                    <div class="col-md-4 d-flex flex-column justify-content-start p-0">
+			                        <h1 class="nombresProductos text-start mt-3" style="cursor: pointer;"><%= prod.getNombre() %></h1>    
+			                        <h2 class="descripcionProductos text-start m-0"><%= prod.getDescripcion() %></h2>
+			                        <h2 class="precioProductos text-start mt-3">$ <%= prod.getPrecio() %></h2>
+			                    </div>
+			                    <div class="col-md-4">
+			                        <h1 class="numProducto text-start mt-3">N° referencia: <%= prod.getNumero() %></h1>
+			                        <div class="stepper-container d-flex align-items-end">
+			                             
+			                             
+			                            <%
+			                            
+										    for (DTCantidad cant : orden.getCantidad()) {
+										        if (prod.getNumero() == cant.getDTCantidadProducto().getProducto().getNumero()) {
+										            cantidad = cant.getCantidad(); 
+										            break; 
+										        }
+										    }
+										%>
+			                             
+			                            <label for="quantity" class="labelCantidad">Cantidad</label>
+			                            <input type="number" id="quantity" class="stepper" value="<%= cantidad %>" min="0" max="100" disabled>
+			                            
+			                        </div>          
+			                    </div>
+			                    <div class="col-md-2">
+			                        <h1 class="textoSubtotal mt-3">Subtotal</h1>
+			                        <%
+										    for (DTCantidad cant : orden.getCantidad()) {
+										        if (prod.getNumero() == cant.getDTCantidadProducto().getProducto().getNumero()) {
+										            subtotal = prod.getPrecio() * cantidad;
+										            subtotalTodo += subtotal;
+										%>
+			                        
+			                        <h1 class="precioProductosSubt mt-3">$ <%= subtotal %></h1>
+			                        
+			                        <%
+			                        			
+										        }    
+										    }   
+										%>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+        
+        <%
+				}	
+        %>
+        
+	        <div class="rectangle-3 row">
+	            <h1 class="textoResumen"> Resumen </h1>
+	            <div class="horizontal-line"></div>
+	            
+	                <div class="col-md-6 mt-3">
+	                    <h1 class="subtotal"> Subtotal </h1>
+	                    <h1 class="envio"> Envio </h1>
+	                    <h1 class="impuestos"> impuestos</h1>
 	                </div>
+	                <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
+	                    <h1 class="subtotal2">$ <%= subtotalTodo %></h1>
+	                    <h1 class="envio2"> 
+	    					<%= (orden != null && orden.getDetallesEnvio() != null) ? orden.getDetallesEnvio().getPrecioEnvio() : 0 %> 
+						</h1>
+						<%
+							float impuestos = 0f;
+							impuestos = subtotalTodo * 0.02f;
+							df.format(impuestos);
+						%>
+	                    <h1 class="impuestos2">$ <%= impuestos %></h1>
+	                </div>
+	            <div class="horizontal-line"></div>
+	            <div class="col-md-6 mt-3">
+	                <h1 class="total"> total </h1>
 	            </div>
-	        </div>
-	    </div>
-	    <div class="rectangle-3 row">
-	        <h1 class="textoResumen"> Resumen </h1>
-	        <div class="horizontal-line"></div>
-	        <div class="col-md-6 mt-3">
-			    <h1 class="subtotal">Subtotal</h1>
-			    <h1 class="envio">Envï¿½o</h1>
-			    <h1 class="impuestos">Impuestos</h1>
-			</div>
-			<div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-			    <h1 class="subtotal2">$${carrito != null ? carrito.getSubtotal() : '0'}</h1>
-			    <h1 class="envio2">$${carrito != null ? carrito.getEnvio() : '0'}</h1>
-			    <h1 class="impuestos2">$${carrito != null ? carrito.getImpuestos() : '0'}</h1>
-			</div>
-	        <div class="horizontal-line"></div>
-	        <div class="col-md-6 mt-3">
-	            <h1 class="total"> Total </h1>
-	        </div>
-	        <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-	            <!-- Total dinï¿½mico con validaciï¿½n del carrito nulo -->
-	            <h1 class="total2">$${carrito != null ? carrito.getTotal() : '0'}</h1>
-	        </div>
-	        <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
-	            <button type="button" class="button-volver" id="volver"> Volver </button>
-	        </div>
-	    </div>
-	</main>
+	            <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
+	                <h1 class="total2">$ <%= subtotalTodo + subtotalTodo * 0.02 %></h1>
+	            </div>
+	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
+	                <button type="button" class="button-volver" id="volver" onclick="window.location.href='infoUsuario'"> Volver </button>
+	            </div>
+	    
+	        </div>   
+	    </main>
     
-    <!-- ENCABEZADO DE FASES -->
-	<jsp:include page="/WEB-INF/template/footer.jsp"/>
-
-
+    <%
+    	}else{    
+    %>
+    	<p>No hay ordenes deisponibles</p>
+    	
+   	<%
+    	}
+   	%>
+    
+    
+    <jsp:include page="/WEB-INF/template/footer.jsp"/>
+    
 </body>
 
 <script src="js/infoOrdenCompra.js"></script>
 <script src="https://kit.fontawesome.com/d795c6c237.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="media/js/infoOrdenCompra.js"></script>
+<script src="/media/js/infoOrdenCompra.js"></script>
 </html>

@@ -57,20 +57,22 @@ a.nav-link{
 
 
 .rectangle-1 {
-    width: 90%; /* Cambia de 80% a 90% para más espacio en móviles */
+    width: 90%;
 	border-color: #AAAAAA;
 	border-width: 1px;
 	border-style: solid;
-    max-height: 80vh; /* Añadir un límite de altura */
-    padding: 16px; /* Ajustar el padding */
+    max-height: 80vh;
+    padding: 16px;
     margin: auto;
-    overflow-y: auto; /* Habilita el scroll solo si es necesario */
+    overflow-y: auto;
+    margin-bottom: 10px !important;
+    cursor: pointer;
 }
 
 .rectangle-2 {
-    width: 100%; /* Mantiene el ancho completo */
-    padding: 12px; /* Ajustar el padding */
-    margin: 8px 0; /* Espaciado entre productos */
+    width: 100%; 
+    padding: 12px;
+    margin: 8px 0;
 	
 	border-width: 1px;
 }
@@ -206,14 +208,6 @@ a.nav-link{
 	margin: auto;
 	text-transform: uppercase;
 }
-.descripcionProductos::after {
-    content: '...';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: white;
-    padding-left: 4px;
-}
 
 .stepper-container {
     display: flex;
@@ -250,7 +244,6 @@ a.nav-link{
 }
 
 .precioProductos {
-	width: 49px;
 	height: 24px;
 	color: #606060;
 	font-weight: 400;

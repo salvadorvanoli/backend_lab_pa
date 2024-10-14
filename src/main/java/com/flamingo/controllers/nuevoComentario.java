@@ -76,7 +76,7 @@ public class nuevoComentario extends HttpServlet {
                 
                 out.println("{\"message\": \"Comentario agregado exitosamente\"}");
                 
-                response.sendRedirect("infoProducto");
+                response.sendRedirect("infoProducto?productoSeleccionado=" + productoActual.getNumReferencia());
                 
             } else {
                 out.println("{\"error\": \"Producto no encontrado\"}");

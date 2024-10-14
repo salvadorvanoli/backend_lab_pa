@@ -73,7 +73,7 @@
             
                         <div class="col-md-6 col-12 centro">
                             <div> 
-                                <img src="<%= usuarioActual.getFoto() %>" alt="Foto de perfil" id="fotoPerfilUsuario" class="img-fluid">
+                                <img src="<%= usuarioActual.getFoto() != null && !usuarioActual.getFoto().isEmpty() ? usuarioActual.getFoto() : "media/images/Chica1.png" %>" alt="Foto de perfil" id="fotoPerfilUsuario" class="img-fluid">
                             </div>
                             <!--<div>
                                 <input type="file" id="inputFile" class="btn btn-secondary mt-2" accept=".png, .jpg, .jpeg, .webp">
@@ -82,16 +82,17 @@
                     </div>
                 </form>
             </div>
-
         </section>
 
-        <div class="linea-resumen"></div>
 
 		<%
 	    // Verifica si el usuarioActual es de tipo Cliente
 	    if (usuarioActual instanceof Cliente) {
 	    	Cliente cliente = (Cliente) usuarioActual;
 		%>
+		
+			<div class="linea-resumen"></div>
+		
 	        <section id="ver-orden-section">
 	            <h2>Ver orden de compra</h2>
 	
@@ -159,7 +160,7 @@
 			        if (productos != null) {
 			            for (Producto producto : productos) {
 			    %>
-			                <div class="container-md container-fluid product-card">
+			                <div class="container-md container-fluid product-card" onclick="window.location.href='infoProducto?productoSeleccionado=<%= producto.getNumReferencia() %>'">
 			                    <div class="row">
 			                        <div class="col-md-3 col-12">
 			                            <img src="<%= producto.getImagenes().get(0) %>" alt="Imagen producto" class="img-producto">

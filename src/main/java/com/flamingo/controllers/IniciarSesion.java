@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.flamingo.exceptions.ContraseniaIncorrectaException;
+import com.flamingo.exceptions.UsuarioNoEncontrado;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
@@ -42,15 +44,7 @@ public class IniciarSesion extends HttpServlet {
         List<Usuario> usuariosRegistrados = sis.getUsuarios();
 
         Usuario usuarioEncontrado = null;
-        
-        
-     // Imprimir todos los usuarios registrados en la consola
-        /*System.out.println("Usuarios registrados:");
-        for (Usuario usuario : usuariosRegistrados) {
-            System.out.println("Nickname: " + usuario.getNickname() + ", Email: " + usuario.getEmail() + ", Contrasenia: " + usuario.getContrasenia());
-        }*/
-        
-        
+ 
         for (Usuario usr : usuariosRegistrados) {
             if (usr.getEmail().equals(emailOrNickname) || usr.getNickname().equals(emailOrNickname)) {
                 usuarioEncontrado = usr;
@@ -65,7 +59,15 @@ public class IniciarSesion extends HttpServlet {
             dispatcher.forward(request, response);
         } else { //inicio de sesion exitoso
         	
-            sis.iniciarSesion(usuarioEncontrado);
+            try {
+				sis.iniciarSesion(emailOrNickname, password);
+			} catch (ContraseniaIncorrectaException e) {
+				e.printStackTrace();
+			} catch (UsuarioNoEncontrado e) {
+				e.printStackTrace();
+			}
+            
+            objSesion.setAttribute("usuarioActual", usuarioEncontrado);
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/home");
             dispatcher.forward(request, response);
