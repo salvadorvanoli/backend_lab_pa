@@ -34,16 +34,9 @@ public class infoOrden extends HttpServlet {
         ISistema sis = SistemaFactory.getInstancia().getISistema();
         Usuario user = sis.getUsuarioActual();
 
+        sis.crearCasos();
+        
         String num = request.getParameter("ordenId");
-        
-        
-        //para test
-        DTFecha f1 = new DTFecha(0, 0, 0);
-        Cliente cli = new Cliente("nick", "nom", "ape", "email", f1, null, "contraseña");
-        
-        OrdenDeCompra orden1 = new OrdenDeCompra(1, f1, cli, null);
-        
-        num = "1";
         
         int id;
         try {
@@ -52,6 +45,8 @@ public class infoOrden extends HttpServlet {
             request.setAttribute("errorMessage", "ID de orden inválido.");
             return;
         }
+        
+        System.out.println("a");
 
         if (!(user instanceof Cliente)) {
             return; // Podrías redirigir a una página de acceso denegado
