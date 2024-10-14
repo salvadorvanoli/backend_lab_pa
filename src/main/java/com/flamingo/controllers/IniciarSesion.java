@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.flamingo.exceptions.ContraseniaIncorrectaException;
+import com.flamingo.exceptions.UsuarioNoEncontrado;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
@@ -65,7 +67,13 @@ public class IniciarSesion extends HttpServlet {
             dispatcher.forward(request, response);
         } else { //inicio de sesion exitoso
         	
-            sis.iniciarSesion(usuarioEncontrado);
+            try {
+				sis.iniciarSesion(emailOrNickname, password);
+			} catch (ContraseniaIncorrectaException e) {
+				e.printStackTrace();
+			} catch (UsuarioNoEncontrado e) {
+				e.printStackTrace();
+			}
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/home");
             dispatcher.forward(request, response);

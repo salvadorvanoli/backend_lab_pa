@@ -59,8 +59,8 @@ public class IngresarDatos extends HttpServlet {
                 errores.add("El nombre debe tener al menos 3 caracteres y no puede contener números.");
             }
 
-            if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3) {
-                errores.add("El apellido debe tener al menos 3 caracteres.");
+            if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3 || !validarNombreSinNumeros(apellido)) {
+                errores.add("El apellido debe tener al menos 3 caracteres y no puede contener numeros.");
             }
 
             if (contraseña == null || contraseña.length() < 8) {

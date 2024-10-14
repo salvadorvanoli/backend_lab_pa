@@ -118,6 +118,6 @@ public abstract class ISistema{
 
 	public abstract int generarIdComentario();
 	
-	public abstract void iniciarSesion(Usuario usuarioEncontrado);
+	public abstract void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado;
 
 }

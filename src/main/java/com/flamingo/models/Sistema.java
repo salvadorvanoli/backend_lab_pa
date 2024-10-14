@@ -92,12 +92,43 @@ public class Sistema extends ISistema {
 	
 	@Override // NO ES NECESARIO QUE SEA BOOL
 	public boolean altaUsuarioCliente(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String imagen,  String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+		// Lista para almacenar los errores
+	    List<String> errores = new ArrayList<>();
+
+	    // Validar nombre
+	    if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
+	        errores.add("El nombre debe tener al menos 3 caracteres y no puede contener números.");
+	    }
+
+	    // Validar apellido
+	    if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3 || !validarNombreSinNumeros(apellido)) {
+	        errores.add("El apellido debe tener al menos 3 caracteres y no puede contener números.");
+	    }
+
+	    // Validar contraseñas
+	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	        errores.add("La contraseña debe tener al menos 8 caracteres.");
+	    } else if (!contrasenia1.equals(contrasenia2)) {
+	        errores.add("Las contraseñas no coinciden.");
+	    }
+
+	    // Validar fecha de nacimiento
+	    if (fechaNac == null) {
+	        errores.add("Se debe ingresar una fecha de nacimiento válida.");
+	    }
+
+
+	    // Si hay errores tirar excepción
+	    if (!errores.isEmpty()) {
+	        throw new IllegalArgumentException("Errores de validación: " + String.join(", ", errores));
+	    }
+		
 		for (Usuario user : this.usuarios) {
 			if (user.getEmail().equalsIgnoreCase(email)) {
 				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el email " + '"' + email + '"' + '.');
 			}
 			if (user.getNickname().equalsIgnoreCase(nickname)) {
-				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el nickname"  + '"' + nickname + '"' + '.');
+				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el nickname " + '"' + nickname + '"' + '.');
 			}
 		}
 		
@@ -105,13 +136,54 @@ public class Sistema extends ISistema {
 			throw new ContraseniaIncorrectaException("Las contraseñas no coinciden.");
 		}
 		
-		Cliente nuevo = new Cliente(nickname, nombre, apellido, email, fechaNac, imagen, contrasenia1); // ESTO HAY QUE CAMBIARLO
+		Cliente nuevo = new Cliente(nickname, nombre, apellido, email, fechaNac, imagen, contrasenia1);
 		this.usuarios.add(nuevo);
 		return true;
 	}
 	
 	@Override // NO ES NECESARIO QUE SEA BOOL
 	public boolean altaUsuarioProveedor(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String nomCompania, String linkWeb, String imagen, String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+		
+		// Lista para almacenar los errores
+	    List<String> errores = new ArrayList<>();
+
+	    // Validar nombre
+	    if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
+	        errores.add("El nombre debe tener al menos 3 caracteres y no puede contener números.");
+	    }
+
+	    // Validar apellido
+	    if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3 || !validarNombreSinNumeros(apellido)) {
+	        errores.add("El apellido debe tener al menos 3 caracteres y no puede contener números.");
+	    }
+
+	    // Validar contraseñas
+	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	        errores.add("La contraseña debe tener al menos 8 caracteres.");
+	    } else if (!contrasenia1.equals(contrasenia2)) {
+	        errores.add("Las contraseñas no coinciden.");
+	    }
+
+	    // Validar fecha de nacimiento
+	    if (fechaNac == null) {
+	        errores.add("Se debe ingresar una fecha de nacimiento válida.");
+	    }
+
+	    // Validar URL del sitio web si es proporcionada
+	    if (linkWeb != null && !linkWeb.trim().isEmpty() && !validarUrl(linkWeb)) {
+	        errores.add("La URL del sitio web no es válida.");
+	    }
+
+	    // Validar nombre de la compañía
+	    if (nomCompania == null || nomCompania.trim().isEmpty()) {
+	        errores.add("La compañía es obligatoria.");
+	    }
+
+	    // Si hay errores tirar excepción
+	    if (!errores.isEmpty()) {
+	        throw new IllegalArgumentException("Errores de validación: " + String.join(", ", errores));
+	    }
+		
 		for (Usuario user : this.usuarios) {
 			if (user.getEmail().equalsIgnoreCase(email)) {
 				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el email " + '"' + email + '"' + '.');
@@ -128,6 +200,16 @@ public class Sistema extends ISistema {
 		Proveedor nuevo = new Proveedor(nickname, nombre, apellido, email, fechaNac, imagen, nomCompania, linkWeb, contrasenia1);
 		this.usuarios.add(nuevo);
 		return true;
+	}
+	
+	private boolean validarNombreSinNumeros(String nombre) {
+	    return !nombre.matches(".*\\d.*");
+	}
+
+	// Método para validar la URL
+	private boolean validarUrl(String url) {
+	    String regex = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}(:[0-9]+)?(/.*)?$";
+	    return url.matches(regex);
 	}
 	
 	
@@ -841,8 +923,27 @@ public class Sistema extends ISistema {
 	}
 
 	@Override
-	public void iniciarSesion(Usuario usuarioEncontrado) {
-		this.usuarioActual = usuarioEncontrado;
+	public void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado {
+		
+		Usuario usuarioEncontrado = null;
+
+		for (Usuario user : this.usuarios) 
+		{
+		        if (user.getEmail().equalsIgnoreCase(emailOrNickname) || user.getNickname().equalsIgnoreCase(emailOrNickname)) 
+		        {
+		            usuarioEncontrado = user;
+		            break;
+		        }
+		}
+		if (usuarioEncontrado == null) {
+			throw new UsuarioNoEncontrado("El Nickname o Email son incorrectos");
+		}
+		
+	    if (!usuarioEncontrado.getContrasenia().equals(password)) {
+	        throw new ContraseniaIncorrectaException("La contraseña es incorrecta.");
+	    }
+
+	    this.usuarioActual = usuarioEncontrado;
 		
 	}
 	
