@@ -204,6 +204,11 @@
 			`<button class="dropbtn">&#9654 ` + categoria.nombreCat + `</button>
 			<div class="dropdown-content">
 			</div>`
+			catElement.addEventListener('click', function(event) {
+            	event.preventDefault();
+            	console.log("CategoriaSELECT");
+            	agregarCategoria(categoria.nombreCat, catElement);
+        	});
 			for (let cat in categoria.hijas){
 				generarCategoria(categoria.hijas[cat], catElement);
 			}

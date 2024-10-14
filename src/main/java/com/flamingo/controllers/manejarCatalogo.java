@@ -77,42 +77,33 @@ public class manejarCatalogo extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 		Object usuario = session.getAttribute("usuarioActual");
-		
-		if(usuario == null) {
-			System.out.println("Entre a user = null");
-			// session.setAttribute("usuarioActual", null);
-			request.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
-					forward(request, response);
-				
-		} else {
-			System.out.println("NOOOOOO Entre a user = null");
-			try {
-				
-				String tipoGET = request.getHeader("tipo");
-				
-				Gson gson = new Gson();
-				
-				String result = "";
-				
-				if (tipoGET.equals("getCategorias")) {
-					result = gson.toJson(sis.listarCategorias());
-					System.out.println(result);
-				} else if (tipoGET.equals("getProductos")) {
-					result = gson.toJson(sis.listarAllProductos());
-					System.out.println(result);
-				}
-				
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				
-				PrintWriter out = response.getWriter();
-				out.print(result);
-				out.flush();
-				
-			} catch (Exception e) {
-				// Manejar Excepcion
+
+		System.out.println("NOOOOOO Entre a user = null");
+		try {
+			
+			String tipoGET = request.getHeader("tipo");
+			
+			Gson gson = new Gson();
+			
+			String result = "";
+			
+			if (tipoGET.equals("getCategorias")) {
+				result = gson.toJson(sis.listarCategorias());
+				System.out.println(result);
+			} else if (tipoGET.equals("getProductos")) {
+				result = gson.toJson(sis.listarAllProductos());
+				System.out.println(result);
 			}
+			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			
+			PrintWriter out = response.getWriter();
+			out.print(result);
+			out.flush();
+			
+		} catch (Exception e) {
+			// Manejar Excepcion
 		}
 	}
 
