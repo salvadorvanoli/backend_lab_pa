@@ -238,6 +238,19 @@ public class Sistema extends ISistema {
 		return lista;
 	}
 	
+	@Override
+	public List<DTProducto> listarAllProductos(){
+		List <DTProducto> lista = new ArrayList<>();
+		for (Categoria cat : this.categorias.values()) {
+			for (Producto prod : cat.getProductos()) {
+				DTProducto dt = prod.getDTProducto();
+				if (!lista.contains(dt)) {
+					lista.add(dt);
+				}
+			}
+		}
+		return lista;
+	}
 
 	// No se si incluir el numero de referencia (para buscar el producto)
 	@Override
@@ -689,6 +702,8 @@ public class Sistema extends ISistema {
         Categoria iPhone = new Categoria("iPhone", true, Celulares);
         Categoria Xiaomi = new Categoria("Xiaomi", true, Celulares);
 
+        Categoria iPhoneNuevo = new Categoria("iPhone Nuevo", true, iPhone);
+        
         // Crear subcategoría de Laptops
         Categoria Lenovo = new Categoria("Lenovo", true, Laptops);
 
@@ -711,6 +726,8 @@ public class Sistema extends ISistema {
 
         Laptops.agregarHijo("Lenovo", Lenovo);         // Agrega 'Lenovo' como subcategoría de 'Laptops'
 
+        iPhone.agregarHijo("iPhone Nuevo", iPhoneNuevo);
+        
         this.getCategorias().put(Electronica.getNombreCat(), Electronica);
         this.getCategorias().put(Moda.getNombreCat(), Moda);
         this.getCategorias().put(Farmacia.getNombreCat(), Farmacia);

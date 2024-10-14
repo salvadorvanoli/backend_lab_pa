@@ -73,7 +73,12 @@ public class Categoria {
 
 	// Método para obtener los datos básicos de la categoría
     public DTCategoria getDTCategoria() {
-        return new DTCategoria(nombreCat, hijos);
+    	HashMap<String, DTCategoria> lista = new HashMap<>();
+    	for (Categoria cat : this.hijos.values()) {
+    		DTCategoria dt = cat.getDTCategoria();
+    		lista.put(dt.getNombreCat(), dt);
+    	}
+        return new DTCategoria(nombreCat, lista);
     }
 
     // Método para quitar un producto de la categoría

@@ -1,9 +1,3 @@
-
-// IMPORTANTE !!! ADAPTAR EL JS PARA QUE FUNCIONE COMO DEBE
-
-console.log("HOLAAAA");
-
-// Asumiendo que las categorías están almacenadas en el localStorage  
 const categor = JSON.parse(localStorage.getItem('categorias')) || [];
 const prod = JSON.parse(localStorage.getItem('productos')) || [];
 

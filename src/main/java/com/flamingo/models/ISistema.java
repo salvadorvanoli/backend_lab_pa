@@ -52,6 +52,8 @@ public abstract class ISistema{
 
 	public abstract List<DTProducto> listarProductos();
 	
+	public abstract List<DTProducto> listarAllProductos();
+	
 	public abstract boolean elegirProducto(String nombreProd) throws ProductoNoExisteException; // ESTA LA AGREGUÉ DESPUÉS
 
 	public abstract Categoria altaCategoria(String nombre, boolean tieneProductos, Categoria padre) throws CategoriaRepetidaException;
