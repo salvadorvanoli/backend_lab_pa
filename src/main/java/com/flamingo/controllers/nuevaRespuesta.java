@@ -75,6 +75,8 @@ public class nuevaRespuesta extends HttpServlet {
             if (productoActual != null) {
 
             	sis.getProductoActual().getComentario(idComentario).agregarRespuesta(nuevoComentario);
+            	
+            	sis.getProductoActual().actualizarCantEstrellas();
                 
                 out.println("{\"message\": \"Comentario agregado exitosamente\"}");
                 

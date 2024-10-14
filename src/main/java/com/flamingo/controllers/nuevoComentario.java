@@ -74,6 +74,8 @@ public class nuevoComentario extends HttpServlet {
 
                 productoActual.agregarComentario(nuevoComentario);
                 
+                sis.getProductoActual().actualizarCantEstrellas();
+                
                 out.println("{\"message\": \"Comentario agregado exitosamente\"}");
                 
                 response.sendRedirect("infoProducto?productoSeleccionado=" + productoActual.getNumReferencia());
