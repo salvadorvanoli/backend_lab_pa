@@ -18,8 +18,6 @@ public class Producto {
 
 
     // Constructor
-
-
     public Producto(String nombreProducto, String descripcion, List<String> especificacion, int numReferencia, float precio, List<String> imagenes, List<Categoria> categorias, Proveedor proveedor, String nombreTienda) {
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
@@ -38,6 +36,23 @@ public class Producto {
         this.proveedor = proveedor;
         
     }
+    
+    public void actualizarCantEstrellas() {
+        int estrellasTotales = 0;
+        int cantComentarios = 0;
+
+        for (Comentario comentario : this.comentarios) {
+            estrellasTotales += comentario.getEstrellas();
+            cantComentarios++;
+        }
+
+        if (cantComentarios > 0) {
+            this.estrellas = (int) Math.round((double) estrellasTotales / cantComentarios);
+        } else {
+            this.estrellas = 0;
+        }
+    }
+
     
     public List<Comentario> getComentarios() {
     	return this.comentarios;
