@@ -26,8 +26,10 @@
 	<jsp:include page="/WEB-INF/template/header.jsp"/>
 
     <%
-	    
+    	String textoBusqueda = (String) session.getAttribute("textoBusqueda");
 	%>
+
+	<input type="hidden" id="textoBusqueda" value="<%= textoBusqueda != null ? textoBusqueda : "" %>">
 
 	<!-- Mostrar el select de orden -->
 	<div class="row container-fluid w-100 justify-content-end align-items-center">
@@ -161,28 +163,37 @@
 	function filtrarProductosPorCategoria() {
 	    // Si no hay categorías seleccionadas, carga todos los productos
 	    if (categoriasSeleccionadas.length === 0) {
-	    	document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
+	        document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
 	        cargarCatalogo(prod);
 	        return;
 	    }
 	    
-	    let textoCategorias = "Categorias seleccionadas: ";
+	    let textoCategorias = "Categorías seleccionadas: ";
 	    
 	    for (let i = 0; i < categoriasSeleccionadas.length; i++) {
-	    	textoCategorias += categoriasSeleccionadas[i].nombreCat;
-	    	if ((i + 1) != categoriasSeleccionadas.length){
-	    		textoCategorias += " - ";
-	    	}
+	        textoCategorias += categoriasSeleccionadas[i].nombreCat;
+	        if ((i + 1) !== categoriasSeleccionadas.length) {
+	            textoCategorias += " - ";
+	        }
 	    }
 	    
 	    document.querySelector("#selectedCategories").textContent = textoCategorias;
 	
-	    const productosFiltrados = prod.filter(producto => {
+	    // Filtrar productos por categorías seleccionadas
+	    let productosFiltrados = prod.filter(producto => {
 	        return producto['categorias'].some(categoria => {
 	            // Función recursiva para buscar en todas las subcategorías
 	            return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	        });
 	    });
+	
+	    // Filtrar productos por el valor de búsqueda si se especifica
+	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+	    if (textoBusqueda) {
+	        productosFiltrados = productosFiltrados.filter(producto => 
+	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+	        );
+	    }
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
@@ -261,6 +272,13 @@
 	                return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	            });
 	        });
+	    }
+	    
+	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+	    if (textoBusqueda) {
+	        productosFiltrados = productosFiltrados.filter(producto => 
+	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+	        );
 	    }
 	
 	    // Ordenar los productos según la opción seleccionada
@@ -362,7 +380,24 @@
 	        const ordenSeleccionado = this.value;
 	        ordenarProductos(ordenSeleccionado); // Llama a la función de ordenar productos
 	    });
-
+	    
+		function ordenarAlEntrar() {
+			let productosFiltrados = prod;
+			
+			const textoBusqueda = document.getElementById('textoBusqueda').value;
+		    if (textoBusqueda) {
+		        productosFiltrados = productosFiltrados.filter(producto => 
+		            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+		        );
+		    }
+		    
+		    cargarCatalogo(productosFiltrados);
+		}
+		
+		if(prod) {
+			ordenarAlEntrar();
+			document.getElementById("searchbar").value = document.getElementById("textoBusqueda").value;
+		}
 		
 	});
 

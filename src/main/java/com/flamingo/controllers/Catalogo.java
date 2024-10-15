@@ -45,6 +45,12 @@ public class Catalogo extends HttpServlet {
         	
             List<Producto> listaDeProductos = sis.getProductos();
             HashMap<String, Categoria> listaDeCategorias = sis.getCategorias();
+            
+            String textoBusqueda = request.getParameter("textoBusqueda");
+            
+            if(textoBusqueda != null) {
+            	session.setAttribute("textoBusqueda", textoBusqueda);
+            }
 
             // Asegurarse de que las listas no sean nulas
             if (listaDeProductos == null) {

@@ -11,7 +11,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> <!-- d-flex justify-content-around -->
             <form class="d-flex me-lg-4" action="Catalogo" method="POST">
-                <input class="form-control me-2 barra-busqueda" name="textoBusqueda" type="search" placeholder="Buscar..." aria-label="Search">
+                <input class="form-control me-2 barra-busqueda" name="textoBusqueda" type="search" placeholder="Buscar..." aria-label="Search" id="searchbar">
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
             <ul class="d-flex align-items-md-center justify-content-between w-75 navbar-nav ms-lg-5 ms-3 me-auto mb-2 mb-lg-0">
