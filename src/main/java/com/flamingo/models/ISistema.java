@@ -44,6 +44,10 @@ public abstract class ISistema{
 	
 	public abstract boolean registro(String nickname, String email) throws UsuarioRepetidoException;
 	
+public abstract boolean validarNombreSinNumeros(String nombre);
+	
+	public abstract boolean validarUrl(String url);
+	
 	public abstract DTProductoDetallado verInformacionProducto();
 
 	public abstract List<DTCategoria> listarCategorias();
