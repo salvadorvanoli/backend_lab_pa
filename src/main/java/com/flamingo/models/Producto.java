@@ -224,7 +224,10 @@ public class Producto {
             nombresEspecificaciones,
             nombresCategorias,
             dtProveedor,
-            imagenes
+            imagenes,
+            nombreTienda,
+            estrellas,
+            cantCompras
         );
     }
 

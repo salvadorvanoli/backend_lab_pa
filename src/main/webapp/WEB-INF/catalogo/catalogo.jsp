@@ -16,8 +16,10 @@
 <head>
     <jsp:include page="/WEB-INF/template/head.jsp" />
     <title>Catálogo</title>
+    <link href='https://fonts.googleapis.com/css?family=Source Sans 3' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="media/css/catalogo.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -45,6 +47,11 @@
     </div>
 
 	<div class="container-fluid w-100">
+	
+		<div class="row col-md-3 col-11 mx-md-3 mx-sm-5 mx-3" id="selectedCategories">
+			Selecciona categorías aquí
+		</div>
+	
         <div class="row d-flex justify-content-center">
             <!-- Aside -->
             <aside id="aside" class="aside-1 scrolleable col-md-3 col-11 row ms-sm-4 ms-0">
@@ -66,6 +73,11 @@
 	
 <jsp:include page="/WEB-INF/template/footer.jsp" />
 
+
+<script src="https://kit.fontawesome.com/d795c6c237.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
 	let categor;
@@ -86,34 +98,6 @@
     	    console.error('Hubo un problema con la solicitud: ', error);
     	}
   	}
-    	
-    async function updateCatalogo(URL, body, tipo) {
-    	try {
-    			
-    		console.log(body);
-    			
-    	    const response = await fetch(URL, {
-    	        method: 'POST',
-    	        headers: {
-    	            'Content-Type': 'application/json',
-    	            'tipo': tipo
-    	        },
-    	        body: JSON.stringify(body)
-    	    });
-
-    	        
-    	    if (!response.ok) {
-    	        throw new Error("Error en la solicitud: " + respuesta.status);
-    	    }
-
-    	    const result = await response.text();
-    	    console.log("Datos recibidos del servidor: ", result);
-    	    return result;
-    	        
-    	} catch (error) {
-    	    console.error('Hubo un problema con la solicitud:', error);
-    	}
-   	}
 	
 	// Manejar el cambio de estado de las categorías
 	const categoriaLinks = document.querySelectorAll('.dropdown-item');
@@ -177,9 +161,21 @@
 	function filtrarProductosPorCategoria() {
 	    // Si no hay categorías seleccionadas, carga todos los productos
 	    if (categoriasSeleccionadas.length === 0) {
+	    	document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
 	        cargarCatalogo(prod);
 	        return;
 	    }
+	    
+	    let textoCategorias = "Categorias seleccionadas: ";
+	    
+	    for (let i = 0; i < categoriasSeleccionadas.length; i++) {
+	    	textoCategorias += categoriasSeleccionadas[i].nombreCat;
+	    	if ((i + 1) != categoriasSeleccionadas.length){
+	    		textoCategorias += " - ";
+	    	}
+	    }
+	    
+	    document.querySelector("#selectedCategories").textContent = textoCategorias;
 	
 	    const productosFiltrados = prod.filter(producto => {
 	        return producto['categorias'].some(categoria => {
@@ -319,7 +315,7 @@
 	            ConjuntoEstrellas.appendChild(star);
 	        }
 	
-	        ConjuntoEstrellas.classList.add("col-lg-4", "col-12", "text-end", "mb-4", "conjunto_estrellas", "d-flex", "justify-content-between");
+	        ConjuntoEstrellas.classList.add("col-lg-4", "col-12", "text-end", "conjunto_estrellas", "d-flex", "justify-content-between", "m-lg-3", "ms-0", "my-2");
 	
 	        const contenedorEstrellas = document.createElement("div");
 	
@@ -333,13 +329,12 @@
 	                </div>
 	                <div class="col-lg-8 col-sm-6 col-10">
 	                    <div class="row">
-	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center">` + element.nombre + `</p>
-	                        ${contenedorEstrellas.innerHTML}
-	                        <p class="col-12 mb-3 px-0 m-0 tienda-x text-break text-sm-start text-center">` + element.tienda + `</p>
+	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center mb-0">` + element.nombre + `</p>` +
+	                        contenedorEstrellas.innerHTML +
+	                        `<p class="col-12 px-0 m-0 tienda-x text-break text-sm-start text-center my-2 my-sm-3 mt-lg-1 mb-lg-3">` + element.nombreTienda + `</p>
 	                    </div>
 	                    <div class="row precio-producto d-flex align-items-end">
-	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center">$` + element.precio + `</p>
-	                        <div class="col carrito fa-solid fa-cart-shopping m-2 d-none d-sm-block" aria-hidden="true" onclick=""></div>
+	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center mb-1">$` + element.precio + `</p>
 	                    </div>
 	                </div>
 	            </div>

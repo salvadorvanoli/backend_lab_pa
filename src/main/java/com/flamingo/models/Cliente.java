@@ -93,4 +93,14 @@ public class Cliente extends Usuario{
 			}
 			return false;
 		}
+		
+		public void realizarCompra(OrdenDeCompra ord) {
+			ord.setCliente(this); 
+			this.vincularOrdenDeCompra(ord);
+			for (Cantidad item : this.carrito.values()) {
+				Producto prod = item.getProducto();
+				prod.setCantCompras(prod.getCantCompras() + item.getCantidad());
+			}
+			this.setCarrito(new HashMap<>());
+		}
 }
