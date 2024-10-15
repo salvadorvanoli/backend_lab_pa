@@ -35,6 +35,11 @@ public class registrarProducto extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    public static EstadoSesion getEstado(HttpServletRequest request)
+	{
+		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
+	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
@@ -52,6 +57,20 @@ public class registrarProducto extends HttpServlet {
 		}
 	
 		session.setAttribute("usuarioActual", sis.getUsuarioActual());
+		// Obtener el usuario actual desde la sesión
+		Usuario usuarioActual = (Usuario) request.getSession().getAttribute("usuarioActual");
+
+		// Verificar si el usuario existe antes de imprimir
+		if (usuarioActual != null) {
+		    // Suponiendo que tienes un método toString() en la clase Usuario o puedes acceder a sus atributos
+		   
+		    // O puedes imprimir atributos específicos como el nombre o el ID
+		    System.out.println("Nombre del usuario actual: " + usuarioActual.getNombre()); 
+ 
+		} else {
+		    System.out.println("No hay un usuario actual en la sesión.");
+		}
+
 		request.setAttribute("categorias", sis.getCategorias());
 		Object usuario = request.getAttribute("usuarioActual");
 		Object categorias = request.getAttribute("categorias");	
@@ -239,33 +258,34 @@ public class registrarProducto extends HttpServlet {
 		    
 		    Producto nuevoProducto = new Producto(null, null,null, 0, 0, null, null, null, null);
 
-		    
-		  //////////////////////Link categorias/////////////////////////////////////////
-		 // Crear vínculo entre categorías y producto
-		    List<Categoria> categoriasGuardadas = new ArrayList<>();
+		    //////////////////////Link categorias/////////////////////////////////////////
+			 // Crear vínculo entre categorías y producto
+			    List<Categoria> categoriasGuardadas = new ArrayList<>();
 
-		    // Obtener el HashMap de categorías desde el sistema
-		    HashMap<String, Categoria> todasLasCategorias = sis.getCategorias();
+			    // Obtener el HashMap de categorías desde el sistema
+			    HashMap<String, Categoria> todasLasCategorias = sis.getCategorias();
 
-		   
-		    if (listaCategorias != null) {
-		        for (String nombreCategoria : listaCategorias) {
-		            // Buscar la categoría utilizando el método del sistema
-		            Categoria categoria = sis.buscarCategoriaRecursivamente(nombreCategoria, todasLasCategorias);
-		            
-		            // Verificar si se encontró la categoría
-		            if (categoria != null) {
-		                // Agregar la categoría a la lista
-		                categoriasGuardadas.add(categoria);
-		                // Imprimir información para verificar
-		                System.out.println("Producto '" + nuevoProducto.getNombreProducto() + "' agregado a la categoría: " + nombreCategoria);
-		            } else {
-		                System.out.println("Categoría no encontrada: " + nombreCategoria);
-		            }
-		        }
-		    } else {
-		        System.out.println("No se seleccionaron categorías.");
-		    }
+			   
+			    if (listaCategorias != null) {
+			        for (String nombreCategoria : listaCategorias) {
+			            // Buscar la categoría utilizando el método del sistema
+			            Categoria categoria = sis.buscarCategoriaRecursivamente(nombreCategoria, todasLasCategorias);
+			            
+			            // Verificar si se encontró la categoría
+			            if (categoria != null) {
+			                // Agregar la categoría a la lista
+			                categoriasGuardadas.add(categoria);
+			                categoria.agregarProducto(sis.getProductoActual());
+			                // Imprimir información para verificar
+			                System.out.println("Producto '" + nuevoProducto.getNombreProducto() + "' agregado a la categoría: " + nombreCategoria);
+			            } else {
+			                System.out.println("Categoría no encontrada: " + nombreCategoria);
+			            }
+			        }
+			    } else {
+			        System.out.println("No se seleccionaron categorías.");
+			    }
+		
 
 	/////////////////////////////////////////////////
 
@@ -300,6 +320,16 @@ public class registrarProducto extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		    
+		 // Suponiendo que `categoriasguardadas` es una lista de objetos de tipo Categoria
+		    for (Categoria categoria : categoriasGuardadas) {
+		        // Agregar el producto actual a la categoría utilizando el método agregarProducto
+		        categoria.agregarProducto(sis.getProductoActual());
+
+		        // Verificación opcional
+		        System.out.println("Producto agregado a la categoría: " + categoria.getNombreCat());
+		    }
+
 		    
 	 // Obtener el HashMap de categorías desde el sistema
 	    HashMap<String, Categoria> categoriasMap = sis.getCategorias();
