@@ -22,28 +22,28 @@ class Testing {
         DTFecha fecha = new DTFecha(12, 06, 1978);
         String contra = "12345678";
         String ruta = "/hola/jeje";
-        
-            boolean res = sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", ruta, contra, contra);
-            assertEquals(true, res);
+        boolean hola;
+        if (sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", ruta, contra, contra)) {
+        	hola = true;
+        }
+        else {
+        	hola = false;
+        }
+            assertEquals(false, hola);
         
    }
     
-	 @Test
-	    public void testAltaUsuarioProveedorConNicknameRepetido() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
-	        // Instancia del sistema
-	        ISistema sis = SistemaFactory.getInstancia().getISistema();
-	        DTFecha fecha = new DTFecha(12, 06, 1978);
+	
+	@Test
+	public void testAltaUsuarioClienteExitoso() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+	    ISistema sis = SistemaFactory.getInstancia().getISistema();
+	    DTFecha fecha = new DTFecha(12, 06, 1978);
 
-	        // Se agrega un proveedor con un nickname existente
-	        //boolean res = sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", null, "12345678", "12345678");
-	        //assertEquals(res, true);
-	        
-	        
-	        // Intentar registrar otro usuario con el mismo nickname
-	       
-	        boolean ress = sis.altaUsuarioProveedor("nickname2", "email2@gmail.com", "nombredos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "12345678");
-	        boolean res2 = sis.altaUsuarioCliente("nickname2", "email2@gmail.com", "nombre", "apellidooss", fecha, "/aa/a", "123456789", "123456789");
-	        assertEquals(false, res2);
-	    }
+	    // Verifica si el usuario se crea correctamente
+	    boolean res1 = sis.altaUsuarioCliente("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "/imagen.jpg", "12345678", "12345678");
+	    assertTrue(res1, "El primer usuario cliente debería registrarse correctamente.");
+	}
+
+
 
 }

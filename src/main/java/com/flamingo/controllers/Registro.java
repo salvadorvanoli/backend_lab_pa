@@ -21,7 +21,7 @@ public class Registro extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/sesion/registro.jsp");
         dispatcher.forward(request, response); // Cambia la ruta según tu estructura de proyecto
     }
-
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtener los parámetros enviados desde el formulario de registro
         String email = request.getParameter("email");
