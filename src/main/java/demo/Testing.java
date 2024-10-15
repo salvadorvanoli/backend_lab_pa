@@ -97,7 +97,21 @@ class Testing {
         assertEquals("Ya existe un usuario registrado con el nickname \"nicknameRepetir\".", thrown.getMessage());
     }
 	
+    @Test
+    public void testAltaUsuarioClienteConNicknameRepetido() {
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 06, 1978);
+        
+        
+        // Intentar registrar otro cliente con el mismo nickname
+        UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
+            sis.altaUsuarioCliente("nicknameRepetir", "emailnuevocli@gmail.com", "nombredos", "apellidodos", fecha, "/12/12/2004", "12345678", "12345678");
+            // no deberia ejecutarse
+        });
 
+        // Verificar el mensaje de la excepción
+        assertEquals("Ya existe un usuario registrado con el nickname \"nicknameRepetir\".", thrown.getMessage());
+    }
 
 
 }
