@@ -26,7 +26,7 @@
 	<jsp:include page="/WEB-INF/template/header.jsp"/>
 
     <%
-    	String textoBusqueda = (String) session.getAttribute("textoBusqueda");
+    	String textoBusqueda = (String) request.getAttribute("textoBusqueda");
 	%>
 
 	<input type="hidden" id="textoBusqueda" value="<%= textoBusqueda != null ? textoBusqueda : "" %>">

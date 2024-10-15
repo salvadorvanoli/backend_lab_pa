@@ -49,7 +49,7 @@ public class Catalogo extends HttpServlet {
             String textoBusqueda = request.getParameter("textoBusqueda");
             
             if(textoBusqueda != null) {
-            	session.setAttribute("textoBusqueda", textoBusqueda);
+            	request.setAttribute("textoBusqueda", textoBusqueda);
             }
 
             // Asegurarse de que las listas no sean nulas
