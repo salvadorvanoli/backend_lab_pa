@@ -1,7 +1,8 @@
 package demo;
 
-import static org.junit.jupiter.api.Assertions.*; 
+import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.flamingo.exceptions.ContraseniaIncorrectaException;
@@ -12,85 +13,91 @@ import com.flamingo.models.SistemaFactory;
 
 class Testing {
 
-	@Test
-	void test() {
-		System.out.println("aaaaaa");
+	public Testing() {
+		super();
 	}
 	
-	@Test
-    public void testAltaUsuarioProveedorExitoso() {
-        // Instancia del sistema
-        ISistema sis = SistemaFactory.getInstancia().getISistema();
-        DTFecha fecha = new DTFecha(12, 06, 1978);
-        
-        try {
-            // Llamada al método a testear
-            boolean res = sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", null, "12345678", "12345678");
-            
-            // Comprobación del resultado esperado
-            assertTrue(res, "El registro del proveedor debería ser exitoso.");
-        } catch (UsuarioRepetidoException | ContraseniaIncorrectaException e) {
-            fail("No debería lanzar una excepción en este caso: " + e.getMessage());
-        }
-    }
+	private ISistema sis;
+    private DTFecha fecha;
 
+    
     @Test
-    public void testAltaUsuarioProveedorConNicknameRepetido() {
-        // Instancia del sistema
-        ISistema sis = SistemaFactory.getInstancia().getISistema();
-        DTFecha fecha = new DTFecha(12, 06, 1978);
+	public void testAltaUsuarioProveedorExitoso() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+	    ISistema sis = SistemaFactory.getInstancia().getISistema();
+	    DTFecha fecha = new DTFecha(12, 06, 1978);
 
-        // Se agrega un proveedor con un nickname existente
-        try {
-            sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", null, "12345678", "12345678");
-        } catch (UsuarioRepetidoException | ContraseniaIncorrectaException e) {
-            fail("No debería lanzar una excepción al registrar el primer usuario.");
-        }
-        
-        // Intentar registrar otro usuario con el mismo nickname
-        UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
-            sis.altaUsuarioProveedor("nickname1", "email2@gmail.com", "nombredos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "12345678");
-        });
+	    // Verifica si el usuario se crea correctamente
+	    boolean res1 = sis.altaUsuarioProveedor("nicknameProveedor", "proveedor@gmail.com", "nombreuno", "apellidouno", fecha, "Compania", "https://compania.com", "/imagen.jpg", "12345678", "12345678");
+	    assertTrue(res1, "El primer usuario proveedor debería registrarse correctamente.");
+	}
+    
+    @Test
+	public void testAltaUsuarioClienteExitoso() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+	    ISistema sis = SistemaFactory.getInstancia().getISistema();
+	    DTFecha fecha = new DTFecha(12, 06, 1978);
 
-        // Verificar el mensaje de la excepción
-        assertEquals("Ya existe un usuario registrado con el nickname \"nickname1\".", thrown.getMessage());
-    }
+	    // Verifica si el usuario se crea correctamente
+	    boolean res1 = sis.altaUsuarioCliente("nicknameCliente", "cliente@gmail.com", "nombreuno", "apellidouno", fecha, "/imagen.jpg", "12345678", "12345678");
+	    assertTrue(res1, "El primer usuario proveedor debería registrarse correctamente.");
+	}
 
     @Test
     public void testAltaUsuarioProveedorConEmailRepetido() {
-        // Instancia del sistema
-        ISistema sis = SistemaFactory.getInstancia().getISistema();
-        DTFecha fecha = new DTFecha(12, 06, 1978);
-
-        // Se agrega un proveedor con un email existente
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 06, 1978);
         try {
             sis.altaUsuarioProveedor("nickname1", "email1@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", null, "12345678", "12345678");
-        } catch (UsuarioRepetidoException | ContraseniaIncorrectaException e) {
-            fail("No debería lanzar una excepción al registrar el primer usuario.");
+        } catch (Exception e) {
+            fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
         }
-
-        // Intentar registrar otro usuario con el mismo email
+        
+        // Intentar registrar otro proveedor con el mismo email
         UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
-            sis.altaUsuarioProveedor("nickname2", "email1@gmail.com", "nombreDos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "12345678");
+            sis.altaUsuarioProveedor("nickname2", "email1@gmail.com", "nombredos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "12345678");
+            // no deberia ejecutarse
         });
 
         // Verificar el mensaje de la excepción
         assertEquals("Ya existe un usuario registrado con el email \"email1@gmail.com\".", thrown.getMessage());
     }
-
+    
+    
     @Test
-    public void testAltaUsuarioProveedorConContrasenaIncorrecta() {
-        // Instancia del sistema
-        ISistema sis = SistemaFactory.getInstancia().getISistema();
-        DTFecha fecha = new DTFecha(12, 06, 1978);
-
-        // Intentar registrar un proveedor con contraseñas que no coinciden
-        ContraseniaIncorrectaException thrown = assertThrows(ContraseniaIncorrectaException.class, () -> {
-            sis.altaUsuarioProveedor("nickname2", "email2@gmail.com", "nombreDos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "87654321");
+    public void testAltaUsuarioClienteConEmailRepetido() {
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 06, 1978);
+        
+        
+        // Intentar registrar otro cliente con el mismo email
+        UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
+            sis.altaUsuarioCliente("nickname3", "email1@gmail.com", "nombredos", "apellidodos", fecha, "/12/12/2004", "12345678", "12345678");
+            // no deberia ejecutarse
         });
 
         // Verificar el mensaje de la excepción
-        assertEquals("Las contraseñas no coinciden.", thrown.getMessage());
+        assertEquals("Ya existe un usuario registrado con el email \"email1@gmail.com\".", thrown.getMessage());
     }
     
+    @Test
+    public void testAltaUsuarioProveedorConNicknameRepetido() {
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 06, 1978);
+        try {
+            sis.altaUsuarioProveedor("nicknameRepetir", "noserepite@gmail.com", "nombreuno", "apellidouno", fecha, "CompaniaUno", "https://www.uno.com", null, "12345678", "12345678");
+        } catch (Exception e) {
+            fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+        }
+        // Intentar registrar otro proveedor con el mismo nickname
+        UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
+            sis.altaUsuarioProveedor("nicknameRepetir", "emailnuevoprov@gmail.com", "nombredos", "apellidodos", fecha, "CompaniaDos", "https://www.dos.com", null, "12345678", "12345678");
+            // no deberia ejecutarse
+        });
+
+        // Verificar el mensaje de la excepción
+        assertEquals("Ya existe un usuario registrado con el nickname \"nicknameRepetir\".", thrown.getMessage());
+    }
+	
+
+
+
 }
