@@ -37,6 +37,19 @@
 		    background-color: #606060;
 		}
     
+    	.imgcarousel {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: contain;
+		}
+		
+		.carousel-container {
+			width: 500px;
+		    height: 300px;
+		    overflow: hidden;
+		    position: relative;
+		}
+    
     </style>
     
 </head>
@@ -82,14 +95,14 @@
 					            String imagen = imagenes.get(contador);
 					            if (contador == 0) {
 					        %>
-					                <div class="carousel-item active">
-					                    <img class="d-block w-100" src="<%= imagen %>" alt="Slide">
+					                <div class="carousel-item active carousel-container">
+					                    <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
 					                </div>
 					        <%
 					            } else {
 					        %>
-					                <div class="carousel-item">
-					                    <img class="d-block w-100" src="<%= imagen %>" alt="Slide">
+					                <div class="carousel-item carousel-container">
+					                    <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
 					                </div>
 					        <%
 					            }
