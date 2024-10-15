@@ -219,12 +219,12 @@ public class Sistema extends ISistema {
 		return true;
 	}
 	
-	private boolean validarNombreSinNumeros(String nombre) {
+	public boolean validarNombreSinNumeros(String nombre) {
 	    return !nombre.matches(".*\\d.*");
 	}
 
 	// Método para validar la URL
-	private boolean validarUrl(String url) {
+	public boolean validarUrl(String url) {
 	    String regex = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}(:[0-9]+)?(/.*)?$";
 	    return url.matches(regex);
 	}

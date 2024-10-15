@@ -16,6 +16,7 @@ import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
+import com.flamingo.models.Proveedor;
 import com.flamingo.models.Cantidad;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.Comentario;
@@ -61,6 +62,11 @@ public class agregarAlCarrito extends HttpServlet {
             	response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cantidad no válida.");
                 return;
             }
+        }
+        
+        if(sis.getUsuarioActual() instanceof Proveedor) {
+        	response.sendRedirect("infoProducto?productoSeleccionado=" + numReferencia);
+            return;
         }
         
         Cliente cl = (Cliente) sis.getUsuarioActual();
