@@ -338,7 +338,22 @@ public class Sistema extends ISistema {
 		return lista;
 	}
 	
+	@Override
+	public Collection<DTProductoDetallado> listarAllProductos(){
+		
+		HashMap<Integer, DTProductoDetallado> lista = new HashMap<>();
+		
+		for (Producto prod : this.getProductos()) {
+			DTProductoDetallado dt = prod.getDTProductoDetallado();
+			if (!lista.containsKey(dt.getNumero())) {
+				lista.put(dt.getNumero(), dt);
+			}
+		}
+		
+		return lista.values();
+	}
 	
+	/*
 	@Override
 	public Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista){
 		if (padre == null) {
@@ -364,6 +379,7 @@ public class Sistema extends ISistema {
 		}
 		return lista.values();
 	}
+	*/
 	
 	
 	/*
