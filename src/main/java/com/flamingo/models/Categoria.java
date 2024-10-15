@@ -73,10 +73,10 @@ public class Categoria {
 
 	// Método para obtener los datos básicos de la categoría
     public DTCategoria getDTCategoria() {
-    	HashMap<String, DTCategoria> lista = new HashMap<>();
+    	List<DTCategoria> lista = new ArrayList<>();
     	for (Categoria cat : this.hijos.values()) {
     		DTCategoria dt = cat.getDTCategoria();
-    		lista.put(dt.getNombreCat(), dt);
+    		lista.add(dt);
     	}
         return new DTCategoria(nombreCat, lista);
     }

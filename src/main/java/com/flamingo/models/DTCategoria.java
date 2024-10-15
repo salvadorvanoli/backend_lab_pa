@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class DTCategoria {
 	
 	private String nombreCat;
-	private HashMap<String, DTCategoria> hijas;
+	private List<DTCategoria> hijas;
 	
 	public String getNombreCat() {
 		return nombreCat;
@@ -14,14 +14,14 @@ public class DTCategoria {
 	public void setNombreCat(String nombreCat) {
 		this.nombreCat = nombreCat;
 	}
-	public HashMap<String, DTCategoria> getHijas() {
+	public List<DTCategoria> getHijas() {
 		return hijas;
 	}
-	public void setHijas(HashMap<String, DTCategoria> hijas) {
+	public void setHijas(List<DTCategoria> hijas) {
 		this.hijas = hijas;
 	}
 	
-	public DTCategoria(String nombreCat, HashMap<String, DTCategoria> hijos) {
+	public DTCategoria(String nombreCat, List<DTCategoria> hijos) {
 		super();
 		this.nombreCat = nombreCat;
 		this.hijas = hijos;

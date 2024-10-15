@@ -1,4 +1,5 @@
 package com.flamingo.models;
+import java.util.Collection;
 import java.util.HashMap;
 
 // import java.util.ArrayList;
@@ -54,7 +55,9 @@ public abstract class ISistema{
 
 	public abstract List<DTProducto> listarProductos();
 	
-	public abstract List<DTProducto> listarAllProductos();
+	// public abstract Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista);
+	
+	public abstract Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista);
 	
 	public abstract boolean elegirProducto(String nombreProd) throws ProductoNoExisteException; // ESTA LA AGREGUÉ DESPUÉS
 

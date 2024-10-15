@@ -324,16 +324,6 @@ a.nav-link{
     border-color: #A45D7F; 
 }
 
-.categoria-seleccionada {
-    background-color: #198754; /* Fondo verde para categoría seleccionada */
-    color: white; /* Texto en blanco */
-}
-
-.categoria-seleccionada:hover{
-    background-color: #11643e; /* Fondo verde para categoría seleccionada */
-    color: white; /* Texto en blanco */
-}
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -391,8 +381,6 @@ a.nav-link{
 
 
 .dropbtn {
-    background-color: #d3d3d3; /* Fondo gris claro */
-    color: black; /* Color del texto */
     padding: 0 40px;
     font-size: 14px;
     border: 1px solid black;
@@ -418,6 +406,22 @@ a.nav-link{
     margin: 0; 
     line-height: 30px;
     text-align: left; 
+}
+
+.dropbtn-color{
+	background-color: #d3d3d3;
+	color: black;
+}
+
+
+.categoria-seleccionada {
+    background-color: #198754 !important; /* Fondo verde para categoría seleccionada */
+    color: white !important; /* Texto en blanco */
+}
+
+.categoria-seleccionada:hover{
+    background-color: #11643e; /* Fondo verde para categoría seleccionada */
+    color: white; /* Texto en blanco */
 }
 
 /* ESTILOS DE VALENTIN */

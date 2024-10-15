@@ -151,8 +151,10 @@
 	    if (!categoriasSeleccionadas.includes(categoria)) {
 	        categoriasSeleccionadas.push(categoria);
 	        boton.classList.add('categoria-seleccionada'); // Añadir la clase CSS
+	        boton.classList.remove('dropbtn-color');
 	    } else {
 	        categoriasSeleccionadas = categoriasSeleccionadas.filter(cat => cat !== categoria);
+	        boton.classList.add('dropbtn-color');
 	        boton.classList.remove('categoria-seleccionada'); // Quitar la clase CSS
 	    }
 	
@@ -160,16 +162,20 @@
 	    filtrarProductosPorCategoria(); // Filtrar productos
 	}
 	
-	
 	function buscarEnSubcategorias(categoria, categoriasSeleccionadas) {
-	    if (categoriasSeleccionadas.includes(categoria.nombre)) {
-	        return true; // Si la categoría actual está seleccionada, devolver true
-	    }
-	
-	    // Recorrer las subcategorías (hijos)
-	    if (categoria.hijos && categoria.hijos.length > 0) {
-	        return categoria.hijos.some(subcategoria => buscarEnSubcategorias(subcategoria, categoriasSeleccionadas));
-	    }
+		for (let i = 0; i < categoriasSeleccionadas.length; i++){
+			if (categoriasSeleccionadas[i].nombreCat.localeCompare(categoria) == 0){
+				return true;
+			}
+		}
+		
+	 	// Recorrer las subcategorías (hijos)
+	 	
+		for (let i = 0; i < categoriasSeleccionadas.length; i++){
+			if (categoriasSeleccionadas[i].hijas && categoriasSeleccionadas[i].hijas.length > 0){
+				return buscarEnSubcategorias(categoria, categoriasSeleccionadas[i].hijas);
+	    	}
+		}
 	
 	    return false; // Si no se encontró en ninguna subcategoría, devolver false
 	}
@@ -178,12 +184,12 @@
 	function filtrarProductosPorCategoria() {
 	    // Si no hay categorías seleccionadas, carga todos los productos
 	    if (categoriasSeleccionadas.length === 0) {
-	        cargarCatalogo(productos);
+	        cargarCatalogo(prod);
 	        return;
 	    }
 	
-	    const productosFiltrados = productos.filter(producto => {
-	        return producto.categorias.some(categoria => {
+	    const productosFiltrados = prod.filter(producto => {
+	        return producto['categorias'].some(categoria => {
 	            // Función recursiva para buscar en todas las subcategorías
 	            return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	        });
@@ -191,54 +197,75 @@
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
-
-	function agregarCategoria(e, nombre) {
-		e.preventDefault(); // Evitar el comportamiento por defecto del enlace
-	    agregarCategoria(subcategoria.nombre, subcategoriaLink);
-	}
+	
+	/*
 
 	function generarCategoria(categoria, padre) {
-			const catElement = document.createElement("div");
-			catElement.classList.add("dropdown");
-			catElement.innerHTML = 
-			`<button class="dropbtn">&#9654 ` + categoria.nombreCat + `</button>
+		const catElement = document.createElement("div");
+		catElement.classList.add("dropdown");
+		catElement.innerHTML +=
+			`<button class="dropbtn dropbtn-color" onclick="agregarCategoria(` + `'` + categoria.nombreCat + `', this)">&#9654 ` + categoria.nombreCat + `</button>
 			<div class="dropdown-content">
-			</div>`
-			catElement.addEventListener('click', function(event) {
-            	event.preventDefault();
-            	console.log("CategoriaSELECT");
-            	agregarCategoria(categoria.nombreCat, catElement);
-        	});
-			for (let cat in categoria.hijas){
-				generarCategoria(categoria.hijas[cat], catElement);
-			}
-			if (padre != null){
-				padre.getElementsByClassName("dropdown-content")[0].appendChild(catElement);
-			} else {
-				return catElement;
-			}
+			</div>`;
+		for (let cat in categoria.hijas){
+			generarCategoria(categoria.hijas[cat], catElement);
+		}
+		if (padre != null){
+			padre.getElementsByClassName("dropdown-content")[0].appendChild(catElement);
+		} else {
+			return catElement;
+		}
 	}
 	
-	// Función para cargar las categorías desde localStorage
-	function cargarCategorias(categor) {
-	    const contenedorPadre = document.getElementById("aside");
+	*/
 	
-	    // Limpiar el contenedor de categorías antes de agregar nuevas
-	    contenedorPadre.innerHTML = '';
+	// Función para cargar las categorías desde localStorage
+	function cargarCategorias(categor, padre) {
+		
+		const contenedorPadre = document.getElementById("aside");
+		if (padre == null){
+	    	contenedorPadre.innerHTML = '';
+		}
 	
 	    categor.forEach(categoria => {
-	        const dropdownDiv = generarCategoria(categoria, null);
-	        contenedorPadre.appendChild(dropdownDiv);
+	    	const catElement = document.createElement("div");
+	    	catElement.classList.add("dropdown");
+
+	    	// Crear el botón como un elemento
+	    	const button = document.createElement("button");
+	    	button.classList.add("dropbtn", "dropbtn-color");
+	    	button.innerHTML = `&#9654; ` + categoria.nombreCat;
+	    	catElement.appendChild(button);
+
+	    	// Crear el dropdown como un elemento
+	    	const dropdown = document.createElement("div");
+	    	dropdown.classList.add("dropdown-content");
+	    	catElement.appendChild(dropdown);
+			if (padre != null){
+				// Verificar que el padre tenga el dropdown-content
+	            const dropdownContent = padre.querySelector(".dropdown-content");
+	            if (dropdownContent) {
+	                dropdownContent.appendChild(catElement);
+	            }
+			} else {
+	        	contenedorPadre.appendChild(catElement);
+			}
+	        button.addEventListener("click", function(){
+	        	agregarCategoria(categoria, this);
+	        });
+	        if (categoria.hijas && categoria.hijas.length > 0){
+	        	cargarCategorias(categoria.hijas, catElement);
+	        }
 	    });
 	}
 	
 	// Función para ordenar productos
 	function ordenarProductos(orden) {
-	    let productosFiltrados = productos; // Usar todos los productos inicialmente
+	    let productosFiltrados = prod; // Usar todos los productos inicialmente
 	
 	    // Filtrar productos por categorías seleccionadas si hay alguna
 	    if (categoriasSeleccionadas.length > 0) {
-	        productosFiltrados = productos.filter(producto => {
+	        productosFiltrados = prod.filter(producto => {
 	            // Verificar si el producto pertenece a alguna de las categorías seleccionadas
 	            return producto.categorias.some(categoria => {
 	                // Función recursiva para buscar en todas las subcategorías
@@ -275,7 +302,10 @@
 	    contenedorPadre.innerHTML = ''; // Limpiar el contenedor antes de agregar los productos
 	
 	    if (prod.length === 0) {
-	        return;
+	    	contenedorPadre.innerHTML =
+	    		`<div class="text-center fs-1 m-5">
+					No hay productos en el catálogo.
+				</div>`
 	    }
 	
 	    prod.forEach(element => {
@@ -336,7 +366,7 @@
 		prod = await getDatos("/backend_lab_pa/manejarcatalogo", "getProductos");
 		console.log(prod);
 
-		cargarCategorias(categor);
+		cargarCategorias(categor, null);
 	    cargarCatalogo(prod); // Carga el catálogo inicialmente
 	    
 	    // Manejar el cambio de ordenamiento
