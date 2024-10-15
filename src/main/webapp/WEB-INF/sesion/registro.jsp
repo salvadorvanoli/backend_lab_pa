@@ -91,8 +91,8 @@
 
         // Verificar nickname
         nicknameInput.addEventListener('input', function() {
-            const nickname = nicknameInput.value.trim();
-            const nicknameExiste = usuariosRegistrados.some(user => user.nickname === nickname);
+            const nickname = nicknameInput.value.trim().toLowerCase();
+            const nicknameExiste = usuariosRegistrados.some(user => user.nickname.toLowerCase() === nickname);
 
             if (nicknameExiste) {
                 nicknameWarning.textContent = 'Este nickname ya está registrado.';

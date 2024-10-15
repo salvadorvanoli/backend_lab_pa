@@ -16,8 +16,10 @@
 <head>
     <jsp:include page="/WEB-INF/template/head.jsp" />
     <title>Catálogo</title>
+    <link href='https://fonts.googleapis.com/css?family=Source Sans 3' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="media/css/catalogo.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -45,6 +47,11 @@
     </div>
 
 	<div class="container-fluid w-100">
+	
+		<div class="row col-md-3 col-11 mx-md-3 mx-sm-5 mx-3" id="selectedCategories">
+			Selecciona categorías aquí
+		</div>
+	
         <div class="row d-flex justify-content-center">
             <!-- Aside -->
             <aside id="aside" class="aside-1 scrolleable col-md-3 col-11 row ms-sm-4 ms-0">
@@ -66,6 +73,11 @@
 	
 <jsp:include page="/WEB-INF/template/footer.jsp" />
 
+
+<script src="https://kit.fontawesome.com/d795c6c237.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 
 	let categor;
@@ -86,34 +98,6 @@
     	    console.error('Hubo un problema con la solicitud: ', error);
     	}
   	}
-    	
-    async function updateCatalogo(URL, body, tipo) {
-    	try {
-    			
-    		console.log(body);
-    			
-    	    const response = await fetch(URL, {
-    	        method: 'POST',
-    	        headers: {
-    	            'Content-Type': 'application/json',
-    	            'tipo': tipo
-    	        },
-    	        body: JSON.stringify(body)
-    	    });
-
-    	        
-    	    if (!response.ok) {
-    	        throw new Error("Error en la solicitud: " + respuesta.status);
-    	    }
-
-    	    const result = await response.text();
-    	    console.log("Datos recibidos del servidor: ", result);
-    	    return result;
-    	        
-    	} catch (error) {
-    	    console.error('Hubo un problema con la solicitud:', error);
-    	}
-   	}
 	
 	// Manejar el cambio de estado de las categorías
 	const categoriaLinks = document.querySelectorAll('.dropdown-item');
@@ -144,8 +128,10 @@
 	    if (!categoriasSeleccionadas.includes(categoria)) {
 	        categoriasSeleccionadas.push(categoria);
 	        boton.classList.add('categoria-seleccionada'); // Añadir la clase CSS
+	        boton.classList.remove('dropbtn-color');
 	    } else {
 	        categoriasSeleccionadas = categoriasSeleccionadas.filter(cat => cat !== categoria);
+	        boton.classList.add('dropbtn-color');
 	        boton.classList.remove('categoria-seleccionada'); // Quitar la clase CSS
 	    }
 	
@@ -153,16 +139,20 @@
 	    filtrarProductosPorCategoria(); // Filtrar productos
 	}
 	
-	
 	function buscarEnSubcategorias(categoria, categoriasSeleccionadas) {
-	    if (categoriasSeleccionadas.includes(categoria.nombre)) {
-	        return true; // Si la categoría actual está seleccionada, devolver true
-	    }
-	
-	    // Recorrer las subcategorías (hijos)
-	    if (categoria.hijos && categoria.hijos.length > 0) {
-	        return categoria.hijos.some(subcategoria => buscarEnSubcategorias(subcategoria, categoriasSeleccionadas));
-	    }
+		for (let i = 0; i < categoriasSeleccionadas.length; i++){
+			if (categoriasSeleccionadas[i].nombreCat.localeCompare(categoria) == 0){
+				return true;
+			}
+		}
+		
+	 	// Recorrer las subcategorías (hijos)
+	 	
+		for (let i = 0; i < categoriasSeleccionadas.length; i++){
+			if (categoriasSeleccionadas[i].hijas && categoriasSeleccionadas[i].hijas.length > 0){
+				return buscarEnSubcategorias(categoria, categoriasSeleccionadas[i].hijas);
+	    	}
+		}
 	
 	    return false; // Si no se encontró en ninguna subcategoría, devolver false
 	}
@@ -171,12 +161,24 @@
 	function filtrarProductosPorCategoria() {
 	    // Si no hay categorías seleccionadas, carga todos los productos
 	    if (categoriasSeleccionadas.length === 0) {
-	        cargarCatalogo(productos);
+	    	document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
+	        cargarCatalogo(prod);
 	        return;
 	    }
+	    
+	    let textoCategorias = "Categorias seleccionadas: ";
+	    
+	    for (let i = 0; i < categoriasSeleccionadas.length; i++) {
+	    	textoCategorias += categoriasSeleccionadas[i].nombreCat;
+	    	if ((i + 1) != categoriasSeleccionadas.length){
+	    		textoCategorias += " - ";
+	    	}
+	    }
+	    
+	    document.querySelector("#selectedCategories").textContent = textoCategorias;
 	
-	    const productosFiltrados = productos.filter(producto => {
-	        return producto.categorias.some(categoria => {
+	    const productosFiltrados = prod.filter(producto => {
+	        return producto['categorias'].some(categoria => {
 	            // Función recursiva para buscar en todas las subcategorías
 	            return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	        });
@@ -184,54 +186,75 @@
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
-
-	function agregarCategoria(e, nombre) {
-		e.preventDefault(); // Evitar el comportamiento por defecto del enlace
-	    agregarCategoria(subcategoria.nombre, subcategoriaLink);
-	}
+	
+	/*
 
 	function generarCategoria(categoria, padre) {
-			const catElement = document.createElement("div");
-			catElement.classList.add("dropdown");
-			catElement.innerHTML = 
-			`<button class="dropbtn">&#9654 ` + categoria.nombreCat + `</button>
+		const catElement = document.createElement("div");
+		catElement.classList.add("dropdown");
+		catElement.innerHTML +=
+			`<button class="dropbtn dropbtn-color" onclick="agregarCategoria(` + `'` + categoria.nombreCat + `', this)">&#9654 ` + categoria.nombreCat + `</button>
 			<div class="dropdown-content">
-			</div>`
-			catElement.addEventListener('click', function(event) {
-            	event.preventDefault();
-            	console.log("CategoriaSELECT");
-            	agregarCategoria(categoria.nombreCat, catElement);
-        	});
-			for (let cat in categoria.hijas){
-				generarCategoria(categoria.hijas[cat], catElement);
-			}
-			if (padre != null){
-				padre.getElementsByClassName("dropdown-content")[0].appendChild(catElement);
-			} else {
-				return catElement;
-			}
+			</div>`;
+		for (let cat in categoria.hijas){
+			generarCategoria(categoria.hijas[cat], catElement);
+		}
+		if (padre != null){
+			padre.getElementsByClassName("dropdown-content")[0].appendChild(catElement);
+		} else {
+			return catElement;
+		}
 	}
 	
-	// Función para cargar las categorías desde localStorage
-	function cargarCategorias(categor) {
-	    const contenedorPadre = document.getElementById("aside");
+	*/
 	
-	    // Limpiar el contenedor de categorías antes de agregar nuevas
-	    contenedorPadre.innerHTML = '';
+	// Función para cargar las categorías desde localStorage
+	function cargarCategorias(categor, padre) {
+		
+		const contenedorPadre = document.getElementById("aside");
+		if (padre == null){
+	    	contenedorPadre.innerHTML = '';
+		}
 	
 	    categor.forEach(categoria => {
-	        const dropdownDiv = generarCategoria(categoria, null);
-	        contenedorPadre.appendChild(dropdownDiv);
+	    	const catElement = document.createElement("div");
+	    	catElement.classList.add("dropdown");
+
+	    	// Crear el botón como un elemento
+	    	const button = document.createElement("button");
+	    	button.classList.add("dropbtn", "dropbtn-color");
+	    	button.innerHTML = `&#9654; ` + categoria.nombreCat;
+	    	catElement.appendChild(button);
+
+	    	// Crear el dropdown como un elemento
+	    	const dropdown = document.createElement("div");
+	    	dropdown.classList.add("dropdown-content");
+	    	catElement.appendChild(dropdown);
+			if (padre != null){
+				// Verificar que el padre tenga el dropdown-content
+	            const dropdownContent = padre.querySelector(".dropdown-content");
+	            if (dropdownContent) {
+	                dropdownContent.appendChild(catElement);
+	            }
+			} else {
+	        	contenedorPadre.appendChild(catElement);
+			}
+	        button.addEventListener("click", function(){
+	        	agregarCategoria(categoria, this);
+	        });
+	        if (categoria.hijas && categoria.hijas.length > 0){
+	        	cargarCategorias(categoria.hijas, catElement);
+	        }
 	    });
 	}
 	
 	// Función para ordenar productos
 	function ordenarProductos(orden) {
-	    let productosFiltrados = productos; // Usar todos los productos inicialmente
+	    let productosFiltrados = prod; // Usar todos los productos inicialmente
 	
 	    // Filtrar productos por categorías seleccionadas si hay alguna
 	    if (categoriasSeleccionadas.length > 0) {
-	        productosFiltrados = productos.filter(producto => {
+	        productosFiltrados = prod.filter(producto => {
 	            // Verificar si el producto pertenece a alguna de las categorías seleccionadas
 	            return producto.categorias.some(categoria => {
 	                // Función recursiva para buscar en todas las subcategorías
@@ -268,7 +291,10 @@
 	    contenedorPadre.innerHTML = ''; // Limpiar el contenedor antes de agregar los productos
 	
 	    if (prod.length === 0) {
-	        return;
+	    	contenedorPadre.innerHTML =
+	    		`<div class="text-center fs-1 m-5">
+					No hay productos en el catálogo.
+				</div>`
 	    }
 	
 	    prod.forEach(element => {
@@ -289,7 +315,7 @@
 	            ConjuntoEstrellas.appendChild(star);
 	        }
 	
-	        ConjuntoEstrellas.classList.add("col-lg-4", "col-12", "text-end", "mb-4", "conjunto_estrellas", "d-flex", "justify-content-between");
+	        ConjuntoEstrellas.classList.add("col-lg-4", "col-12", "text-end", "conjunto_estrellas", "d-flex", "justify-content-between", "m-lg-3", "ms-0", "my-2");
 	
 	        const contenedorEstrellas = document.createElement("div");
 	
@@ -303,13 +329,12 @@
 	                </div>
 	                <div class="col-lg-8 col-sm-6 col-10">
 	                    <div class="row">
-	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center">` + element.nombre + `</p>
-	                        ${contenedorEstrellas.innerHTML}
-	                        <p class="col-12 mb-3 px-0 m-0 tienda-x text-break text-sm-start text-center">` + element.tienda + `</p>
+	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center mb-0">` + element.nombre + `</p>` +
+	                        contenedorEstrellas.innerHTML +
+	                        `<p class="col-12 px-0 m-0 tienda-x text-break text-sm-start text-center my-2 my-sm-3 mt-lg-1 mb-lg-3">` + element.nombreTienda + `</p>
 	                    </div>
 	                    <div class="row precio-producto d-flex align-items-end">
-	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center">$` + element.precio + `</p>
-	                        <div class="col carrito fa-solid fa-cart-shopping m-2 d-none d-sm-block" aria-hidden="true" onclick=""></div>
+	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center mb-1">$` + element.precio + `</p>
 	                    </div>
 	                </div>
 	            </div>
@@ -329,7 +354,7 @@
 		prod = await getDatos("/backend_lab_pa/manejarcatalogo", "getProductos");
 		console.log(prod);
 
-		cargarCategorias(categor);
+		cargarCategorias(categor, null);
 	    cargarCatalogo(prod); // Carga el catálogo inicialmente
 	    
 	    // Manejar el cambio de ordenamiento

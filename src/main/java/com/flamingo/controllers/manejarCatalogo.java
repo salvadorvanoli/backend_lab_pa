@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,9 @@ import com.flamingo.models.Cantidad;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.DTCantidad;
+import com.flamingo.models.DTProducto;
+import com.flamingo.models.DTProductoDetallado;
+import com.flamingo.models.DTProveedor;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.Producto;
@@ -91,7 +95,9 @@ public class manejarCatalogo extends HttpServlet {
 				result = gson.toJson(sis.listarCategorias());
 				System.out.println(result);
 			} else if (tipoGET.equals("getProductos")) {
-				result = gson.toJson(sis.listarAllProductos());
+				
+				HashMap<Integer, DTProductoDetallado> lista = new HashMap<>();
+				result = gson.toJson(sis.listarAllProductos(null, lista));
 				System.out.println(result);
 			}
 			

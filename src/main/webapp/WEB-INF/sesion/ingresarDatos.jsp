@@ -193,7 +193,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         mostrarErrores();
     }
-
+	
+    function validarApellido() {
+        const apellido = apellidoInput.value.trim();
+        if (!validarNombreSinNumeros(apellido)) {
+            errores['apellido'] = 'El apellido no puede contener números.';
+            nombreInput.classList.add('is-invalid');
+        } else {
+            delete errores['apellido'];
+            nombreInput.classList.remove('is-invalid');
+        }
+        mostrarErrores();
+    }
     function mostrarErrores() {
         const errorDiv = document.getElementById('error-mensajes');
         errorDiv.innerHTML = ''; // Limpiar mensajes anteriores
@@ -233,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     apellidoInput.addEventListener('input', function() {
         validarCampoTexto(apellidoInput, 3, 'Apellido');
+        validarApellido();
     });
 
     passwordInput.addEventListener('input', validarContraseñas);

@@ -1,6 +1,7 @@
 package com.flamingo.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import java.util.HashMap;
@@ -218,12 +219,12 @@ public class Sistema extends ISistema {
 		return true;
 	}
 	
-	private boolean validarNombreSinNumeros(String nombre) {
+	public boolean validarNombreSinNumeros(String nombre) {
 	    return !nombre.matches(".*\\d.*");
 	}
 
 	// Método para validar la URL
-	private boolean validarUrl(String url) {
+	public boolean validarUrl(String url) {
 	    String regex = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}(:[0-9]+)?(/.*)?$";
 	    return url.matches(regex);
 	}
@@ -295,16 +296,17 @@ public class Sistema extends ISistema {
 
 	@Override
 	public Categoria buscarCategoriaRecursivamente(String nombreCat, HashMap<String, Categoria> categorias) {
-	    for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-	        Categoria categoria = entry.getValue();
-	        if (categoria.getNombreCat().equals(nombreCat)) {
-	            return categoria;
-	        }
-	        Categoria catEncontrada = buscarCategoriaRecursivamente(nombreCat, categoria.getHijos());
-	        if (catEncontrada != null) {
-	            return catEncontrada;
-	        }
-	    }
+		if (!categorias.isEmpty()) {
+		    for (Categoria cat : categorias.values()) {
+		        if (cat.getNombreCat().equals(nombreCat)) {
+		            return cat;
+		        }
+		        Categoria catEncontrada = buscarCategoriaRecursivamente(nombreCat, cat.getHijos());
+		        if (catEncontrada != null) {
+		            return catEncontrada;
+		        }
+		    }
+		}
 	    return null;
 	}
 	
@@ -336,19 +338,46 @@ public class Sistema extends ISistema {
 		return lista;
 	}
 	
+	
 	@Override
-	public List<DTProducto> listarAllProductos(){
-		List <DTProducto> lista = new ArrayList<>();
-		for (Categoria cat : this.categorias.values()) {
-			for (Producto prod : cat.getProductos()) {
-				DTProducto dt = prod.getDTProducto();
-				if (!lista.contains(dt)) {
-					lista.add(dt);
+	public Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista){
+		if (padre == null) {
+			for (Categoria cat : this.categorias.values()) {
+				for (Producto prod : cat.getProductos()) {
+					DTProductoDetallado dt = prod.getDTProductoDetallado();
+					if (!lista.containsKey(dt.getNumero())) {
+						lista.put(dt.getNumero(), dt);
+					}
 				}
+				listarAllProductos(cat, lista);
 			}
+		} else {
+			for (Categoria cat : padre.getHijos().values()) {
+				for (Producto prod : cat.getProductos()) {
+					DTProductoDetallado dt = prod.getDTProductoDetallado();
+					if (!lista.containsKey(dt.getNumero())) {
+						lista.put(dt.getNumero(), dt);
+					}
+				}
+				listarAllProductos(cat, lista);
+			}
+		}
+		return lista.values();
+	}
+	
+	
+	/*
+	@Override
+	public List<DTProductoDetallado> listarAllProductos(){
+		List<DTProductoDetallado> lista = new ArrayList<>();
+		for (Producto prod : this.getProductos()) {
+			DTProductoDetallado dt = prod.getDTProductoDetallado();
+			lista.add(dt);
+			System.out.println(dt);
 		}
 		return lista;
 	}
+	*/
 
 	// No se si incluir el numero de referencia (para buscar el producto)
 	@Override
@@ -807,11 +836,6 @@ public class Sistema extends ISistema {
 
         HashMap<String, Categoria> categorias = new HashMap<>();
         
-        // Agregar categorías al HashMap
-        categorias.put("C001", Electronica);
-        categorias.put("C002", Celulares);
-        categorias.put("C003", Laptops);
-        
         this.categorias = categorias;
 
         // Asociar subcategorías usando agregarHijo (que agrega al HashMap con nombre y categoría)
@@ -830,8 +854,9 @@ public class Sistema extends ISistema {
         this.getCategorias().put(Moda.getNombreCat(), Moda);
         this.getCategorias().put(Farmacia.getNombreCat(), Farmacia);
         this.getCategorias().put(FloresyPlantas.getNombreCat(), FloresyPlantas);
-        this.getCategorias().put(FloresyPlantas.getNombreCat(), FloresyPlantas);
         this.getCategorias().put(HogaryCocina.getNombreCat(), HogaryCocina);
+        // this.getCategorias().put(Celulares.getNombreCat(), Celulares);
+        // this.getCategorias().put(Laptops.getNombreCat(), Laptops);
         
         String imagen1 = "media/images/Chico1.png";
         String imagen2 = "media/images/Chico2.png";
@@ -864,6 +889,17 @@ public class Sistema extends ISistema {
         especificaciones.add("Buen");
         especificaciones.add("Producto");
         especificaciones.add("!!!!");
+        
+        c2.add(HogaryCocina);
+        c1.add(Moda);
+        c1.add(Electronica);
+        c1.add(Lenovo);
+        c3.add(Lenovo);
+        c3.add(Electronica);
+        c3.add(Samsung);
+        
+        
+        
         
         Producto producto1 = new Producto("Agua Fresca", "Muy refrescante.", especificaciones, 999, 72.5f, img1, c2,  pr3, "Tienda1");
         Producto producto2 = new Producto("Guitarra", "Guitarra electrica de ebano.", especificaciones, 998, 16500.0f, img1, c1,  pr2, "Tienda2");
@@ -1067,9 +1103,7 @@ public class Sistema extends ISistema {
 		if (this.usuarioActual != null) {
 			if (this.usuarioActual instanceof Cliente) {
 				Cliente cli = (Cliente) this.usuarioActual;
-				ord.setCliente(cli);
-				cli.vincularOrdenDeCompra(ord);
-				cli.setCarrito(new HashMap<>());
+				cli.realizarCompra(ord);
 			} else {
 				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 			}

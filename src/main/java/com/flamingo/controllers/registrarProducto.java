@@ -124,29 +124,42 @@ public class registrarProducto extends HttpServlet {
 	 // Declarar la lista de imágenes fuera del if
 	    List<String> listaImagenes = new ArrayList<>();
 
-	    // Obtener el parámetro de imágenes
-	    String img = request.getParameter("imagenes"); // Suponiendo que obtienes la cadena como un solo parámetro
+	 // Obtener el parámetro de imágenes
+	    String img = request.getParameter("imagenes");
 
 	    // Verificar si el parámetro no es nulo o vacío
 	    if (img != null && !img.isEmpty()) {
-	        // Eliminar los corchetes y las comillas
-	        img = img.replace("[", "").replace("]", "").replace("\"", "");
+	        // Eliminar los corchetes, comillas y espacios innecesarios alrededor
+	        img = img.replace("[", "").replace("]", "").replace("\"", "").trim();
 
-	        // Dividir la cadena por comas para obtener cada imagen
-	        String[] imagenesArray = img.split(",");
+	        // Dividir la cadena por el prefijo específico de las imágenes en base64 (asegura que sea correcto)
+	        String[] imagenesArray = img.split("(?=data:image/)");
 
 	        // Crear la lista de imágenes
 	        listaImagenes = new ArrayList<>(Arrays.asList(imagenesArray));
 
+	        // Limpiar posibles comas al final de cada imagen
+	        for (int i = 0; i < listaImagenes.size(); i++) {
+	            listaImagenes.set(i, listaImagenes.get(i).trim()); // Elimina espacios en blanco
+	            // Si hay comas al final de la imagen, las eliminamos
+	            if (listaImagenes.get(i).endsWith(",")) {
+	                listaImagenes.set(i, listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - 1));
+	            }
+	        }
+
 	        // Imprimir cada imagen en una nueva línea
 	        for (String imagen : listaImagenes) {
-	            System.out.println(imagen.trim()); // Imprime la imagen
+	            System.out.println(imagen.trim()); // Imprime la imagen limpia
 	        }
 	    } else {
 	        System.out.println("No se recibieron imágenes.");
 	    }
 
-	  
+	    // Verificar y mostrar las imágenes guardadas en la lista
+	    for (int i = 0; i < listaImagenes.size(); i++) {
+	        System.out.println("Imagen en lista " + (i + 1) + ": " + listaImagenes.get(i).trim()); // Imprime cada imagen
+	    }
+
 	 // Declarar la lista de especificaciones fuera del if
 	    List<String> listaEspecificaciones = new ArrayList<>();
 
@@ -267,13 +280,22 @@ public class registrarProducto extends HttpServlet {
 
 	    
 		    List<String> op = new ArrayList<>();
+		 // Suponiendo que ya tienes la lista de imágenes llena
+		    if (!listaImagenes.isEmpty()) {
+		        System.out.println("Lista de imágenes:");
+		        for (String imagen : listaImagenes) {
+		            System.out.println(imagen.trim()); // Imprime cada imagen
+		        }
+		    } else {
+		        System.out.println("No hay imágenes para mostrar.");
+		    }
 
 		 // Agregar los strings "a" y "b" a la lista, imagenes
 		 op.add("p");
 		 op.add("q");
 		    
 		    try {
-				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  op, ((Proveedor) sis.getUsuarioActual()).getnomCompania());         
+				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  listaImagenes, ((Proveedor) sis.getUsuarioActual()).getnomCompania());         
 			} catch (ProductoRepetidoException | CategoriaNoPuedeTenerProductosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

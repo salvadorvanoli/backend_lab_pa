@@ -40,23 +40,28 @@
             
                             <div class="form-group d-flex">
                                 <div class="w-50 me-2">
+                                	<label for="inputNombre" class=" ">Nombre</label>
                                     <input type="text" class="form-control mt-2" value="<%= usuarioActual.getNombre() %>" id="inputNombre" placeholder="Ingrese su nombre" disabled>
                                 </div>
                                 <div class="w-50">
+                                	<label for="inputApellido" class=" ">Apellido</label>
                                     <input type="text" class="form-control mt-2" value="<%= usuarioActual.getApellido() %>" id="inputApellido" placeholder="Ingrese su apellido" disabled>
                                 </div>
                             </div>
             
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                            	<label for="inputNickname" class=" ">Nickname</label>
                                 <input type="text" class="form-control mt-2" value="<%= usuarioActual.getNickname() %>" id="inputNickname" placeholder="Ingrese su nickname" disabled>
                             </div>
             
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                            	<label for="inputEmail" class=" ">Email</label>
                                 <input type="email" class="form-control mt-2" value="<%= usuarioActual.getEmail() %>" id="inputEmail" placeholder="Ingrese su correo electrónico" disabled>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <div class="mr-2 w-50">
+                                	<label for="inputFecha" class=" ">Fecha de nacimiento</label>
                                     <input type="date" value="<%= usuarioActual.getFechaNac().getFechaEnFormatoInput() %>" class="form-control mt-2" id="inputFecha" disabled>
                                 </div>
                             </div>
@@ -142,8 +147,10 @@
    	            <div class="row">
    	                <div id="info-proveedor-container">
    	                    <div class="form-group d-flex align-items-center">
-   	                        <div class="mr-2 w-100">
-   	                            <input type="text" value="<%= proveedor.getlink() %>" class="form-control" id="inputSitioWeb" placeholder="" disabled>
+   	                        <div class="mr-2 w-100 mb-5">
+   	                        	<label for="inputSitioWeb" class="mt-3">Sitio web</label>
+   	                            <input type="text" value="<%= proveedor.getlink() %>" class="form-control mt-2" id="inputSitioWeb" placeholder="" disabled>
+   	                            <label for="inputCompañía" class="mt-3">Nombre de la compañía</label>
    	                            <input type="text" value="<%= proveedor.getnomCompania() %>" class="form-control mt-2 mb-2" id="inputCompañía" placeholder="" disabled>
    	                        </div>
    	                    </div>

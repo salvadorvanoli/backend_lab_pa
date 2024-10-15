@@ -209,7 +209,7 @@ public class Producto {
         
         List<String> nombresEspecificaciones = new ArrayList<>();
         for(String esp : especificacion) {
-        	nombresCategorias.add(esp);
+        	nombresEspecificaciones.add(esp);
         }
 
         // Crear el objeto DTProveedor a partir del Proveedor
@@ -224,7 +224,10 @@ public class Producto {
             nombresEspecificaciones,
             nombresCategorias,
             dtProveedor,
-            imagenes
+            imagenes,
+            nombreTienda,
+            estrellas,
+            cantCompras
         );
     }
 
