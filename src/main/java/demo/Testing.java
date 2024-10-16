@@ -362,7 +362,7 @@ class Testing {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             sis.altaUsuarioCliente("nick4", "correo4@gmail.com", "Nombre", "Apellido", fecha, null, "12345678", "87654321");
         });
-        assertTrue(thrown.getMessage().contains("Las contraseñas no coinciden"));
+        assertTrue(thrown.getMessage().contains("Las contraseñas no coinciden."));
     }
 
     @Test
