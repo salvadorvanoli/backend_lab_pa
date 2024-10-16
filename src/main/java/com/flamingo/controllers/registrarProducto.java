@@ -1,6 +1,8 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,62 +38,63 @@ public class registrarProducto extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    public static EstadoSesion getEstado(HttpServletRequest request)
-	{
-		return (EstadoSesion) request.getSession().getAttribute("estado_sesion");
-	}
+    private void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
+        
+        ISistema sis;
+        HttpSession session = request.getSession();
 
-	private void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, ProductoNoExisteException, CategoriaNoExisteException {
-		ISistema sis;
-		
-		HttpSession session = request.getSession();
+        // Inicializar el sistema si no está en el contexto
+        if (getServletContext().getAttribute("sistema") == null) {
+            System.out.println("CREO EL SISTEMA");
+            sis = SistemaFactory.getInstancia().getISistema();
+            getServletContext().setAttribute("sistema", sis);
+            sis.crearCasos();
+        } else {
+            sis = (ISistema) getServletContext().getAttribute("sistema");
+        }
 
-		if (getServletContext().getAttribute("sistema") == null) {
-		    System.out.println("CREO EL SISTEMA");
-		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
-		    sis = (ISistema) getServletContext().getAttribute("sistema");
-		    sis.crearCasos();
-		} else {
-		    sis = (ISistema) getServletContext().getAttribute("sistema");
-		}
-	
+        // Obtener el usuario actual desde la sesión
+        Usuario usuarioActual = (Usuario) session.getAttribute("usuarioActual");
 
-		// Obtener el usuario actual desde la sesión
-		Usuario usuarioActual = (Usuario) request.getSession().getAttribute("usuarioActual");
+        // Registro de la información del usuario actual
+        if (usuarioActual != null) {
+            System.out.println("Nombre del usuario actual: " + usuarioActual.getNombre());
+        } else {
+            System.out.println("No hay un usuario actual en la sesión.");
+        }
 
-		// Verificar si el usuario existe antes de imprimir
-		if (usuarioActual != null) {
-		    // Suponiendo que tienes un método toString() en la clase Usuario o puedes acceder a sus atributos
-		   
-		    // O puedes imprimir atributos específicos como el nombre o el ID
-		    System.out.println("Nombre del usuario actual: " + usuarioActual.getNombre()); 
- 
-		} else {
-		    System.out.println("No hay un usuario actual en la sesión.");
-		}
+        // Obtener los nombres y números de referencia de los productos del sistema
+        List<String> nombresProductos = new ArrayList<>();
+        List<Integer> numerosProductos = new ArrayList<>();
+        
+        for (Producto producto : sis.getProductos()) {
+            nombresProductos.add(producto.getNombreProducto());
+            numerosProductos.add(producto.getNumReferencia());
+        }
 
-		request.setAttribute("categorias", sis.getCategorias());
-		Object usuario = request.getAttribute("usuarioActual");
-		Object categorias = request.getAttribute("categorias");	
-		
-		if(usuario == null) {
-			
-			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
-					forward(request, response);
-		} else {
-			Usuario usr = (Usuario) usuario;
-			session.setAttribute("usuarioActual", usr);
-			
-			HashMap<String, Categoria> ctg = (HashMap<String, Categoria>) categorias;
-			request.setAttribute("categorias", ctg);
-			
+        // Pasar los nombres y números de productos y categorías al JSP
+        request.setAttribute("nombres", nombresProductos);
+        request.setAttribute("numeros", numerosProductos);
+        request.setAttribute("categorias", sis.getCategorias());
 
-			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
-					forward(request, response);
-		}
-	}
-	
+        // Redirigir según la presencia del usuario en la sesión
+        if (usuarioActual == null) {
+            // Si no hay un usuario, redirigir a la página de registro de productos
+            request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").forward(request, response);
+        } else {
+            // Si el usuario existe, actualizar la sesión y pasar las categorías
+            session.setAttribute("usuarioActual", usuarioActual);
+            
+            // Pasar las categorías como un HashMap (suponiendo que ya está definido como tal)
+            HashMap<String, Categoria> ctg = (HashMap<String, Categoria>) sis.getCategorias();
+            request.setAttribute("categorias", ctg);
+
+            // Redirigir al JSP de registro de productos con las categorías y nombres
+            request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").forward(request, response);
+        }
+    }
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			try {
@@ -138,6 +141,11 @@ public class registrarProducto extends HttpServlet {
 	    String numeroRef = request.getParameter("numero");
 	    String descripcion = request.getParameter("descripcion");
 	    String imagenes = request.getParameter("imagenes");
+	    
+	    if(nombre == "a") {
+	    	
+	    }
+	    
 	    
 	 // Declarar la lista de imágenes fuera del if
 	    List<String> listaImagenes = new ArrayList<>();

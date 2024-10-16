@@ -5,6 +5,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.HashMap"%>
+<%@ page import="com.google.gson.Gson" %>
 
 
 
@@ -16,96 +17,8 @@
     <title>Registrar Producto</title>
     <link href='https://fonts.googleapis.com/css?family=Source Sans 3' rel='stylesheet'> <!-- Importamos la letra -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/media/css/registrarProducto.css">
-	<style>
-		
-	
-
-		.dropdown {
-		    position: relative;
-		    display: inline-block;
-		}
-
-		.dropdown-content {
-		    display: none;
-		    position: absolute;
-		    background-color: #a9a9a9; /* Fondo gris */
-		    width: 300px;
-		    z-index: 100; /* Asegura que el menú esté por encima de otros elementos */
-		    border: 1px solid black;
-		    overflow: visible; /* Asegura que el contenido no se oculte si sale del área */
-		}
-
-		.dropdown-content a {
-		    color: black;
-		    padding: 12px 16px;
-		    text-decoration: none;
-		    display: block;
-		}
-
-		
-		.dropdown-content a:hover {
-		    background-color: #f1f1f1;
-		}
-
-	
-		.dropdown:hover .dropdown-content {
-		    display: block;
-		}
-
-		
-		.nested-dropdown {
-		    position: relative;
-		}
-
-		
-		.nested-dropdown-content {
-		    display: none;
-		    position: absolute;
-		    background-color: #f9f9f9;
-		    min-width: 160px;
-		    left: 100%; /* Alinea el submenú a la derecha del elemento padre */
-		    top: 0; /* Comienza desde la parte superior del padre */
-		    z-index: 200; /* Asegura que el submenú esté por encima */
-		}
-
-		
-		.nested-dropdown:hover .nested-dropdown-content {
-		    display: block;
-		}
-
-		
-		.dropbtn {
-		    background-color: #d3d3d3; /* Fondo gris claro */
-		    color: black; /* Color del texto */
-		    padding: 0 40px;
-		    font-size: 14px;
-		    border: 1px solid black;
-		    cursor: pointer;
-		    width: 100%;
-		    height: 30px;
-		    margin: 0;
-		    line-height: 30px;
-		    text-align: left;
-		}
-
-		.dropbtnW {
-		    background-color: white; 
-		    color: black; 
-		    padding: 0 40px; 
-		    font-size: 14px; 
-		    border: 1px solid black;
-		    cursor: pointer;
-		    width: 100%; 
-		    height: 30px; 
-		    margin: 0; 
-		    line-height: 30px;
-		    text-align: left; 
-		}
-
-
-
-	</style>
+    <link rel="stylesheet" href="media/css/registrarProducto.css">
+    <link rel="stylesheet" href="media/css/catalogo.css">
 	    
 	<jsp:include page="/WEB-INF/template/header.jsp" />
 
@@ -202,62 +115,9 @@
     </div>
     <div class="row">
         <div class="col-md-8 col-12">
-            <div class="vertical-menu-1">
-                <div class="row">
-                    <% 
-                        // Obtener el objeto de categorías desde el request
-                        Object categoriasObj = request.getAttribute("categorias");
-                        HashMap<String, Categoria> categorias = null;
-
-                        // Verificar si el objeto es un HashMap y hacer el cast apropiado
-                        if (categoriasObj instanceof HashMap<?,?>) {
-                            categorias = (HashMap<String, Categoria>) categoriasObj;
-                        }
-
-                        if (categorias != null) {
-                            // Iterar sobre los valores del HashMap (es decir, las instancias de Categoria)
-                            for (Categoria categoria : categorias.values()) {
-                                
-                                // Determinar la clase CSS según si tiene subcategorías o no
-                                String categoriaClase = categoria.tieneSubcategorias() ? "dropbtn" : "dropbtnW";
-                    %>
-                    <!-- Mostrar categoría principal -->
-                    <div class="col-md-12 col-12">
-                        <div class="row">
-                            <div class="dropdown">
-                                <button class="<%= categoriaClase %>" onclick="agregarCategoria('<%= categoria.getNombreCat() %>')">
-                                    <%= categoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= categoria.getNombreCat() %>
-                                </button>
-
-                                <!-- Si tiene subcategorías, las mostramos aquí -->
-                                <% if (categoria.tieneSubcategorias()) { %>
-                                <div class="dropdown-content">
-                                    <% for (Categoria subcategoria : categoria.getHijos().values()) { %>
-                                    <div class="nested-dropdown">
-                                        <a href="#" onclick="agregarCategoria('<%= subcategoria.getNombreCat() %>')">
-                                            <%= subcategoria.tieneSubcategorias() ? "&#9654;" : "" %> <%= subcategoria.getNombreCat() %>
-                                        </a>
-                                        <!-- Si hay sub-subcategorías, las mostramos aquí -->
-                                        <% if (subcategoria.tieneSubcategorias()) { %>
-                                        <div class="nested-dropdown-content">
-                                            <% for (Categoria subSubCategoria : subcategoria.getHijos().values()) { %>
-                                            <a href="#" onclick="agregarCategoria('<%= subSubCategoria.getNombreCat() %>')">
-                                                <%= subSubCategoria.getNombreCat() %>
-                                            </a>
-                                            <% } %>
-                                        </div>
-                                        <% } %>
-                                    </div>
-                                    <% } %>
-                                </div>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                    <% 
-                            } // Fin del for de categorías
-                        } 
-                    %>
+            <div class="vertical-menu-1 scrolleable ps-3">
+                <div id="categorias" class="row d-flex justify-content-center">
+                    
                 </div>
             </div>
         </div>
@@ -338,9 +198,86 @@
      <input type="hidden" name="descripcion" id="productoDescripcion">
 	</form>
 
-	
+	<script type="text/javascript">
+        // Pasar la lista de nombres desde el backend a un array de JavaScript
+        var nombresProductos = <%= new Gson().toJson(request.getAttribute("nombres")) %>;
+        console.log(nombresProductos);  // Ahora tienes la lista de nombres en JavaScript
+
+        // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        nombresProductos.forEach(function(nombre) {
+            console.log("Nombre del producto: " + nombre);
+        });
+    </script>
+    
+    	<script type="text/javascript">
+        // Pasar la lista de nombres desde el backend a un array de JavaScript
+        var numerosProductos = <%= new Gson().toJson(request.getAttribute("numeros")) %>;
+        console.log(numerosProductos);  // Ahora tienes la lista de nombres en JavaScript
+
+        // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        numerosProductos.forEach(function(numero) {
+            console.log("Numero del producto: " + numero);
+        });
+    </script>
 
 	<script>
+	
+	async function getDatos(URL, tipo) {
+    	try {
+    	    const response = await fetch(URL, {
+    	        method: 'GET',
+    	        headers: {
+    	            'tipo': tipo
+    	        }
+    	    });
+    	    const data = await response.json();
+    	    console.log('Datos recibidos: ', data);
+    	    return data;
+    	} catch (error) {
+    	    console.error('Hubo un problema con la solicitud: ', error);
+    	}
+  	}
+	
+	function cargarCategorias(categor, padre) {
+		
+		const contenedorPadre = document.getElementById("categorias");
+		if (padre == null){
+	    	contenedorPadre.innerHTML = '';
+		}
+	
+	    categor.forEach(categoria => {
+	    	const catElement = document.createElement("div");
+	    	catElement.classList.add("dropdown");
+
+	    	// Crear el botón como un elemento
+	    	const button = document.createElement("button");
+	    	button.classList.add("dropbtn", "dropbtn-color");
+	    	button.innerHTML = `&#9654; ` + categoria.nombreCat;
+	    	catElement.appendChild(button);
+
+	    	// Crear el dropdown como un elemento
+	    	const dropdown = document.createElement("div");
+	    	dropdown.classList.add("dropdown-content");
+	    	catElement.appendChild(dropdown);
+			if (padre != null){
+				// Verificar que el padre tenga el dropdown-content
+	            const dropdownContent = padre.querySelector(".dropdown-content");
+	            if (dropdownContent) {
+	                dropdownContent.appendChild(catElement);
+	            }
+			} else {
+	        	contenedorPadre.appendChild(catElement);
+			}
+	        button.addEventListener("click", function(){
+	        	agregarCategoria(categoria.nombreCat);
+	        });
+	        if (categoria.hijas && categoria.hijas.length > 0){
+	        	cargarCategorias(categoria.hijas, catElement);
+	        }
+	    });
+	    
+	}
+	
 	
 	function cargarProductoEnFormulario() {
 	    // Asignar los valores del objeto nuevoProducto al formulario
@@ -407,7 +344,12 @@
 	    };
 	    
 	    
-	    document.addEventListener('DOMContentLoaded', function() {
+	    document.addEventListener('DOMContentLoaded', async function() {
+	    	
+	    	const categorias = await getDatos("/backend_lab_pa/manejarcatalogo", "getCategorias");
+	    	
+	    	cargarCategorias(categorias, null);
+	    	
 	        const adjuntarButton = document.querySelector('.adjuntar');
 	        const contenedorImagenes = document.querySelector('.rectangulo');
 
@@ -456,6 +398,14 @@
 	            // Simula un clic en el input para abrir el selector de archivos
 	            input.click();
 	        });
+	        
+	        const btnCancelar = document.querySelector('.cancelar'); // Selecciona el botón "Cancelar"
+
+	        // Evento para el botón "Cancelar"
+	        btnCancelar.addEventListener('click', function() {
+	            location.reload(); // Recarga la página
+	        });
+	        
 	    });
 	
 	    
@@ -464,7 +414,7 @@
 	        if (!nuevoProducto.categorias.includes(categoria)) {
 	            // Agrega la categoría al producto
 	            nuevoProducto.categorias.push(categoria);
-	            console.log(`Categoría "${categoria}" agregada al producto.`);
+	            console.log("Categoría " + categoria + " agregada al producto.");
 
 	            // Crea un nuevo elemento de lista (li) para la categoría
 	            const li = document.createElement('li');
@@ -505,7 +455,7 @@
 
 	        // Elimina la categoría de nuevoProducto.categorias
 	        nuevoProducto.categorias = nuevoProducto.categorias.filter(cat => cat !== categoria);
-	        console.log(`Categoría "${categoria}" eliminada del producto.`);
+	        console.log("Categoría " + categoria + " eliminada del producto.");
 	    }
 	    
 	    
@@ -563,25 +513,31 @@
 	            mostrarAlerta("El precio debe ser un número válido con hasta dos decimales.");
 	            return false;
 	        }
-	        
-	        
-	        // Validar que el precio sea un número válido con hasta dos decimales
+
+	        // Validar que el número de referencia sea un número válido
 	        if (!regexPrecio.test(inputReferencia.value)) {
 	            mostrarAlerta("El número de referencia debe ser un número.");
 	            return false;
 	        }
-	        
-	     /* Validar si el número de referencia ya existe en la lista de productos
-	        const referenciaExiste = productos.some(producto => producto.numeroReferencia === inputReferencia.value);
-	        if (referenciaExiste) {
-	            mostrarAlerta("El número de referencia ya existe. Elige otro.");
+
+	        // Validar si el título del nuevo producto ya existe en la lista de productos existentes
+	        if (nombresProductos.includes(inputTitulo.value.trim())) {
+	            mostrarAlerta("El producto con ese título ya existe. Por favor, elige un título diferente.");
 	            return false;
 	        }
-		*/
+	        
+	     // Validar si el número del nuevo producto ya existe en la lista de productos existentes
+	        if (numerosProductos.includes(parseInt(inputReferencia.value.trim()))) {
+	            mostrarAlerta("El número de referencia ya está en uso. Por favor, elige un número diferente.");
+	            return false;
+	        }
+
 	        return true;
 	    }
+
 	 
 	 
+	    /*
 	    document.addEventListener('DOMContentLoaded', function() {
 	        const btnCancelar = document.querySelector('.cancelar'); // Selecciona el botón "Cancelar"
 
@@ -592,6 +548,7 @@
 
 	       
 	    });
+	    */
 
 
 	    // Función para reiniciar el objeto nuevoProducto

@@ -633,37 +633,72 @@
 	            for (let element in array){
 	                let itemCarrito = document.createElement("div");
 	                console.log(array[element]);
-	                itemCarrito.innerHTML =
-	                    `<div class="row my-3 d-flex align-items-center" id="producto` + array[element].producto.numReferencia + `">
-	                        <div class="col-sm-3 col-4 d-flex align-items-center justify-content-center" onclick="cargarProducto(` + array[element].producto.numReferencia + `)">
-	                            <img class="w-75" src="` + array[element].producto.imagenes[0] + `" alt="` + array[element].producto.nombre + `">
-	                        </div>
-	                        <div class="col-sm-6 col-4">
-	                            <div class="row titulo-producto">
-	                                <p class="col-sm-6 col-12">` + array[element].producto.nombre + `</p>
-	                                <p class="col-sm-6 col-12">Nro. ` + array[element].producto.numReferencia + `</p>
-	                            </div>
-	                            <div class="row descripcion-producto d-none d-sm-block">
-	                                <p>` + array[element].producto.descripcion + `</p>
-	                            </div>
-	                            <div class="row precio-producto">
-	                                <p>$` + array[element].producto.precio + `</p>
-	                            </div>
-	                        </div>
-	                        <div class="col-3">
-	                            <div class="col-12">
-	                                <label for="cantidad">Cantidad</label>
-	                                <input type="number" name="cantidad" class="cantidad-producto" min="1" required value="` + array[element].cantidad + `" onchange="manejarCantidad(this, ` + array[element].producto.numReferencia + `)">
-	                                <div class="invalid-feedback">
-	                                    <i class="fa-solid fa-triangle-exclamation"></i> Valor inválido.
-	                                </div>
-	                            </div>
-	                            <br>
-	                            <div class="col-12">    
-	                                <button type="button" class="btn btn-danger text-nowrap" onclick="eliminarItem(` + array[element].producto.numReferencia + `)"><i class="fa-solid fa-trash-can"></i></button>
-	                            </div>
-	                        </div>
-	                    </div>`;
+	                
+	                if(array[element].producto.imagenes[0] == null || array[element].producto.imagenes[0] == ""){
+	                	itemCarrito.innerHTML =
+		                    `<div class="row my-3 d-flex align-items-center" id="producto` + array[element].producto.numReferencia + `">
+		                        <div class="col-sm-3 col-4 d-flex align-items-center justify-content-center" onclick="cargarProducto(` + array[element].producto.numReferencia + `)">
+		                            <img class="w-75" src="media/images/default.webp" alt="` + array[element].producto.nombre + `">
+		                        </div>
+		                        <div class="col-sm-6 col-4">
+		                            <div class="row titulo-producto">
+		                                <p class="col-sm-6 col-12">` + array[element].producto.nombre + `</p>
+		                                <p class="col-sm-6 col-12">Nro. ` + array[element].producto.numReferencia + `</p>
+		                            </div>
+		                            <div class="row descripcion-producto d-none d-sm-block">
+		                                <p>` + array[element].producto.descripcion + `</p>
+		                            </div>
+		                            <div class="row precio-producto">
+		                                <p>$` + array[element].producto.precio + `</p>
+		                            </div>
+		                        </div>
+		                        <div class="col-3">
+		                            <div class="col-12">
+		                                <label for="cantidad">Cantidad</label>
+		                                <input type="number" name="cantidad" class="cantidad-producto" min="1" required value="` + array[element].cantidad + `" onchange="manejarCantidad(this, ` + array[element].producto.numReferencia + `)">
+		                                <div class="invalid-feedback">
+		                                    <i class="fa-solid fa-triangle-exclamation"></i> Valor inválido.
+		                                </div>
+		                            </div>
+		                            <br>
+		                            <div class="col-12">    
+		                                <button type="button" class="btn btn-danger text-nowrap" onclick="eliminarItem(` + array[element].producto.numReferencia + `)"><i class="fa-solid fa-trash-can"></i></button>
+		                            </div>
+		                        </div>
+		                    </div>`;
+	                } else {
+	                	itemCarrito.innerHTML =
+		                    `<div class="row my-3 d-flex align-items-center" id="producto` + array[element].producto.numReferencia + `">
+		                        <div class="col-sm-3 col-4 d-flex align-items-center justify-content-center" onclick="cargarProducto(` + array[element].producto.numReferencia + `)">
+		                            <img class="w-75" src="` + array[element].producto.imagenes[0] + `" alt="` + array[element].producto.nombre + `">
+		                        </div>
+		                        <div class="col-sm-6 col-4">
+		                            <div class="row titulo-producto">
+		                                <p class="col-sm-6 col-12">` + array[element].producto.nombre + `</p>
+		                                <p class="col-sm-6 col-12">Nro. ` + array[element].producto.numReferencia + `</p>
+		                            </div>
+		                            <div class="row descripcion-producto d-none d-sm-block">
+		                                <p>` + array[element].producto.descripcion + `</p>
+		                            </div>
+		                            <div class="row precio-producto">
+		                                <p>$` + array[element].producto.precio + `</p>
+		                            </div>
+		                        </div>
+		                        <div class="col-3">
+		                            <div class="col-12">
+		                                <label for="cantidad">Cantidad</label>
+		                                <input type="number" name="cantidad" class="cantidad-producto" min="1" required value="` + array[element].cantidad + `" onchange="manejarCantidad(this, ` + array[element].producto.numReferencia + `)">
+		                                <div class="invalid-feedback">
+		                                    <i class="fa-solid fa-triangle-exclamation"></i> Valor inválido.
+		                                </div>
+		                            </div>
+		                            <br>
+		                            <div class="col-12">    
+		                                <button type="button" class="btn btn-danger text-nowrap" onclick="eliminarItem(` + array[element].producto.numReferencia + `)"><i class="fa-solid fa-trash-can"></i></button>
+		                            </div>
+		                        </div>
+		                    </div>`;
+	                }
 	
 	                carrito.appendChild(itemCarrito);
 	
@@ -675,6 +710,11 @@
 	                    } else {
 	                        imagen = array[element].producto.imagenes;
 	                    }
+	                    
+	                    if(imagen == null || imagen == ""){
+	                    	imagen = "media/images/default.webp";	
+	                    }
+	                    
 	                    itemContenedor.innerHTML =
 	                        `<div class="row my-3 d-flex align-items-center producto-secundario` + array[element].producto.numReferencia + `">
 	                            <div class="col-4 d-flex align-items-center justify-content-center">
@@ -979,9 +1019,11 @@
 	            "precioTotal": Number.parseFloat(total),
 	            "fecha": fechaActual,
 	            "cliente": null,
+	            "proveedores": null,
 	            "cantidad": Object.values(carritoActual),
 	            "formaPago": formaPago,
-	            "detallesEnvio": detallesEnvio
+	            "detallesEnvio": detallesEnvio,
+	            "estado": "comprada"
 	        }
 
 	        updateCarrito("/backend_lab_pa/manejarcarrito", nuevaOrden, "realizarCompra");

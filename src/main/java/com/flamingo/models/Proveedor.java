@@ -54,4 +54,8 @@ public class Proveedor extends Usuario{
 			return c;
 		}
 		
+		public String toString() {
+			return "Nickname: " + this.getNickname() + " - " + "Nombre completo: " + this.getNombre() + " " + this.getApellido();
+		}
+		
 }

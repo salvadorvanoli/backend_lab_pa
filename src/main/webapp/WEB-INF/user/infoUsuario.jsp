@@ -92,8 +92,8 @@
 
 		<%
 	    // Verifica si el usuarioActual es de tipo Cliente
-	    if (usuarioActual instanceof Cliente) {
-	    	Cliente cliente = (Cliente) usuarioActual;
+	    if (usuarioActual instanceof Usuario) {
+	    	Usuario usuario = (Usuario) usuarioActual;
 		%>
 		
 			<div class="linea-resumen"></div>
@@ -110,7 +110,7 @@
 	                                <select class="form-control mt-2" id="selectOrdenes">
 	                                
 	                                <%
-                                    for (OrdenDeCompra orden : cliente.getOrdenesDeCompras()) { // Asegúrate de que 'getOrdenes' retorne una lista de órdenes
+                                    for (OrdenDeCompra orden : usuario.getOrdenesDeCompras()) { // Asegúrate de que 'getOrdenes' retorne una lista de órdenes
 	                                %>
 	                                
 	                                    <option value="<%= orden.getNumero() %>">Orden <%= orden.getNumero() %> - Fecha <%= orden.getFecha().getFechaEnFormatoInput() %></option>
