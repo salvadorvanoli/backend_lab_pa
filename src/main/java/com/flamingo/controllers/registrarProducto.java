@@ -56,7 +56,7 @@ public class registrarProducto extends HttpServlet {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
 	
-		session.setAttribute("usuarioActual", sis.getUsuarioActual());
+
 		// Obtener el usuario actual desde la sesión
 		Usuario usuarioActual = (Usuario) request.getSession().getAttribute("usuarioActual");
 
@@ -76,7 +76,6 @@ public class registrarProducto extends HttpServlet {
 		Object categorias = request.getAttribute("categorias");	
 		
 		if(usuario == null) {
-			session.setAttribute("usuarioActual", null);
 			
 			request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").
 					forward(request, response);
@@ -366,9 +365,14 @@ public class registrarProducto extends HttpServlet {
 	        }
 	    }
 	    
-	   session.setAttribute("usuarioActual", sis.getUsuarioActual());
+	    session.setAttribute("usuarioActual", sis.getUsuarioActual());
 
-	    response.sendRedirect("infoUsuario");
+	 // Imprimir el valor de "usuarioActual" para depuración
+	 System.out.println("Usuario actual en la sesiónAAA: " + session.getAttribute("usuarioActual"));
+
+	
+	 request.getRequestDispatcher("infoUsuario").forward(request, response); // No pierdes el request ni los atributos
+
 	}
 
 	
