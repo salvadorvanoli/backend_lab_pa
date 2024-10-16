@@ -24,34 +24,6 @@
     <%@ page import="java.util.List" %>
     <%@ page import="java.util.ArrayList" %>
     
-    
-    <style>
-    
-    	.linea-resumen {
-		    width: 100%;
-		    height: 1px;
-		    opacity: 30%;
-		    border-color: #606060;
-		    border-width: 1px;
-		    border-style: solid;
-		    background-color: #606060;
-		}
-    
-    	.imgcarousel {
-		    width: 100%;
-		    height: 100%;
-		    object-fit: contain;
-		}
-		
-		.carousel-container {
-			width: 500px;
-		    height: 300px;
-		    overflow: hidden;
-		    position: relative;
-		}
-    
-    </style>
-    
 </head>
 <body>
     
@@ -71,58 +43,64 @@
         <div class="container-md container-fluid">
             <div class="row">
                 <div class="col-md-6 col-12 mt-5">
-                    <div id="imgCarousel" class="carousel slide" data-bs-ride="carousel">
-					    <ol class="carousel-indicators" id="indicadores-carrusel">
-					        <%
-					        List<String> imagenes = producto.getImagenes();
-					        for (int contador = 0; contador < imagenes.size(); contador++) {
-					            if (contador == 0) {
-					        %>
-					                <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class="active"></li>
-					        <%
-					            } else {
-					        %>
-					                <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class=""></li>
-					        <%
+                    <div id="imgCarousel" class="carousel slide <%= (producto.getImagenes() == null || producto.getImagenes().isEmpty()) ? "d-none" : "" %>" data-bs-ride="carousel">
+					    <% 
+					    List<String> imagenes = producto.getImagenes();
+					    if (imagenes != null && !imagenes.isEmpty() && imagenes.get(0) != "") { 
+					    %>
+					        <ol class="carousel-indicators" id="indicadores-carrusel">
+					            <%
+					            for (int contador = 0; contador < imagenes.size(); contador++) {
+					                if (contador == 0) {
+					            %>
+					                    <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class="active"></li>
+					            <%
+					                } else {
+					            %>
+					                    <li data-bs-target="#imgCarousel" data-slide-to="<%= contador %>" class=""></li>
+					            <%
+					                }
 					            }
-					        }
-					        %>
-					    </ol>
-					    
-					    <div class="carousel-inner" id="item-carrusel">
-					        <%
-					        for (int contador = 0; contador < imagenes.size(); contador++) {
-					            String imagen = imagenes.get(contador);
-					            if (contador == 0) {
-					        %>
-					                <div class="carousel-item active carousel-container">
-					                    <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
-					                </div>
-					        <%
-					            } else {
-					        %>
-					                <div class="carousel-item carousel-container">
-					                    <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
-					                </div>
-					        <%
+					            %>
+					        </ol>
+					        
+					        <div class="carousel-inner" id="item-carrusel">
+					            <%
+					            for (int contador = 0; contador < imagenes.size(); contador++) {
+					                String imagen = imagenes.get(contador);
+					                if (contador == 0) {
+					            %>
+					                    <div class="carousel-item active carousel-container">
+					                        <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
+					                    </div>
+					            <%
+					                } else {
+					            %>
+					                    <div class="carousel-item carousel-container">
+					                        <img class="d-block w-100 imgcarousel" src="<%= imagen %>" alt="Slide">
+					                    </div>
+					            <%
+					                }
 					            }
-					        }
-					        %>
-					    </div>
-					    
-					    <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
-					        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					        <span class="sr-only">Previous</span>
-					    </a>
-					    <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
-					        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-					        <span class="sr-only">Next</span>
-					    </a>
+					            %>
+					        </div>
+					        
+					        <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+					            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					            <span class="sr-only">Previous</span>
+					        </a>
+					        <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+					            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+					            <span class="sr-only">Next</span>
+					        </a>
+					    <% 
+					    } 
+					    %>
 					</div>
 					
 					<%
 					    // Ocultar el carrusel si no hay imágenes
-					    if (imagenes.isEmpty()) {
+					    if (imagenes == null || imagenes.isEmpty() || imagenes.get(0) == "") {
 					%>
 					    <script>
 						    document.addEventListener('DOMContentLoaded', function() {
@@ -214,16 +192,26 @@
             </h2>
 
             <div id="especificaciones-container">
-                <ul>
-                <% 
-		        for (String especificacion : producto.getEspecificacion()) { 
-		        %>
-		            <li><%= especificacion %></li>
-		        <%
-		        }
-		        %>
-                </ul>
-            </div>
+			    <% 
+			    if (producto.getEspecificacion() != null && !producto.getEspecificacion().isEmpty() && producto.getEspecificacion().get(0) != "") { 
+			    %>
+			        <ul>
+			        <% 
+			        for (String especificacion : producto.getEspecificacion()) { 
+			        %>
+			            <li class="especificacion"><%= especificacion %></li>
+			        <% 
+			        }
+			        %>
+			        </ul>
+			    <% 
+			    } else { 
+			    %>
+			        <p class="seccion-vacia">El proveedor no cargó especificaciones.</p>
+			    <% 
+			    } 
+			    %>
+			</div>
 
         </section>
 
@@ -273,7 +261,13 @@
 			    <%
 			        // Renderizar todos los comentarios y respuestas de manera recursiva
 			        String htmlComentarios = ComentarioRenderer.renderComentarios(producto.getComentarios(), 0, 0, haCompradoProducto);
-			        out.print(htmlComentarios);
+			        if (htmlComentarios != null && !htmlComentarios.trim().isEmpty()) {
+			            out.print(htmlComentarios);
+			        } else {
+			    %>
+			        <p class="seccion-vacia">El producto no tiene comentarios aún.</p>
+			    <%
+			        }
 			    %>
 			</div>
 
