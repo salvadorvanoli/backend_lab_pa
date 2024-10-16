@@ -61,7 +61,7 @@ public abstract boolean validarNombreSinNumeros(String nombre);
 	
 	// public abstract Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista);
 	
-	public abstract Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista);
+	public abstract Collection<DTProductoDetallado> listarAllProductos();
 	
 	public abstract boolean elegirProducto(String nombreProd) throws ProductoNoExisteException; // ESTA LA AGREGUÉ DESPUÉS
 

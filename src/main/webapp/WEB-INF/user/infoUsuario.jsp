@@ -170,7 +170,7 @@
 			                <div class="container-md container-fluid product-card" onclick="window.location.href='infoProducto?productoSeleccionado=<%= producto.getNumReferencia() %>'">
 			                    <div class="row">
 			                        <div class="col-md-3 col-12">
-			                            <img src="<%= producto.getImagenes().get(0) %>" alt="Imagen producto" class="img-producto">
+			                            <img src="<%= (producto.getImagenes() != null && !producto.getImagenes().isEmpty() && producto.getImagenes().get(0) != "") ? producto.getImagenes().get(0) : "media/images/default.webp" %>" alt="Imagen producto" class="img-producto">
 			                        </div>
 			                        <div class="col-md-8 col-12">
 			                            <div>

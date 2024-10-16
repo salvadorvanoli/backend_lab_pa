@@ -96,8 +96,7 @@ public class manejarCatalogo extends HttpServlet {
 				System.out.println(result);
 			} else if (tipoGET.equals("getProductos")) {
 				
-				HashMap<Integer, DTProductoDetallado> lista = new HashMap<>();
-				result = gson.toJson(sis.listarAllProductos(null, lista));
+				result = gson.toJson(sis.listarAllProductos());
 				System.out.println(result);
 			}
 			
