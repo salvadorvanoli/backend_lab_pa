@@ -87,7 +87,8 @@ public class infoOrden extends HttpServlet {
         
         String num = request.getParameter("ordenId");
         
-        if(num == null) {
+        if(num == null || num == "") {
+        	response.sendRedirect(request.getContextPath() + "/infoUsuario");
         	return;
         }
         
