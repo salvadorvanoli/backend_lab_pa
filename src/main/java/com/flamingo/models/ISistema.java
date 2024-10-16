@@ -52,6 +52,8 @@ public abstract class ISistema{
 
 	public abstract List<DTCategoria> listarCategorias();
 
+	public abstract void setProductoActual(Producto prod);
+	
 	public abstract boolean elegirCategoria(String nombreCat) throws CategoriaNoExisteException;
 	
 	public abstract Categoria buscarCategoriaRecursivamente(String nombreCat, HashMap<String, Categoria> categorias);

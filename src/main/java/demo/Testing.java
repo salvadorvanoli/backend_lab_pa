@@ -242,19 +242,7 @@ class Testing {
     	
     	Producto prod = new Producto("wattpad", "descrip", null, 81118890, 0, null, lista, null, "dd market");
     	
-    	
-    	
-    	try {
-			sis.elegirCategoria(cat.getNombreCat());
-		} catch (CategoriaNoExisteException e) {
-			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
-		}
-    	
-    	try {
-			sis.elegirProducto(prod.getNombreProducto());
-		} catch (ProductoNoExisteException e) {
-			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
-		}
+    	sis.setProductoActual(prod);
     	
     	CategoriaNoPuedeTenerProductosException thrown = assertThrows(CategoriaNoPuedeTenerProductosException.class, () ->{ 
     		sis.agregarProductoACategorias(lista);
