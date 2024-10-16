@@ -10,8 +10,11 @@
 <%@ page import="com.flamingo.models.Producto" %>
 <%@ page import="com.flamingo.models.OrdenDeCompra" %>
 <%@ page import="com.flamingo.models.Usuario" %>
+<%@ page import="com.flamingo.models.Proveedor" %>
+<%@ page import="com.flamingo.models.Cliente" %>
 <%@ page import="com.flamingo.models.DTCantidad" %>
 <%@ page import="com.flamingo.models.DTProducto" %>
+<%@ page import="com.flamingo.models.Estado" %>
 
 
 <!DOCTYPE html>
@@ -50,9 +53,16 @@
 	
 		<main class="container-fluid">
 		<%
-			for (DTProducto prod : productos) {
-				cantidad = 0;
-				subtotal = 0f;
+		
+			
+		
+			if(productos != null) {
+			
+				System.out.println("no es null");
+				
+				for (DTProducto prod : productos) {
+					cantidad = 0;
+					subtotal = 0f;
 			
 		%>
 		
@@ -114,6 +124,7 @@
         
         <%
 				}	
+			}
         %>
         
 	        <div class="rectangle-3 row">
@@ -144,17 +155,53 @@
 	            <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
 	                <h1 class="total2">$ <%= subtotalTodo + subtotalTodo * 0.02 %></h1>
 	            </div>
+	            
+	            <%
+	            
+	            if(orden.getEstado() != Estado.entregada) {
+	            
+	            %>
+	            
+	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
+		            <form class="d-flex" action="cambiarEstadoOrden" method="POST">
+	    
+						    <select name="estadoOrden" class="form-select" required>
+						        <%
+						            if (usuarioActual instanceof Cliente) {
+						        %>
+						            <option value="entregada">Lo recibí</option>
+						        <%
+						            } else if (usuarioActual instanceof Proveedor) {
+						        %>
+						            <option value="enPreparacion">Lo estoy preparando</option>
+						            <option value="enCamino">Lo envié</option>
+						        <%
+						            }
+						        %>
+						    </select>
+					    	
+					    	<input type="text" name="numeroOrden" class="d-none" value="<%= orden.getNumero() %>">
+					    	
+					    	<button type="submit" class="btn btn-success"> Cambiar estado </button>
+						</form>
+	            </div>
+	            
+	            <%
+	            
+	            }
+	            
+	            %>
+	            
 	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
 	                <button type="button" class="button-volver" id="volver" onclick="window.location.href='infoUsuario'"> Volver </button>
 	            </div>
-	    
 	        </div>   
 	    </main>
     
     <%
     	}else{    
     %>
-    	<p>No hay ordenes deisponibles</p>
+    	<p>No hay ordenes disponibles</p>
     	
    	<%
     	}

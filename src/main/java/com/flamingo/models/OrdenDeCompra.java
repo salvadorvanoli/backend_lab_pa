@@ -8,9 +8,11 @@ public class OrdenDeCompra {
 	private float precioTotal;
 	private DTFecha fecha;
 	private Cliente cliente;
+	private List<Proveedor> proveedores;
 	private List<DTCantidad> cantidad;
 	private FormaPago formaPago;
 	private DetallesEnvio detallesEnvio;
+	private Estado estado;
 	
 	public int getNumero() {
 		return numero;
@@ -43,6 +45,14 @@ public class OrdenDeCompra {
 		this.cantidad = cantidad;
 	}
 	
+	public List<Proveedor> getProveedores() {
+		return proveedores;
+	}
+	
+	public void setProveedores(List<Proveedor> proveedores) {
+		this.proveedores = proveedores;
+	}
+	
 	public FormaPago getFormaPago() {
 		return this.formaPago;
 	}
@@ -57,6 +67,14 @@ public class OrdenDeCompra {
 	
 	public void setDetallesEnvio(DetallesEnvio detallesEnvio) {
 		this.detallesEnvio = detallesEnvio;
+	}
+	
+	public Estado getEstado() {
+		return estado;
+	}
+	
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 	public void desvincularCliente () {
@@ -90,11 +108,12 @@ public class OrdenDeCompra {
 		}
 	}
 	
-	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidad> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
+	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<Proveedor> proveedores, List<DTCantidad> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
 		super();
 		this.numero = numero;
 		this.fecha = fecha;
 		this.cliente = cliente;
+		this.proveedores = proveedores;
 		this.formaPago = formaPago;
 		this.detallesEnvio = detallesEnvio;
 		if (cantidades != null && !(cantidades.isEmpty())) {
@@ -117,10 +136,17 @@ public class OrdenDeCompra {
 	                + "Fecha: " + fechaFormateada + System.lineSeparator()
 	                + "Precio total: " + this.getPrecioTotal() + System.lineSeparator()
 	                + "Nombre cliente: " + this.cliente.getNickname() + System.lineSeparator()
+	                + "Estado: " + this.estado.name() + System.lineSeparator()
 	                + System.lineSeparator() +  "-------------------- PRODUCTOS --------------------" + System.lineSeparator() + System.lineSeparator();
 	    Integer i = 1;
 	    for (DTCantidad prod : this.cantidad){
 	        retorno += "Producto número " + i.toString() + ": "  + System.lineSeparator() + prod.toString() + System.lineSeparator();
+	        i++;
+	    }
+	    i = 1;
+	    retorno += System.lineSeparator() +  "-------------------- PROVEEDORES --------------------" + System.lineSeparator() + System.lineSeparator();
+	    for (Proveedor prov : this.proveedores){
+	        retorno += "Proveedor número " + i.toString() + ": "  + System.lineSeparator() + prov.toString() + System.lineSeparator();
 	        i++;
 	    }
 	    return retorno;

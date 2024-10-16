@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Cliente extends Usuario{
-		private List <OrdenDeCompra> OrdenesDeCompras;
 		private List <Comentario> Comentarios;
 		private HashMap<Integer, Cantidad> carrito;
 		
 		public Cliente(String nickName, String nombre, String apellido, String email, DTFecha fecha, String foto, String contrasenia){
 			super(nickName, nombre, apellido, email, fecha, foto, contrasenia);
-			this.OrdenesDeCompras = new ArrayList<>();
 			this.Comentarios = new ArrayList<>();
 			this.carrito = new HashMap<>();
 		}
@@ -24,24 +22,8 @@ public class Cliente extends Usuario{
 			return c;
 		}
 		
-		public void desvincularOrdenDeCompra(OrdenDeCompra ord){
-			this.OrdenesDeCompras.remove(ord);
-		}
-		
-		public void vincularOrdenDeCompra(OrdenDeCompra ord) {
-			this.OrdenesDeCompras.add(ord);
-		}
-		
-		public void setOrdenesDeCompras(List <OrdenDeCompra> OrdenesDeCompras){
-			this.OrdenesDeCompras = OrdenesDeCompras;
-		}
-		
 		public void setComentarios(List <Comentario> Comentarios){
 			this.Comentarios = Comentarios;
-		}
-		
-		public List <OrdenDeCompra> getOrdenesDeCompras(){
-			return this.OrdenesDeCompras;
 		}
 		
 		public List <Comentario> getComentarios(){
@@ -97,10 +79,22 @@ public class Cliente extends Usuario{
 		public void realizarCompra(OrdenDeCompra ord) {
 			ord.setCliente(this); 
 			this.vincularOrdenDeCompra(ord);
+			List<Proveedor> proveedores = new ArrayList<>();
 			for (Cantidad item : this.carrito.values()) {
 				Producto prod = item.getProducto();
 				prod.setCantCompras(prod.getCantCompras() + item.getCantidad());
+				if (!proveedores.contains(item.getProducto().getProveedor())) {
+					proveedores.add(item.getProducto().getProveedor());
+				}
 			}
+			ord.setProveedores(proveedores);
+			
+			for(Proveedor prov : proveedores) {
+				prov.getOrdenesDeCompras().add(ord);
+			}
+			
 			this.setCarrito(new HashMap<>());
+			System.out.println("ORDENNNNNNN: ");
+			System.out.println(ord);
 		}
 }

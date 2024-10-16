@@ -1125,6 +1125,7 @@ public class Sistema extends ISistema {
 			if (this.usuarioActual instanceof Cliente) {
 				Cliente cli = (Cliente) this.usuarioActual;
 				cli.realizarCompra(ord);
+				this.ordenes.put(ord.getNumero(), ord);
 			} else {
 				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 			}
