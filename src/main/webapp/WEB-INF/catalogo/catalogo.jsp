@@ -187,13 +187,19 @@
 	        });
 	    });
 	
-	    // Filtrar productos por el valor de búsqueda si se especifica
 	    const textoBusqueda = document.getElementById('textoBusqueda').value;
-	    if (textoBusqueda) {
-	        productosFiltrados = productosFiltrados.filter(producto => 
-	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
-	        );
-	    }
+		if (textoBusqueda) {
+		    productosFiltrados = productosFiltrados.filter(producto => {
+		        let nombreProducto = producto.nombre.toLowerCase();
+		        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
+		        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
+
+		        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
+		        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
+		               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
+		               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
+		    });
+		}
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
@@ -273,13 +279,6 @@
 	            });
 	        });
 	    }
-	    
-	    const textoBusqueda = document.getElementById('textoBusqueda').value;
-	    if (textoBusqueda) {
-	        productosFiltrados = productosFiltrados.filter(producto => 
-	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
-	        );
-	    }
 	
 	    // Ordenar los productos según la opción seleccionada
 	    if (orden === "1") {
@@ -295,6 +294,20 @@
 	    } else if (orden === "6") {
 	        productosFiltrados.sort((a, b) => b.cantCompras - a.cantCompras); // Ordenar por cantidad de compras descendente
 	    }
+	    
+	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+		if (textoBusqueda) {
+		    productosFiltrados = productosFiltrados.filter(producto => {
+		        let nombreProducto = producto.nombre.toLowerCase();
+		        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
+		        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
+
+		        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
+		        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
+		               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
+		               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
+		    });
+		}
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos ordenados
 	}
@@ -408,11 +421,18 @@
 			let productosFiltrados = prod;
 			
 			const textoBusqueda = document.getElementById('textoBusqueda').value;
-		    if (textoBusqueda) {
-		        productosFiltrados = productosFiltrados.filter(producto => 
-		            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
-		        );
-		    }
+			if (textoBusqueda) {
+			    productosFiltrados = productosFiltrados.filter(producto => {
+			        let nombreProducto = producto.nombre.toLowerCase();
+			        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
+			        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
+
+			        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
+			        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
+			               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
+			               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
+			    });
+			}
 		    
 		    cargarCatalogo(productosFiltrados);
 		}
