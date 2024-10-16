@@ -112,7 +112,7 @@ class Testing {
     }
 	
     
-    // ################################ ORDEN ################################
+    // ################################ ORDEN (Exeptions) ################################
     
     @Test
     public void ElegirOrdenNoExiste() {
@@ -172,7 +172,7 @@ class Testing {
     }
 	*/
     
- // ################################ Categoria ################################
+ // ################################ Categoria (Exeptions) ################################
     
     @Test
     public void CategoriaNoExisteConNombre() {
