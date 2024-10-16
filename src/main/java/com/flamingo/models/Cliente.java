@@ -88,6 +88,11 @@ public class Cliente extends Usuario{
 				}
 			}
 			ord.setProveedores(proveedores);
+			
+			for(Proveedor prov : proveedores) {
+				prov.getOrdenesDeCompras().add(ord);
+			}
+			
 			this.setCarrito(new HashMap<>());
 			System.out.println("ORDENNNNNNN: ");
 			System.out.println(ord);

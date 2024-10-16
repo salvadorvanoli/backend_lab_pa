@@ -51,6 +51,9 @@ public class cambiarEstadoOrden extends HttpServlet {
         String estadoOrden = request.getParameter("estadoOrden");
         String numeroOrden = request.getParameter("numeroOrden");
         
+        System.out.println(estadoOrden);
+        System.out.println(numeroOrden);
+        
         if(estadoOrden == null || estadoOrden == "" || numeroOrden == null || numeroOrden == "") {
         	response.sendRedirect(request.getContextPath() + "/infoUsuario");
         	return;
@@ -79,12 +82,20 @@ public class cambiarEstadoOrden extends HttpServlet {
             throw new OrdenDeCompraNoExisteException("La orden de compra no existe");
         }
         
-        if(estadoOrden == "entregada") {
+        if(estadoOrden.equals("entregada")) {
+        	
+        	System.out.println("Entré al if 1");
+        	
         	if(ordenSeleccionada.getEstado() != Estado.enCamino) {
+        		
+        		System.out.println("Entré al if 2");
+        		
         		response.sendRedirect(request.getContextPath() + "/infoUsuario");
         		return;
         	}
         }
+        
+        System.out.println("Llegué a pasar el if");
         
         Estado est = Estado.valueOf(estadoOrden);
         
@@ -93,8 +104,7 @@ public class cambiarEstadoOrden extends HttpServlet {
         request.setAttribute("usuarioActual", sis.getUsuarioActual());
         request.setAttribute("orden", ordenSeleccionada);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/orden/infoOrden.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/infoUsuario");
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -83,7 +83,7 @@ public class infoOrden extends HttpServlet {
         	
         */
         	
-        Usuario user = sis.getUsuarioActual();
+        Usuario user = (Usuario) sis.getUsuarioActual();
         
         String num = request.getParameter("ordenId");
         
@@ -95,11 +95,8 @@ public class infoOrden extends HttpServlet {
         int id;
         
         id = Integer.parseInt(num);
-
-        Cliente cliente = (Cliente) sis.getUsuarioActual();
         
-        
-        List<OrdenDeCompra> ordenes = cliente.getOrdenesDeCompras();
+        List<OrdenDeCompra> ordenes = user.getOrdenesDeCompras();
         OrdenDeCompra ordenSeleccionada = null;
         
         for(OrdenDeCompra orden1 : ordenes) {
@@ -112,7 +109,6 @@ public class infoOrden extends HttpServlet {
         if (ordenSeleccionada == null) {
             throw new OrdenDeCompraNoExisteException("La orden de compra no existe");
         }
-        
         
         List<DTProducto> listaProd = new ArrayList<>();
         

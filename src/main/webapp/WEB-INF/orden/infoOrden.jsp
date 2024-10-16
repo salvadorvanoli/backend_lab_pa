@@ -53,9 +53,16 @@
 	
 		<main class="container-fluid">
 		<%
-			for (DTProducto prod : productos) {
-				cantidad = 0;
-				subtotal = 0f;
+		
+			
+		
+			if(productos != null) {
+			
+				System.out.println("no es null");
+				
+				for (DTProducto prod : productos) {
+					cantidad = 0;
+					subtotal = 0f;
 			
 		%>
 		
@@ -117,6 +124,7 @@
         
         <%
 				}	
+			}
         %>
         
 	        <div class="rectangle-3 row">
@@ -172,7 +180,7 @@
 						        %>
 						    </select>
 					    	
-					    	<input type="text" name="numeroOrden" class="d-none" value="<%= orden.getNumero() %>" disabled>
+					    	<input type="text" name="numeroOrden" class="d-none" value="<%= orden.getNumero() %>">
 					    	
 					    	<button type="submit" class="btn btn-success"> Cambiar estado </button>
 						</form>
