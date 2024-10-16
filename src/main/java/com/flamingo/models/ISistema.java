@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 // import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import com.flamingo.exceptions.*;
 
@@ -132,5 +133,7 @@ public abstract boolean validarNombreSinNumeros(String nombre);
 	public abstract void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado;
 
 	public abstract void setProductoActual(Producto prd);
+
+	public abstract boolean existeCategoriaRecursivamente(Categoria categoriaPadre, String string);
 
 }

@@ -2,19 +2,31 @@ package demo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import com.flamingo.exceptions.CategoriaNoPuedeTenerProductosException;
+import com.flamingo.exceptions.CategoriaRepetidaException;
 import com.flamingo.exceptions.ContraseniaIncorrectaException;
+import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 import com.flamingo.exceptions.ProductoRepetidoException;
 import com.flamingo.exceptions.UsuarioNoEncontrado;
+import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.exceptions.UsuarioRepetidoException;
+import com.flamingo.models.Cantidad;
 import com.flamingo.models.Categoria;
+import com.flamingo.models.Cliente;
+import com.flamingo.models.DTCantidad;
+import com.flamingo.models.DTCliente;
 import com.flamingo.models.DTFecha;
+import com.flamingo.models.DTOrdenDeCompraDetallada;
+import com.flamingo.models.DTProducto;
 import com.flamingo.models.ISistema;
+import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.Producto;
 import com.flamingo.models.Proveedor;
 import com.flamingo.models.SistemaFactory;
@@ -28,6 +40,9 @@ class Testing {
 	private ISistema sis;
     private DTFecha fecha;
     private Proveedor proveedor;
+    private Cliente cliente;
+    private Producto producto;
+    private Cantidad cantidad;
 
     
     @Test
@@ -317,6 +332,40 @@ class Testing {
         assertTrue(thrown.getMessage().contains("Por favor, introduce un correo electrónico válido."));
     }
      
+     @Test
+     public void registroConEmailExistente() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+     	sis = SistemaFactory.getInstancia().getISistema();  // Inicializa el sistema antes de cada test
+         fecha = new DTFecha(12, 6, 1978);
+         sis.altaUsuarioProveedor("noexisto", "yaexisto@gmail.com", "Nombre", "Apellido", fecha, "Compania", "https://hola.com", null, "12345678", "12345678");
+
+         
+         // Intentar registrar otro usuario con el mismo email
+         UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
+             sis.registro("Yosoynuevo", "yaexisto@gmail.com"); //no deberia ejecutarse
+         });
+
+         // Verificar que el mensaje de la excepción contiene el texto esperado
+         assertTrue(thrown.getMessage().contains("Ya existe un usuario registrado con el email \"yaexisto@gmail.com\"."));
+
+         }
+     
+     @Test
+     public void registroConNicknameExistente() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+     	sis = SistemaFactory.getInstancia().getISistema();  // Inicializa el sistema antes de cada test
+         fecha = new DTFecha(12, 6, 1978);
+         sis.altaUsuarioProveedor("yaexisto", "yonoexisto@gmail.com", "Nombre", "Apellido", fecha, "Compania", "https://hola.com", null, "12345678", "12345678");
+
+         
+         // Intentar registrar otro usuario con el mismo email
+         UsuarioRepetidoException thrown = assertThrows(UsuarioRepetidoException.class, () -> {
+             sis.registro("yaexisto", "yosoynuevo@gmail.com"); //no deberia ejecutarse
+         });
+
+         // Verificar que el mensaje de la excepción contiene el texto esperado
+         assertTrue(thrown.getMessage().contains("Ya existe un usuario registrado con el nickname \"yaexisto\"."));
+
+         }
+     
     /* error esquizo de eclipse
     @Test
     public void registroConEmailNull() {
@@ -435,6 +484,66 @@ class Testing {
         assertTrue(thrown.getMessage().contains("Se debe ingresar una fecha de nacimiento válida."));
     }
     
+    ////////////////// INICIAR SESION //////////////////
+    
+    @Test
+    public void testIniciarSesionContraseniaIncorrecta() throws UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado {
+        // Inicializar el sistema
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Definir fecha de nacimiento
+        fecha = new DTFecha(12, 6, 1978);
+        
+        // Registrar un usuario cliente en el sistema
+        sis.altaUsuarioCliente("Octavius", "Octavius@gmail.com", "Nombre", "Apellido", fecha, null, "12345678", "12345678");
+
+        // Intentar iniciar sesión con una contraseña incorrecta y verificar que arroja una excepción
+        ContraseniaIncorrectaException thrown = assertThrows(ContraseniaIncorrectaException.class, () -> {
+            sis.iniciarSesion("Octavius", "87654321"); //no deberia ejecutarse
+        });
+
+        // Verificar que el mensaje de la excepción contiene el texto esperado
+        assertTrue(thrown.getMessage().contains("La contraseña es incorrecta."));
+    }
+    
+    @Test
+    public void testIniciarSesionUsuarioNoEncontrado() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+        // Inicializar el sistema
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Definir fecha de nacimiento
+        fecha = new DTFecha(12, 6, 1978);
+        
+        // Registrar un usuario cliente en el sistema
+        sis.altaUsuarioCliente("Osborn", "Osborn@gmail.com", "Nombre", "Apellido", fecha, null, "12345678", "12345678");
+
+        // Intentar iniciar sesión con un nickname que no existe y verificar que arroja una excepción
+        UsuarioNoEncontrado thrown = assertThrows(UsuarioNoEncontrado.class, () -> {
+            sis.iniciarSesion("UsuarioInexistente", "12345678"); //no deberia ejecutarse
+        });
+
+        // Verificar que el mensaje de la excepción contiene el texto esperado
+        assertTrue(thrown.getMessage().contains("El Nickname o Email son incorrectos"));
+    }
+
+    @Test
+    public void testIniciarSesionExitoso() throws UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado {
+        // Inicializar el sistema
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Definir fecha de nacimiento
+        fecha = new DTFecha(12, 6, 1978);
+        
+        // Registrar un usuario cliente en el sistema
+        sis.altaUsuarioCliente("Connors", "Connors@gmail.com", "Nombre", "Apellido", fecha, null, "12345678", "12345678");
+
+        // Iniciar sesión correctamente
+        sis.iniciarSesion("Connors@gmail.com", "12345678");
+
+        // Verificar que el usuarioActual es el correcto
+        assertEquals("Connors@gmail.com", sis.getUsuarioActual().getEmail());
+    }
+
     
     ////////////////////// PRODUCTOS /////////////////////
     
@@ -493,5 +602,279 @@ class Testing {
 
         assertTrue(thrown.getMessage().contains("Producto repetido"));
     }
+    
+    //////// GetCarritoActual ///////////
+    
+    @Test
+    public void testGetCarritoActualConCliente() throws UsuarioNoExisteException, ContraseniaIncorrectaException, UsuarioNoEncontrado, UsuarioRepetidoException {
+    	
+   	 	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 6, 1978);
+        sis.altaUsuarioCliente("nickclientecarrito1", "clientecarrito1@gmail.com", "Nombre", "Apellido", fecha, null, "12345678", "12345678");
+       
+        sis.iniciarSesion("nickclientecarrito1", "12345678");
+
+     // Crear un producto de ejemplo
+        String titulo = "Productooo";
+        int numReferencia = 1222;
+        String descrip = "Descripción del producto.";
+        List<String> especificaciones = Arrays.asList("cosa 1", "cosa 2");
+        float precio = 99.99f;
+        List<Categoria> categorias = Arrays.asList(new Categoria("Probando", true, null));
+        List<String> imagenes = Arrays.asList("imagen1.png");
+        String nombreTienda = "Tienda Ejemplo";
+
+     // Crear un producto de ejemplo
+        producto = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda);
+
+        // Crear una cantidad asociada al producto (1 unidad)
+        cantidad = new Cantidad(1);
+        cantidad.setProducto(producto);
+
+        // Agregar el producto al carrito del cliente
+        cliente = (Cliente) sis.getUsuarioActual();
+        
+        cliente.agregarProducto(cantidad);
+        
+        HashMap<Integer, DTCantidad> carritoActual = sis.getCarritoActual();
+        
+        assertNotNull(carritoActual);
+        assertEquals(1, carritoActual.size()); // Verifica que haya un producto en el carrito
+        assertTrue(carritoActual.containsKey(numReferencia)); // Verifica que el carrito contiene el producto con el ID correcto
+        
+        }
+    
+    @Test
+    public void testGetCarritoActualConProveedor() throws UsuarioNoExisteException, ContraseniaIncorrectaException, UsuarioNoEncontrado, UsuarioRepetidoException {
+
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+
+        // Registrar un proveedor en lugar de un cliente
+        sis.altaUsuarioProveedor("proveedorrr", "proveedorrr@gmail.com", "NombreProv", "ApellidoProv", fecha, "Empresa", "https://empresa.com", null, "12345678", "12345678");
+
+        // Iniciar sesión con el proveedor
+        sis.iniciarSesion("proveedorrr", "12345678");
+
+        // Intentar obtener el carrito de un proveedor (debería fallar)
+        assertThrows(UsuarioNoExisteException.class, () -> {
+            sis.getCarritoActual(); // no deberia ejecutarse
+        });
+    }
+    
+    @Test
+    public void testGetCarritoActualConUsuarioNull() throws UsuarioNoExisteException, ContraseniaIncorrectaException, UsuarioNoEncontrado, UsuarioRepetidoException {
+
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+        sis.setTodoNull();
+        // Intentar obtener el carrito de un usuario null (debería fallar)
+        assertThrows(UsuarioNoExisteException.class, () -> {
+            sis.getCarritoActual(); // no deberia ejecutarse
+        });
+    }
+    
+    /////////////// BUSCAR CATEGORIA RECURSIVAMENTE /////////////
+    
+    @Test
+    public void testBuscarCategoriaExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        Categoria categoriaPadre = sis.altaCategoria("Electronica", true, null);
+        sis.altaCategoria("Celulares", true, categoriaPadre);
+        sis.altaCategoria("Computadoras", true, categoriaPadre);
+        
+        // Buscar la categoría "Celulares"
+        Categoria categoriaBuscada = sis.buscarCategoriaRecursivamente("Celulares", sis.getCategorias());
+        
+        // Verificar que la categoría buscada es la correcta
+        assertNotNull(categoriaBuscada);
+        assertEquals("Celulares", categoriaBuscada.getNombreCat());
+    }
+    
+    @Test
+    public void testBuscarCategoriaNoExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear una categoría de ejemplo
+        sis.altaCategoria("Parlantes", true, null);
+        
+        // Intentar buscar una categoría que no existe
+        Categoria categoriaBuscada = sis.buscarCategoriaRecursivamente("Ropa", sis.getCategorias());
+        
+        // Verificar que la categoría buscada es null
+        assertNull(categoriaBuscada);
+    }
+
+
+    ///////// EXISTE CATEGORIA ////////////
+    
+    @Test
+    public void testCategoriaExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        sis.altaCategoria("Joyas", true, null);
+        sis.altaCategoria("Diamantes", true, null);
+        
+        // Verificar que "Electronica" existe
+        assertTrue(sis.existeCategoria("Joyas"));
+    }
+    
+    @Test
+    public void testCategoriaNoExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        sis.altaCategoria("Guiso", true, null);
+        
+        // Verificar que "Ropa" no existe
+        assertFalse(sis.existeCategoria("Papas"));
+    }
+
+    ///////////// EXISTE CATEGORIA RECURSIVAMENTE /////////////
+    
+    @Test
+    public void testCategoriaHijaExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        Categoria categoriaPadre = sis.altaCategoria("Rock", true, null);
+        sis.altaCategoria("Guitarras", true, categoriaPadre);
+        
+        // Verificar que "Celulares" existe
+        assertTrue(sis.existeCategoriaRecursivamente(categoriaPadre, "Guitarras"));
+    }
+    
+    @Test
+    public void testCategoriaNietaExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        Categoria categoriaPadre = sis.altaCategoria("Electro", true, null);
+        Categoria categoriaHija = sis.altaCategoria("Cel", true, categoriaPadre);
+        sis.altaCategoria("Samsung", true, categoriaHija);
+        
+        // Verificar que "Samsung" existe
+        assertTrue(sis.existeCategoriaRecursivamente(categoriaPadre, "Samsung"));
+    }
+
+    @Test
+    public void testCategoriaNoExistenteRec() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        Categoria categoriaPadre = sis.altaCategoria("Electron", true, null);
+        sis.altaCategoria("Proton", true, categoriaPadre);
+        
+        // Verificar que "Tablets" no existe en la jerarquía de "Electronica"
+        assertFalse(sis.existeCategoriaRecursivamente(categoriaPadre, "Juan"));
+    }
+    
+    @Test
+    public void testCategoriaAnidadaNoExistente() throws CategoriaRepetidaException {
+        sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear categorías de ejemplo
+        Categoria categoriaPadre = sis.altaCategoria("E", true, null);
+        Categoria categoriaHija = sis.altaCategoria("A", true, categoriaPadre);
+        sis.altaCategoria("Smartphones", true, categoriaHija);
+        
+        // Verificar que "Computadoras" no existe en la jerarquía de "Electronica"
+        assertFalse(sis.existeCategoriaRecursivamente(categoriaPadre, "F"));
+    }
+
+    
+     ////////// VER INFO ORDEN DE COMPRA /////////////
+    
+    @Test
+    public void testVerInformacionOrdenSinSeleccionar() {
+        sis = SistemaFactory.getInstancia().getISistema();
+
+        // Asegurarse de que no hay orden seleccionada
+        sis.setTodoNull();
+
+        // Verificar que se lanza NullPointerException
+        NullPointerException thrown = assertThrows(NullPointerException.class, () -> {
+            sis.verInformacionOrdenDeCompra(); // no deberia ejecutarse
+        });
+        assertTrue(thrown.getMessage().contains("No se ha elegido una orden de compra previamente."));
+    }
+    
+    @Test
+    public void testVerInformacionOrdenConSeleccion() throws OrdenDeCompraNoExisteException, ProductoRepetidoException, CategoriaNoPuedeTenerProductosException, UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado {
+        // Crear instancia del sistema
+        sis = SistemaFactory.getInstancia().getISistema();
+
+        // Crear cliente y productos necesarios para la orden
+        Cliente cliente = new Cliente("testCliente", "testEmail@jaja.com", "nombre", "apell", fecha, null, "12345678");        
+        fecha = new DTFecha(12, 6, 1978);
+    	sis.altaUsuarioCliente("juancito", "juancito@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+        sis.iniciarSesion("juancito", "12345678");
+    	
+    	String titulo = "Productoaa";
+        int numReferencia = 123;
+        String descrip = "Descripción del productoa.";
+        List<String> especificaciones = Arrays.asList("Especificaa", "Especaaaaaa 2");
+        float precio = 99.99f;
+        List<Categoria> categorias = Arrays.asList(new Categoria("Cataaaa", true, null));
+        List<String> imagenes = Arrays.asList("imagen1.png", "imagen2.png");
+        String nombreTienda = "Tiendaaaa";
+
+       // sis.registrarProducto(titulo, numReferencia, descrip, especificaciones, precio, categorias, imagenes, nombreTienda);
+        producto = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda);
+
+        
+        List<Cantidad> cantidades = new ArrayList<>();
+        
+        Cantidad cantidad1 = new Cantidad(2);
+        cantidad1.setProducto(producto);
+        
+        cantidades.add(cantidad1);
+       
+        
+        OrdenDeCompra ordencita = sis.agregarOrden(cantidades);
+        // Crear la orden de compra
+        
+        sis.elegirOrdenDeCompra(ordencita.getNumero());
+
+        // Llamar al método para obtener la información detallada
+        DTOrdenDeCompraDetallada infoOrden = sis.verInformacionOrdenDeCompra();
+
+        // Verificar que la información devuelta no es nula
+        assertNotNull(infoOrden);
+        assertEquals(ordencita.getNumero(), infoOrden.getNumero());
+        assertEquals(sis.getUsuarioActual(), infoOrden.getCliente());
+        
+    }
+
+    //////// listar clientes //////////
+    
+    @Test
+    public void testListarClientesConClientesYProveedores() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+        // Crear instancia del sistema
+        sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 6, 1978);
+
+        // Crear algunos clientes
+    	sis.altaUsuarioCliente("listar1", "listar1@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+    	sis.altaUsuarioCliente("listar2", "listar2@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+
+
+        // Crear algunos proveedores
+    	sis.altaUsuarioProveedor("nolistar1", "nolistar1@gmail.com", "juan", "jujuan", fecha, "Compa", "https://hola.com", null, "12345678", "12345678");
+
+        // Llamar al método para listar clientes
+        List<DTCliente> listaClientes = sis.listarClientes();
+
+        // Verificar que solo se devuelvan los clientes
+        
+        assertTrue(listaClientes.stream().anyMatch(dt -> dt.getNickname().equals("listar1")));
+        assertTrue(listaClientes.stream().anyMatch(dt -> dt.getNickname().equals("listar2")));
+    }
+
     
 }

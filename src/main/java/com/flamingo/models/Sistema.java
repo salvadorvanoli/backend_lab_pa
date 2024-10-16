@@ -347,7 +347,7 @@ public class Sistema extends ISistema {
         return false;
     }
 
-    private boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
+    public boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
         for (Categoria hijo : categoria.getHijos().values()) {
             if (hijo.getNombreCat().equals(nombreCategoria) || existeCategoriaRecursivamente(hijo, nombreCategoria)) {
                 return true;
@@ -512,7 +512,7 @@ public class Sistema extends ISistema {
 	        List<OrdenDeCompra> ordenes = clienteActual.getOrdenesDeCompras();
 	        ordenes.add(nueva);
 	        clienteActual.setOrdenesDeCompras(ordenes);
-	        System.out.println(nueva);
+	        //System.out.println(nueva);
 	        return nueva;
 	    } else {
 	        throw new IllegalArgumentException("El usuario actual no es un cliente.");
