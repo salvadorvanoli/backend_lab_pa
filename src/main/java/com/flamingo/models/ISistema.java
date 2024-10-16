@@ -1,4 +1,5 @@
 package com.flamingo.models;
+import java.util.Collection;
 import java.util.HashMap;
 
 // import java.util.ArrayList;
@@ -53,6 +54,8 @@ public abstract class ISistema{
 	public abstract List<DTCategoria> listarCategorias();
 
 	public abstract void setProductoActual(Producto prod);
+	
+	public abstract void setUsuarioActual(Usuario usr);
 	
 	public abstract boolean elegirCategoria(String nombreCat) throws CategoriaNoExisteException;
 	
@@ -127,5 +130,10 @@ public abstract class ISistema{
 	public abstract int generarIdComentario();
 	
 	public abstract void iniciarSesion(String emailOrNickname, String password) throws ContraseniaIncorrectaException, UsuarioNoEncontrado;
+
+	public Collection<DTProductoDetallado> listarAllProductos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -15,12 +15,15 @@ import com.flamingo.exceptions.ContraseniaIncorrectaException;
 import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 import com.flamingo.exceptions.OrdenDeCompraRepetidaException;
 import com.flamingo.exceptions.ProductoNoExisteException;
+import com.flamingo.exceptions.ProductoRepetidoException;
 import com.flamingo.exceptions.UsuarioRepetidoException;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.DTFecha;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
+import com.flamingo.models.Proveedor;
 import com.flamingo.models.SistemaFactory;
+import com.flamingo.models.Usuario;
 
 class Testing {
 
@@ -203,7 +206,7 @@ class Testing {
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
     	// Instacncia de categoria
-    	Categoria cat = new Categoria("test12sisistesteado", false, null);
+    	Categoria cat = new Categoria("testesteado", false, null);
     	
 		try {
 			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
@@ -214,6 +217,8 @@ class Testing {
     	List<Categoria> lista = new ArrayList<>();
     	
     	lista.add(cat);
+    	
+    	sis.setProductoActual(null);
     	
     	NullPointerException thrown = assertThrows(NullPointerException.class, () ->{ 
     		sis.agregarProductoACategorias(lista);
@@ -253,10 +258,103 @@ class Testing {
     }
     
     @Test
-    public void agregarCategoriaAProductoACategoriaSinProductos() {
+    public void agregarCategoriaSinProductosAProductoConProdActualNull() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("test1doaodjkoakko", false, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	Producto prod = new Producto("wat3ad", "descrip", null, 811890, 0, null, lista, null, "dd market");
+    	
+    	sis.setProductoActual(prod);
+    	
+    	CategoriaNoPuedeTenerProductosException thrown = assertThrows(CategoriaNoPuedeTenerProductosException.class, () ->{ 
+    		sis.agregarCategoriasAProducto(lista);
+    		//no deberia ejecutarse
+    	});
+    	
+    	assertEquals("Las categorías " + cat.getNombreCat() + " no puede contener productos.", thrown.getMessage());
+    	
+    }
+    
+    @Test
+    public void RegistrarProductoEnCategoriaSinProductosSinProveedor() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("teaodjkoakko", false, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	
+    	Producto prod = new Producto("wat3ad", "descrip", null, 8190, 0, null, lista, null, "dd market");
+    	
+    	sis.setUsuarioActual(null);
+    	
+    	NullPointerException thrown = assertThrows(NullPointerException.class, () ->{ 
+    		sis.registrarProducto(prod.getNombreProducto(), prod.getNumReferencia(), prod.getDescripcion(), null, 0, lista, null, prod.getNombreTienda());
+    		//no deberia ejecutarse
+    	});
+    	
+    	assertEquals("No se ha elegido un proveedor previamente.", thrown.getMessage());
+    	
+    }
+    
+    @Test
+    public void RegistrarProductoEnCategoriaSinProductos() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("teaokoakko", false, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	DTFecha f = new DTFecha(2, 4, 1998);
+    	
+    	Producto prod = new Producto("wat3ad", "descrip", null, 8190, 0, null, lista, null, "dd market");
+    	
+    	Proveedor prov = new Proveedor("nice", "pool", "gonzales", "laal@yahoo@respuestas.com.yahoooo", f, null, "company inc", "olaaa.com", "12345678");
+    	
+    	try {
+			sis.altaUsuarioProveedor(prov.getNickname(), prov.getEmail(), prov.getNombre(), prov.getApellido(), prov.getFechaNac(), prov.getnomCompania(), prov.getlink(), null ,prov.getContrasenia(), prov.getContrasenia());
+		} catch (UsuarioRepetidoException | ContraseniaIncorrectaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+    	
+    	sis.setUsuarioActual((Usuario) prov);
+    	
+    	CategoriaNoPuedeTenerProductosException thrown = assertThrows(CategoriaNoPuedeTenerProductosException.class, () ->{ 
+    		sis.registrarProducto(prod.getNombreProducto(), prod.getNumReferencia(), prod.getDescripcion(), null, 0, lista, null, prod.getNombreTienda());
+    		//no deberia ejecutarse
+    	});
+    	
+    	assertEquals("Las categorías " + cat.getNombreCat() + " no puede contener productos.", thrown.getMessage());
     	
     }
     
@@ -265,6 +363,23 @@ class Testing {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
+    	Categoria cat = new Categoria("HOMEROCHINO", true, null);
+    	
+    	try {
+			sis.altaCategoria(cat.getNombreCat(), true, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+    	
+    	Categoria cat2 = new Categoria("HOMEROCHINO", true, null);
+    	
+    	
+    	CategoriaRepetidaException thrown = assertThrows(CategoriaRepetidaException.class, () ->{ 
+    		sis.altaCategoria(cat2.getNombreCat(), true, cat2.getPadre());
+    		//no deberia ejecutarse
+    	});
+    	
+    	assertEquals("Ya existe una categoría con el nombre " + '"' + cat.getNombreCat() + '"' + '.', thrown.getMessage());
     }
     
     
