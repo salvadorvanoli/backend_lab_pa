@@ -26,8 +26,10 @@
 	<jsp:include page="/WEB-INF/template/header.jsp"/>
 
     <%
-	    
+    	String textoBusqueda = (String) request.getAttribute("textoBusqueda");
 	%>
+
+	<input type="hidden" id="textoBusqueda" value="<%= textoBusqueda != null ? textoBusqueda : "" %>">
 
 	<!-- Mostrar el select de orden -->
 	<div class="row container-fluid w-100 justify-content-end align-items-center">
@@ -161,28 +163,37 @@
 	function filtrarProductosPorCategoria() {
 	    // Si no hay categorías seleccionadas, carga todos los productos
 	    if (categoriasSeleccionadas.length === 0) {
-	    	document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
+	        document.querySelector("#selectedCategories").textContent = "Selecciona categorías aquí";
 	        cargarCatalogo(prod);
 	        return;
 	    }
 	    
-	    let textoCategorias = "Categorias seleccionadas: ";
+	    let textoCategorias = "Categorías seleccionadas: ";
 	    
 	    for (let i = 0; i < categoriasSeleccionadas.length; i++) {
-	    	textoCategorias += categoriasSeleccionadas[i].nombreCat;
-	    	if ((i + 1) != categoriasSeleccionadas.length){
-	    		textoCategorias += " - ";
-	    	}
+	        textoCategorias += categoriasSeleccionadas[i].nombreCat;
+	        if ((i + 1) !== categoriasSeleccionadas.length) {
+	            textoCategorias += " - ";
+	        }
 	    }
 	    
 	    document.querySelector("#selectedCategories").textContent = textoCategorias;
 	
-	    const productosFiltrados = prod.filter(producto => {
+	    // Filtrar productos por categorías seleccionadas
+	    let productosFiltrados = prod.filter(producto => {
 	        return producto['categorias'].some(categoria => {
 	            // Función recursiva para buscar en todas las subcategorías
 	            return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	        });
 	    });
+	
+	    // Filtrar productos por el valor de búsqueda si se especifica
+	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+	    if (textoBusqueda) {
+	        productosFiltrados = productosFiltrados.filter(producto => 
+	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+	        );
+	    }
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
@@ -262,6 +273,13 @@
 	            });
 	        });
 	    }
+	    
+	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+	    if (textoBusqueda) {
+	        productosFiltrados = productosFiltrados.filter(producto => 
+	            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+	        );
+	    }
 	
 	    // Ordenar los productos según la opción seleccionada
 	    if (orden === "1") {
@@ -321,24 +339,47 @@
 	
 	        contenedorEstrellas.appendChild(ConjuntoEstrellas);
 	
-	        const producto = document.createElement("div");
-	        producto.innerHTML =
-	            `<div class="col-12 row my-3 d-flex align-items-center justify-content-center pe-sm-5 pe-2 rectangle-1 product" id="producto` + element.numReferencia + `" onclick="cargarProducto(` + element.numReferencia + `)">
-	                <div class="col-lg-4 col-sm-6 col-12 d-flex align-items-center justify-content-center">
-	                    <img class="w-xs-75 w-50 image-1" src="` + element.imagenes[0] + `" alt="` + element.nombre + `">
-	                </div>
-	                <div class="col-lg-8 col-sm-6 col-10">
-	                    <div class="row">
-	                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center mb-0">` + element.nombre + `</p>` +
-	                        contenedorEstrellas.innerHTML +
-	                        `<p class="col-12 px-0 m-0 tienda-x text-break text-sm-start text-center my-2 my-sm-3 mt-lg-1 mb-lg-3">` + element.nombreTienda + `</p>
-	                    </div>
-	                    <div class="row precio-producto d-flex align-items-end">
-	                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center mb-1">$` + element.precio + `</p>
-	                    </div>
-	                </div>
-	            </div>
-	            `
+	        let producto;
+	        
+	        if(element.imagenes[0]) {
+	        	producto = document.createElement("div");
+		        producto.innerHTML =
+		            `<div class="col-12 row my-3 d-flex align-items-center justify-content-center pe-sm-5 pe-2 rectangle-1 product" id="producto` + element.numReferencia + `" onclick="cargarProducto(` + element.numReferencia + `)">
+		                <div class="col-lg-4 col-sm-6 col-12 d-flex align-items-center justify-content-center">
+		                    <img class="w-xs-75 w-50 image-1" src="` + element.imagenes[0] + `" alt="` + element.nombre + `">
+		                </div>
+		                <div class="col-lg-8 col-sm-6 col-10">
+		                    <div class="row">
+		                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center mb-0">` + element.nombre + `</p>` +
+		                        contenedorEstrellas.innerHTML +
+		                        `<p class="col-12 px-0 m-0 tienda-x text-break text-sm-start text-center my-2 my-sm-3 mt-lg-1 mb-lg-3">` + element.nombreTienda + `</p>
+		                    </div>
+		                    <div class="row precio-producto d-flex align-items-end">
+		                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center mb-1">$` + element.precio + `</p>
+		                    </div>
+		                </div>
+		            </div>
+		            `
+	        } else {
+	        	producto = document.createElement("div");
+		        producto.innerHTML =
+		            `<div class="col-12 row my-3 d-flex align-items-center justify-content-center pe-sm-5 pe-2 rectangle-1 product" id="producto` + element.numReferencia + `" onclick="cargarProducto(` + element.numReferencia + `)">
+		                <div class="col-lg-4 col-sm-6 col-12 d-flex align-items-center justify-content-center">
+		                    <img class="w-xs-75 w-50 image-1" src="media/images/default.webp" alt="` + element.nombre + `">
+		                </div>
+		                <div class="col-lg-8 col-sm-6 col-10">
+		                    <div class="row">
+		                        <p class="col-md col-12 titulo-producto p-0 text-break text-sm-start text-center mb-0">` + element.nombre + `</p>` +
+		                        contenedorEstrellas.innerHTML +
+		                        `<p class="col-12 px-0 m-0 tienda-x text-break text-sm-start text-center my-2 my-sm-3 mt-lg-1 mb-lg-3">` + element.nombreTienda + `</p>
+		                    </div>
+		                    <div class="row precio-producto d-flex align-items-end">
+		                        <p class="col-sm-6 col-12 p-0 precio text-break text-sm-start text-center mb-1">$` + element.precio + `</p>
+		                    </div>
+		                </div>
+		            </div>
+		            `
+	        }
 	
 	        contenedorPadre.appendChild(producto);
 	
@@ -362,7 +403,24 @@
 	        const ordenSeleccionado = this.value;
 	        ordenarProductos(ordenSeleccionado); // Llama a la función de ordenar productos
 	    });
-
+	    
+		function ordenarAlEntrar() {
+			let productosFiltrados = prod;
+			
+			const textoBusqueda = document.getElementById('textoBusqueda').value;
+		    if (textoBusqueda) {
+		        productosFiltrados = productosFiltrados.filter(producto => 
+		            producto.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+		        );
+		    }
+		    
+		    cargarCatalogo(productosFiltrados);
+		}
+		
+		if(prod) {
+			ordenarAlEntrar();
+			document.getElementById("searchbar").value = document.getElementById("textoBusqueda").value;
+		}
 		
 	});
 
