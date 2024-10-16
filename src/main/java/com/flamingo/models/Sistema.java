@@ -111,7 +111,7 @@ public class Sistema extends ISistema {
 	    }
 
 	    // Validar contraseñas
-	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	    if (contrasenia1 == null || contrasenia1.length() < 8 || contrasenia2 == null || contrasenia2.length() < 8) {
 	        errores.add("La contraseña debe tener al menos 8 caracteres.");
 	    } else if (!contrasenia1.equals(contrasenia2)) {
 	        errores.add("Las contraseñas no coinciden.");
@@ -147,6 +147,28 @@ public class Sistema extends ISistema {
 	}
 	
 	public boolean registro(String nickname, String email) throws UsuarioRepetidoException {
+		
+		// Lista para almacenar los errores
+	    List<String> errores = new ArrayList<>();
+
+	    // Validar nickname
+	    if (nickname == null || nickname.trim().isEmpty()) {
+	        errores.add("El nickname no puede ser vacio.");
+	    }
+	    
+	 // Validar email
+	    if (email == null || email.trim().isEmpty()) {
+	        errores.add("El email no puede ser vacio.");
+	    }
+	// Validar formato email
+	    if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+	    	errores.add("Por favor, introduce un correo electrónico válido.");
+	    }
+	 // Si hay errores tirar excepción
+	    if (!errores.isEmpty()) {
+	        throw new IllegalArgumentException("Errores de validación: " + String.join(", ", errores));
+	    }
+	    
 		for (Usuario user : this.usuarios) {
 			if (user.getEmail().equalsIgnoreCase(email)) {
 				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el email " + '"' + email + '"' + '.');
@@ -168,14 +190,14 @@ public class Sistema extends ISistema {
 	    if (nombre == null || nombre.trim().isEmpty() || nombre.length() < 3 || !validarNombreSinNumeros(nombre)) {
 	        errores.add("El nombre debe tener al menos 3 caracteres y no puede contener números.");
 	    }
-
+	   
 	    // Validar apellido
 	    if (apellido == null || apellido.trim().isEmpty() || apellido.length() < 3 || !validarNombreSinNumeros(apellido)) {
 	        errores.add("El apellido debe tener al menos 3 caracteres y no puede contener números.");
 	    }
 
 	    // Validar contraseñas
-	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	    if (contrasenia1 == null || contrasenia2 == null || contrasenia1.length() < 8 || contrasenia2.length() < 8) {
 	        errores.add("La contraseña debe tener al menos 8 caracteres.");
 	    } else if (!contrasenia1.equals(contrasenia2)) {
 	        errores.add("Las contraseñas no coinciden.");
@@ -190,7 +212,12 @@ public class Sistema extends ISistema {
 	    if (linkWeb != null && !linkWeb.trim().isEmpty() && !validarUrl(linkWeb)) {
 	        errores.add("La URL del sitio web no es válida.");
 	    }
-
+	    
+	    // Validar nombre de la compañía
+	    if (linkWeb == null || linkWeb.trim().isEmpty()) {
+	        errores.add("La URL del sitio web es obligatoria.");
+	    }
+	    
 	    // Validar nombre de la compañía
 	    if (nomCompania == null || nomCompania.trim().isEmpty()) {
 	        errores.add("La compañía es obligatoria.");
