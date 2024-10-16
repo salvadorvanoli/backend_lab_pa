@@ -5,6 +5,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Collection"%>
 <%@page import="java.util.HashMap"%>
+<%@ page import="com.google.gson.Gson" %>
 
 
 
@@ -197,7 +198,27 @@
      <input type="hidden" name="descripcion" id="productoDescripcion">
 	</form>
 
-	
+	<script type="text/javascript">
+        // Pasar la lista de nombres desde el backend a un array de JavaScript
+        var nombresProductos = <%= new Gson().toJson(request.getAttribute("nombres")) %>;
+        console.log(nombresProductos);  // Ahora tienes la lista de nombres en JavaScript
+
+        // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        nombresProductos.forEach(function(nombre) {
+            console.log("Nombre del producto: " + nombre);
+        });
+    </script>
+    
+    	<script type="text/javascript">
+        // Pasar la lista de nombres desde el backend a un array de JavaScript
+        var numerosProductos = <%= new Gson().toJson(request.getAttribute("numeros")) %>;
+        console.log(numerosProductos);  // Ahora tienes la lista de nombres en JavaScript
+
+        // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        numerosProductos.forEach(function(numero) {
+            console.log("Numero del producto: " + numero);
+        });
+    </script>
 
 	<script>
 	
@@ -492,23 +513,28 @@
 	            mostrarAlerta("El precio debe ser un número válido con hasta dos decimales.");
 	            return false;
 	        }
-	        
-	        
-	        // Validar que el precio sea un número válido con hasta dos decimales
+
+	        // Validar que el número de referencia sea un número válido
 	        if (!regexPrecio.test(inputReferencia.value)) {
 	            mostrarAlerta("El número de referencia debe ser un número.");
 	            return false;
 	        }
-	        
-	     /* Validar si el número de referencia ya existe en la lista de productos
-	        const referenciaExiste = productos.some(producto => producto.numeroReferencia === inputReferencia.value);
-	        if (referenciaExiste) {
-	            mostrarAlerta("El número de referencia ya existe. Elige otro.");
+
+	        // Validar si el título del nuevo producto ya existe en la lista de productos existentes
+	        if (nombresProductos.includes(inputTitulo.value.trim())) {
+	            mostrarAlerta("El producto con ese título ya existe. Por favor, elige un título diferente.");
 	            return false;
 	        }
-		*/
+	        
+	     // Validar si el número del nuevo producto ya existe en la lista de productos existentes
+	        if (numerosProductos.includes(parseInt(inputReferencia.value.trim()))) {
+	            mostrarAlerta("El número de referencia ya está en uso. Por favor, elige un número diferente.");
+	            return false;
+	        }
+
 	        return true;
 	    }
+
 	 
 	 
 	    /*
