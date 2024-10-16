@@ -8,9 +8,11 @@ public class OrdenDeCompra {
 	private float precioTotal;
 	private DTFecha fecha;
 	private Cliente cliente;
+	private List<Proveedor> proveedores;
 	private List<DTCantidad> cantidad;
 	private FormaPago formaPago;
 	private DetallesEnvio detallesEnvio;
+	private Estado estado;
 	
 	public int getNumero() {
 		return numero;
@@ -43,6 +45,14 @@ public class OrdenDeCompra {
 		this.cantidad = cantidad;
 	}
 	
+	public List<Proveedor> getProveedores() {
+		return proveedores;
+	}
+	
+	public void setProveedores(List<Proveedor> proveedores) {
+		this.proveedores = proveedores;
+	}
+	
 	public FormaPago getFormaPago() {
 		return this.formaPago;
 	}
@@ -57,6 +67,14 @@ public class OrdenDeCompra {
 	
 	public void setDetallesEnvio(DetallesEnvio detallesEnvio) {
 		this.detallesEnvio = detallesEnvio;
+	}
+	
+	public Estado getEstado() {
+		return estado;
+	}
+	
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 	
 	public void desvincularCliente () {
@@ -90,11 +108,12 @@ public class OrdenDeCompra {
 		}
 	}
 	
-	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<DTCantidad> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
+	public OrdenDeCompra(int numero, DTFecha fecha, Cliente cliente, List<Proveedor> proveedores, List<DTCantidad> cantidades, FormaPago formaPago, DetallesEnvio detallesEnvio) {
 		super();
 		this.numero = numero;
 		this.fecha = fecha;
 		this.cliente = cliente;
+		this.proveedores = proveedores;
 		this.formaPago = formaPago;
 		this.detallesEnvio = detallesEnvio;
 		if (cantidades != null && !(cantidades.isEmpty())) {

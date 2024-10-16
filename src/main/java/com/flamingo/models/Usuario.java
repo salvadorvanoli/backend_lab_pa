@@ -1,6 +1,8 @@
 package com.flamingo.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.flamingo.models.DTFecha;
 
@@ -12,6 +14,7 @@ public class Usuario{
     private DTFecha fechaNac;
     private String foto;
     private String contrasenia;
+    private List <OrdenDeCompra> ordenesDeCompras;
 
     public Usuario(String nickname, String nombre, String apellido, String email, DTFecha fechaNac, String foto, String contrasenia){
         this.nickname = nickname;
@@ -21,6 +24,7 @@ public class Usuario{
         this.fechaNac = fechaNac;
         this.foto = foto;
         this.contrasenia = contrasenia;
+        this.ordenesDeCompras = new ArrayList<>();
     }
 
 	public String getNickname() {
@@ -77,6 +81,22 @@ public class Usuario{
 
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
+	}
+	
+	public List <OrdenDeCompra> getOrdenesDeCompras(){
+		return this.ordenesDeCompras;
+	}
+	
+	public void setOrdenesDeCompras(List <OrdenDeCompra> OrdenesDeCompras){
+		this.ordenesDeCompras = OrdenesDeCompras;
+	}
+	
+	public void desvincularOrdenDeCompra(OrdenDeCompra ord){
+		this.ordenesDeCompras.remove(ord);
+	}
+	
+	public void vincularOrdenDeCompra(OrdenDeCompra ord) {
+		this.ordenesDeCompras.add(ord);
 	}
 	
 	public String toString() {
