@@ -14,6 +14,7 @@
 <%@ page import="com.flamingo.models.Cliente" %>
 <%@ page import="com.flamingo.models.DTCantidad" %>
 <%@ page import="com.flamingo.models.DTProducto" %>
+<%@ page import="com.flamingo.models.Estado" %>
 
 
 <!DOCTYPE html>
@@ -147,6 +148,12 @@
 	                <h1 class="total2">$ <%= subtotalTodo + subtotalTodo * 0.02 %></h1>
 	            </div>
 	            
+	            <%
+	            
+	            if(orden.getEstado() != Estado.entregada) {
+	            
+	            %>
+	            
 	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
 		            <form class="d-flex" action="cambiarEstadoOrden" method="POST">
 	    
@@ -170,6 +177,12 @@
 					    	<button type="submit" class="btn btn-success"> Cambiar estado </button>
 						</form>
 	            </div>
+	            
+	            <%
+	            
+	            }
+	            
+	            %>
 	            
 	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
 	                <button type="button" class="button-volver" id="volver" onclick="window.location.href='infoUsuario'"> Volver </button>
