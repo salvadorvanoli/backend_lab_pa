@@ -111,6 +111,9 @@ class Testing {
         assertEquals("Ya existe un usuario registrado con el nickname \"nicknameRepetir\".", thrown.getMessage());
     }
 	
+    
+    // ################################ ORDEN ################################
+    
     @Test
     public void ElegirOrdenNoExiste() {
     	// Instancia del sistema
@@ -168,6 +171,8 @@ class Testing {
     	assertEquals("La Orden De compra y existe: ", thrown.getMessage());
     }
 	*/
+    
+ // ################################ Categoria ################################
     
     @Test
     public void CategoriaNoExisteConNombre() {
