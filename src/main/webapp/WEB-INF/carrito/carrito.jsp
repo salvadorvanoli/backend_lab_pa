@@ -1019,9 +1019,11 @@
 	            "precioTotal": Number.parseFloat(total),
 	            "fecha": fechaActual,
 	            "cliente": null,
+	            "proveedores": null,
 	            "cantidad": Object.values(carritoActual),
 	            "formaPago": formaPago,
-	            "detallesEnvio": detallesEnvio
+	            "detallesEnvio": detallesEnvio,
+	            "estado": "comprada"
 	        }
 
 	        updateCarrito("/backend_lab_pa/manejarcarrito", nuevaOrden, "realizarCompra");

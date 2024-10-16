@@ -136,10 +136,17 @@ public class OrdenDeCompra {
 	                + "Fecha: " + fechaFormateada + System.lineSeparator()
 	                + "Precio total: " + this.getPrecioTotal() + System.lineSeparator()
 	                + "Nombre cliente: " + this.cliente.getNickname() + System.lineSeparator()
+	                + "Estado: " + this.estado.name() + System.lineSeparator()
 	                + System.lineSeparator() +  "-------------------- PRODUCTOS --------------------" + System.lineSeparator() + System.lineSeparator();
 	    Integer i = 1;
 	    for (DTCantidad prod : this.cantidad){
 	        retorno += "Producto número " + i.toString() + ": "  + System.lineSeparator() + prod.toString() + System.lineSeparator();
+	        i++;
+	    }
+	    i = 1;
+	    retorno += System.lineSeparator() +  "-------------------- PROVEEDORES --------------------" + System.lineSeparator() + System.lineSeparator();
+	    for (Proveedor prov : this.proveedores){
+	        retorno += "Proveedor número " + i.toString() + ": "  + System.lineSeparator() + prov.toString() + System.lineSeparator();
 	        i++;
 	    }
 	    return retorno;
