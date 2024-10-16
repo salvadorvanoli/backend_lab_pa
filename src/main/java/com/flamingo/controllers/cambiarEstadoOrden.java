@@ -84,18 +84,12 @@ public class cambiarEstadoOrden extends HttpServlet {
         
         if(estadoOrden.equals("entregada")) {
         	
-        	System.out.println("Entré al if 1");
-        	
         	if(ordenSeleccionada.getEstado() != Estado.enCamino) {
-        		
-        		System.out.println("Entré al if 2");
         		
         		response.sendRedirect(request.getContextPath() + "/infoUsuario");
         		return;
         	}
         }
-        
-        System.out.println("Llegué a pasar el if");
         
         Estado est = Estado.valueOf(estadoOrden);
         
