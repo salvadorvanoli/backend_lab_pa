@@ -16,10 +16,13 @@ import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 import com.flamingo.exceptions.OrdenDeCompraRepetidaException;
 import com.flamingo.exceptions.ProductoNoExisteException;
 import com.flamingo.exceptions.ProductoRepetidoException;
+import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.exceptions.UsuarioRepetidoException;
 import com.flamingo.models.Categoria;
+import com.flamingo.models.Cliente;
 import com.flamingo.models.DTFecha;
 import com.flamingo.models.ISistema;
+import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.Producto;
 import com.flamingo.models.Proveedor;
 import com.flamingo.models.SistemaFactory;
@@ -112,7 +115,7 @@ class Testing {
     }
 	
     
-    // ################################ ORDEN (Exeptions) ################################
+    // ################################ ElegirOrden ################################
     
     @Test
     public void ElegirOrdenNoExiste() {
@@ -131,6 +134,8 @@ class Testing {
     	assertEquals("La orden de compra número " + '"' + num + '"' + " no existe.", thrown.getMessage());
     }
     
+    // ################################ CancelarOrden ################################
+    
     @Test
     public void CancelarOrdenNoExiste() {
     	// Instancia del sistema
@@ -146,6 +151,46 @@ class Testing {
     	
     	// Verificar el mensaje de la excepción
     	assertEquals("La orden de compra número " + '"' + num + '"' + " no existe.", thrown.getMessage());
+    }
+    
+    // ################################ RealizarCompra ################################
+    
+    @Test
+    public void realizarCompraConUsuarioNull() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	OrdenDeCompra ord = new OrdenDeCompra(55674, new DTFecha(1, 12, 1987), null, null);
+    	
+    	sis.setUsuarioActual(null);
+    	
+    	UsuarioNoExisteException thrown = assertThrows(UsuarioNoExisteException.class, () ->{ 
+    		sis.realizarCompra(ord);
+    		//no deberia ejecutarse
+    	});
+    	
+    	// Verificar el mensaje de la excepción
+    	assertEquals("No se ha seleccionado ningún usuario previamente.", thrown.getMessage());
+    }
+    
+    @Test
+    public void realizarCompraConUsuarioNoCliente() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	OrdenDeCompra ord = new OrdenDeCompra(535674, new DTFecha(1, 10, 1990), null, null);
+    	
+    	Proveedor prov = new Proveedor("marce", "marcelo", "odi", "kadjwa@email.com", fecha, null, null, null, null);
+    	
+    	sis.setUsuarioActual((Usuario) prov);
+    	
+    	UsuarioNoExisteException thrown = assertThrows(UsuarioNoExisteException.class, () ->{ 
+    		sis.realizarCompra(ord);
+    		//no deberia ejecutarse
+    	});
+    	
+    	// Verificar el mensaje de la excepción
+    	assertEquals("El usuario actual no es un Cliente.", thrown.getMessage());
     }
     
    /* @Test
@@ -172,7 +217,7 @@ class Testing {
     }
 	*/
     
- // ################################ Categoria (Exeptions) ################################
+    // ################################ ElegirCategoria ################################
     
     @Test
     public void CategoriaNoExisteConNombre() {
@@ -205,19 +250,15 @@ class Testing {
     	
     }
     
+ // ################################ AgregarProductoACategorias ################################
+    
     @Test
-    public void agregarProductoACategoriaSinProductosConProdActualNull() {
+    public void agregarProductoACategoriaConProdActualNull() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
     	// Instacncia de categoria
     	Categoria cat = new Categoria("testesteado", false, null);
-    	
-		try {
-			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
-		} catch (CategoriaRepetidaException e) {
-			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
-		}
 		
     	List<Categoria> lista = new ArrayList<>();
     	
@@ -234,7 +275,7 @@ class Testing {
     }
     
     @Test
-    public void agregarProductoACategoriaSinProductosConProdActual() {
+    public void agregarProductoACategoriasCatSinProductos() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
@@ -261,6 +302,8 @@ class Testing {
     	
     	assertEquals("Las categorías " + cat.getNombreCat() + " no puede contener productos.", thrown.getMessage());
     }
+    
+    //// ################################ AgregarCategoriasAProducto ################################
     
     @Test
     public void agregarCategoriaSinProductosAProductoConProdActualNull() {
@@ -386,6 +429,7 @@ class Testing {
     	
     	assertEquals("Ya existe una categoría con el nombre " + '"' + cat.getNombreCat() + '"' + '.', thrown.getMessage());
     }
+    
     
     
 }
