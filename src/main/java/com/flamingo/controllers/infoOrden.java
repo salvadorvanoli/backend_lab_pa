@@ -34,44 +34,6 @@ public class infoOrden extends HttpServlet {
 		} else {
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		}
-       
-        /*borrar luego:
-        	
-        
-        	//String nickName, String nombre, String apellido, String email, DTFecha fecha, String foto, String contrasenia
-        	Usuario user = new Usuario("bellardoa2eda", "israkadkk", "beadawdk,pllizzi", "elmadafackinisraelllll@yahoo.com", new DTFecha(1,1,1), null, "kawdlkalalala");
-        	
-			sis.altaUsuarioCliente(user.getNickname(), user.getNombre(), user.getApellido(), user.getEmail(), user.getFechaNac(), user.getFoto(), user.getContrasenia(), user.getContrasenia());
-
-        	
-        	Cliente cli = new Cliente(user.getNickname(), user.getNombre(), user.getApellido(), user.getEmail(), user.getFechaNac(), user.getFoto(), user.getContrasenia());
-        	
-        	List<String> espe = new ArrayList<>();
-        	espe.add("h20 puro");
-        	
-        	Producto prod1 = new Producto("Agua Fresca", "Muy refrescante.", espe, 999, 72.5f, null, null,  null, "DD Water");
-        	Producto prod2 = new Producto("Semen Fresco", "Muy sabrozo.", null, 2, 14500f, null, null,  null, "SOTO");
-        	Producto prod3 = new Producto("Bamboo", "Re duro.", null, 122, 1f, null, null,  null, "be lichi");
-        	Producto prod4 = new Producto("Milanga", "Muy rica.", null, 3, 12f, null, null,  null, "Saul Scanino");
-        	
-        	DTCantidad cant = new DTCantidad(3, prod1.getDTProducto());
-        	DTCantidad cant8 = new DTCantidad(90, prod2.getDTProducto());
-        	DTCantidad cant9 = new DTCantidad(1, prod3.getDTProducto());
-        	DTCantidad cant10 = new DTCantidad(20, prod4.getDTProducto());
-        	
-        	List<DTCantidad> listaCan = new ArrayList<>();
-        	
-        	listaCan.add(cant);
-        	listaCan.add(cant8);
-        	listaCan.add(cant9);
-        	listaCan.add(cant10);
-        	
-        	//int numero, DTFecha fecha, Cliente cliente, List<DTCantidad> cantidades
-        	OrdenDeCompra orden = new OrdenDeCompra(1, sis.getFechaActual(), cli, listaCan);
-        	
-        	cli.vincularOrdenDeCompra(orden);
-        	
-        */
         	
         Usuario user = (Usuario) sis.getUsuarioActual();
         

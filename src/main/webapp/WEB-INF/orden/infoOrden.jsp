@@ -57,8 +57,6 @@
 			
 		
 			if(productos != null) {
-			
-				System.out.println("no es null");
 				
 				for (DTProducto prod : productos) {
 					cantidad = 0;
@@ -137,7 +135,7 @@
 	                    <h1 class="impuestos"> impuestos</h1>
 	                </div>
 	                <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-	                    <h1 class="subtotal2">$ <%= subtotalTodo %></h1>
+	                    <h1 class="subtotal2">$ <%= Math.round(subtotalTodo) %></h1>
 	                    <h1 class="envio2"> 
 	    					<%= (orden != null && orden.getDetallesEnvio() != null) ? orden.getDetallesEnvio().getPrecioEnvio() : 0 %> 
 						</h1>
@@ -146,14 +144,14 @@
 							impuestos = subtotalTodo * 0.02f;
 							df.format(impuestos);
 						%>
-	                    <h1 class="impuestos2">$ <%= impuestos %></h1>
+	                    <h1 class="impuestos2">$ <%= Math.round(impuestos) %></h1>
 	                </div>
 	            <div class="horizontal-line"></div>
 	            <div class="col-md-6 mt-3">
 	                <h1 class="total"> total </h1>
 	            </div>
 	            <div class="col-md-6 mt-3 d-flex flex-column align-items-end">
-	                <h1 class="total2">$ <%= subtotalTodo + subtotalTodo * 0.02 %></h1>
+	                <h1 class="total2">$ <%= Math.round(subtotalTodo + (subtotalTodo * 0.02)) %></h1>
 	            </div>
 	            
 	            <%
