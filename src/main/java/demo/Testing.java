@@ -42,6 +42,7 @@ import com.flamingo.models.DTProductoDetallado;
 import com.flamingo.models.DTProveedor;
 import com.flamingo.models.DTProveedorDetallado;
 import com.flamingo.models.DetallesEnvio;
+import com.flamingo.models.EstadoSesion;
 import com.flamingo.models.FormaPago;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
@@ -2549,5 +2550,64 @@ class Testing {
         detalles.setNumTelefono("0912345678");
 
         
+    }
+    
+    @Test
+    public void testEstadoSesionValues() {
+        // Verificar que el enum contiene los tres valores
+        EstadoSesion[] estados = EstadoSesion.values();
+        assertEquals(3, estados.length);
+        assertEquals(EstadoSesion.NO_LOGIN, estados[0]);
+        assertEquals(EstadoSesion.LOGIN_CORRECTO, estados[1]);
+        assertEquals(EstadoSesion.LOGIN_INCORRECTO, estados[2]);
+    }
+
+    @Test
+    public void testEstadoSesionValueOf() {
+        // Verificar que se puede obtener cada valor del enum por su nombre
+        assertEquals(EstadoSesion.NO_LOGIN, EstadoSesion.valueOf("NO_LOGIN"));
+        assertEquals(EstadoSesion.LOGIN_CORRECTO, EstadoSesion.valueOf("LOGIN_CORRECTO"));
+        assertEquals(EstadoSesion.LOGIN_INCORRECTO, EstadoSesion.valueOf("LOGIN_INCORRECTO"));
+    }
+    
+    @Test
+    public void testConstructorAndGetters() {
+        DTFecha fecha = new DTFecha(5, 10, 2023);
+        
+        assertEquals(5, fecha.getDia());
+        assertEquals(10, fecha.getMes());
+        assertEquals(2023, fecha.getAnio());
+    }
+
+    @Test
+    public void testSetters() {
+        DTFecha fecha = new DTFecha(1, 1, 2020);
+        
+        fecha.setDia(15);
+        fecha.setMes(7);
+        fecha.setAnio(2025);
+        
+        assertEquals(15, fecha.getDia());
+        assertEquals(7, fecha.getMes());
+        assertEquals(2025, fecha.getAnio());
+    }
+
+    @Test
+    public void testToString() {
+        DTFecha fecha = new DTFecha(5, 10, 2023);
+        
+        assertEquals("5/10/2023", fecha.toString());
+    }
+
+    @Test
+    public void testGetFechaEnFormatoInput() {
+        DTFecha fecha = new DTFecha(5, 10, 2023);
+        
+        assertEquals("2023-10-05", fecha.getFechaEnFormatoInput());
+        
+        // Probar con valores de día y mes menores a 10 para ver si se agregan ceros
+        DTFecha fecha2 = new DTFecha(3, 8, 2022);
+        
+        assertEquals("2022-08-03", fecha2.getFechaEnFormatoInput());
     }
 }
