@@ -892,8 +892,8 @@ public class Sistema extends ISistema {
         producto2.setEstrellas(3);
         producto3.setEstrellas(3);
         
-        pr1.agregarProducto(producto1);
-        pr1.agregarProducto(producto2);
+        pr3.agregarProducto(producto1);
+        pr2.agregarProducto(producto2);
         pr1.agregarProducto(producto3);
         
         Moda.agregarProducto(producto1);
