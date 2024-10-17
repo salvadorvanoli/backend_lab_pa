@@ -33,6 +33,10 @@ public abstract class ISistema{
 	
 	public abstract Producto getProductoActual();
 	
+	public abstract void setOrdenActual(OrdenDeCompra ord);
+	
+	public abstract void setCarritoActual(HashMap<Integer, Cantidad> car) throws UsuarioNoExisteException;
+	
 	public abstract void crearCasos();
 	
 	// Falta destructor (busqué y creo que no tiene)
