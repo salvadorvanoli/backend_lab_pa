@@ -163,28 +163,50 @@
 	            %>
 	            
 	            <div class="col-md-12 mt-5 d-flex flex-column align-items-end">
-		            <form class="d-flex" action="cambiarEstadoOrden" method="POST">
-	    
-						    <select name="estadoOrden" class="form-select" required>
-						        <%
-						            if (usuarioActual instanceof Cliente) {
-						        %>
-						            <option value="entregada">Lo recibí</option>
-						        <%
-						            } else if (usuarioActual instanceof Proveedor) {
-						        %>
-						            <option value="enPreparacion">Lo estoy preparando</option>
-						            <option value="enCamino">Lo envié</option>
-						        <%
-						            }
-						        %>
-						    </select>
-					    	
-					    	<input type="text" name="numeroOrden" class="d-none" value="<%= orden.getNumero() %>">
-					    	
-					    	<button type="submit" class="btn btn-success"> Cambiar estado </button>
-						</form>
-	            </div>
+				    <form class="d-flex" action="cambiarEstadoOrden" method="POST">
+				        <select name="estadoOrden" class="form-select me-2" required>
+				            <%
+				                if (usuarioActual instanceof Cliente) {
+				            %>
+				                <option value="entregada">Lo recibí</option>
+				            <%
+				                } else if (usuarioActual instanceof Proveedor) {
+				            %>
+				                <option value="enPreparacion">Lo estoy preparando</option>
+				                <option value="enCamino">Lo envié</option>
+				            <%
+				                }
+				            %>
+				        </select>
+				
+				        <%
+				            String estadoFormateado = "";
+				            if (orden.getEstado() != null) {
+				                switch (orden.getEstado()) {
+				                    case comprada:
+				                        estadoFormateado = "Comprada";
+				                        break;
+				                    case enPreparacion:
+				                        estadoFormateado = "En preparación";
+				                        break;
+				                    case enCamino:
+				                        estadoFormateado = "En camino";
+				                        break;
+				                    case entregada:
+				                        estadoFormateado = "Entregada";
+				                        break;
+				                }
+				        %>
+				            <input type="text" name="estadoOrden" class="form-control me-2" value="<%= estadoFormateado %>" disabled>
+				        <%
+				            }
+				        %>
+				
+				        <input type="text" name="numeroOrden" class="d-none" value="<%= orden.getNumero() %>">
+				
+				        <button type="submit" class="btn btn-success"> Cambiar estado </button>
+				    </form>
+				</div>
 	            
 	            <%
 	            
