@@ -118,7 +118,7 @@ public class Sistema extends ISistema {
 	    }
 
 	    // Validar contraseñas
-	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	    if (contrasenia1 == null || contrasenia1.length() < 8 || contrasenia2 == null || contrasenia2.length() < 8) {
 	        errores.add("La contraseña debe tener al menos 8 caracteres.");
 	    } else if (!contrasenia1.equals(contrasenia2)) {
 	        errores.add("Las contraseñas no coinciden.");
@@ -182,7 +182,7 @@ public class Sistema extends ISistema {
 	    }
 
 	    // Validar contraseñas
-	    if (contrasenia1 == null || contrasenia1.length() < 8) {
+	    if (contrasenia1 == null || contrasenia1.length() < 8 || contrasenia2 == null || contrasenia2.length() < 8) {
 	        errores.add("La contraseña debe tener al menos 8 caracteres.");
 	    } else if (!contrasenia1.equals(contrasenia2)) {
 	        errores.add("Las contraseñas no coinciden.");
