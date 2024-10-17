@@ -832,7 +832,7 @@ public class Sistema extends ISistema {
         String imagen5 = "media/images/Chica2.png";
         String imagen6 = "media/images/Chica3.png";
         
-        String imagenProducto = "media/images/oreo.webp";
+        String imagenProducto = "media/images/default.webp";
         
         Cliente cl1 = new Cliente("Salva", "Salvador", "Santurio", "Salva.Santu@example.com", fecha1, imagen2, "contrasenia");
         Cliente cl2 = new Cliente("Otto", "Nadia", "Gorría", "Panconqueso1012@example.com", fecha2, imagen5, "supersonic");
