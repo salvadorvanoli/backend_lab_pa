@@ -23,6 +23,8 @@ public abstract class ISistema{
 	
 	public abstract Usuario getUsuarioActual();
 	
+	public abstract void setOrdenActual(OrdenDeCompra ord);
+	
 	public abstract OrdenDeCompra getOrdenDeCompraActual();
 	
 	public abstract Categoria getCategoriaActual();

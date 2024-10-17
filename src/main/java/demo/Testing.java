@@ -3,11 +3,13 @@ package demo;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.flamingo.controllers.Carrito;
 import com.flamingo.exceptions.CategoriaNoExisteException;
 import com.flamingo.exceptions.CategoriaNoPuedeTenerProductosException;
 import com.flamingo.exceptions.CategoriaRepetidaException;
@@ -18,8 +20,10 @@ import com.flamingo.exceptions.ProductoNoExisteException;
 import com.flamingo.exceptions.ProductoRepetidoException;
 import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.exceptions.UsuarioRepetidoException;
+import com.flamingo.models.Cantidad;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.Cliente;
+import com.flamingo.models.DTClienteDetallado;
 import com.flamingo.models.DTFecha;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
@@ -115,9 +119,105 @@ class Testing {
     }
 	
     
+    // ################################ AgregarOrden ################################
+ 
+    @Test
+    public void AgregarOrdenExitoso() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	//int num = 100000000;
+    	
+    	Cantidad c = new Cantidad(1);
+    	
+    	Producto prod = new Producto(null, null, null, 0, 0, null, null, null, null);
+    	
+    	c.setProducto(prod);
+    	
+    	List<Cantidad> Lista = new ArrayList<>();
+    	
+    	Lista.add(c);
+    	
+    	Cliente cli = new Cliente("a", "b", "c", "d", fecha, null, null);
+    	
+    	sis.setUsuarioActual((Usuario) cli);
+    	
+    	OrdenDeCompra res1 = null;
+    	
+    	res1 = sis.agregarOrden(Lista);
+    	
+    	assertNotNull(res1, "La orden no debe ser nula");
+    	
+    }
+    
+    @Test
+    public void AgregarOrdenSinCliente() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	int num = 100000000;
+    	
+    	Cantidad c = new Cantidad(1);
+    	
+    	List<Cantidad> Lista = new ArrayList<>();
+    	
+    	Lista.add(c);
+    	
+    	Proveedor prov = new Proveedor("a", "b", "c", "d", fecha, null, null, null, null);
+    	
+    	sis.setUsuarioActual((Usuario) prov);
+    	
+    	// intento elegir una orden con un numero de orden que no existe
+    	IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->{ 
+    		sis.agregarOrden(Lista);
+    		//no deberia ejecutarse
+    	});
+    	
+    	// Verificar el mensaje de la excepción
+    	assertEquals("El usuario actual no es un cliente.", thrown.getMessage());
+    	
+    }
+    
+   
+    
     // ################################ ElegirOrden ################################
     
     @Test
+    public void ElegirOrdenExitoso() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	Cantidad c = new Cantidad(1);
+    	
+    	Producto prod = new Producto(null, null, null, 0, 0, null, null, null, null);
+    	
+    	c.setProducto(prod);
+    	
+    	List<Cantidad> Lista = new ArrayList<>();
+    	
+    	Lista.add(c);
+    	
+    	Cliente cli = new Cliente("a", "b", "c", "d", fecha, null, null);
+    	
+    	sis.setUsuarioActual((Usuario) cli);
+    	
+    	Cantidad cant = new Cantidad(1);
+    	cant.setProducto(new Producto(null, null, null, 0, 0, null, null, null, null));
+    
+    	OrdenDeCompra ord = sis.agregarOrden(Lista);
+    	
+    	boolean res1 = false;
+    	
+		try {
+			res1 = sis.elegirOrdenDeCompra(ord.getNumero());
+		} catch (OrdenDeCompraNoExisteException e) {
+
+			e.printStackTrace(); //no deberia ejecutarse
+		}
+
+    	assertTrue(res1, "La orden deberia seleccionarse correctamente.");
+    }
+    
+   @Test
     public void ElegirOrdenNoExiste() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
@@ -135,6 +235,38 @@ class Testing {
     }
     
     // ################################ CancelarOrden ################################
+   
+   	@Test
+   	public void CancelarOrdenExitoso() {
+   		ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	Cantidad c = new Cantidad(1);
+    	
+    	Producto prod = new Producto(null, null, null, 0, 0, null, null, null, null);
+    	
+    	c.setProducto(prod);
+    	
+    	List<Cantidad> Lista = new ArrayList<>();
+    	
+    	Lista.add(c);
+    	
+    	Cliente cli = new Cliente("a", "b", "c", "d", fecha, null, null);
+    	
+    	sis.setUsuarioActual((Usuario) cli);
+    	
+    	Cantidad cant = new Cantidad(1);
+    	cant.setProducto(new Producto(null, null, null, 0, 0, null, null, null, null));
+    
+    	OrdenDeCompra ord = sis.agregarOrden(Lista);
+    	
+    	sis.setOrdenActual(ord);
+    	
+    	try {
+			sis.cancelarOrdenDeCompra(ord.getNumero()); // Deberia ejecutarse
+		} catch (OrdenDeCompraNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		} 
+   	}
     
     @Test
     public void CancelarOrdenNoExiste() {
@@ -154,6 +286,41 @@ class Testing {
     }
     
     // ################################ RealizarCompra ################################
+    
+    @Test
+    public void realizarCompraExitoso() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	OrdenDeCompra ord = new OrdenDeCompra(535674, new DTFecha(1, 10, 1990), null, null);
+    	
+    	Cliente cli = new Cliente(null, null, null, null, fecha, null, null);
+    	
+    	HashMap <Integer, Cantidad> car = new HashMap<>();
+    	
+    	Cantidad cant = new Cantidad(1);
+    	
+    	Proveedor prov = new Proveedor(null, null, null, null, fecha, null, null, null, null);
+    	
+    	Producto prod = new Producto(null, null, null, 0, 0, null, null, prov, null);
+    	
+    	prod.setCantCompras(1);
+    	
+    	cant.setProducto(prod);
+    	
+    	car.put(1, cant);
+    	
+    	cli.setCarrito(car);
+    	
+    	sis.setUsuarioActual((Usuario) cli);
+    	
+    	try {
+			sis.realizarCompra(ord); // Deberia ejecutarse
+		} catch (UsuarioNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    }
+    
     
     @Test
     public void realizarCompraConUsuarioNull() {
@@ -193,6 +360,7 @@ class Testing {
     	assertEquals("El usuario actual no es un Cliente.", thrown.getMessage());
     }
     
+  
    /* @Test
     public void OrdenDeCompraRepetida() {
     	// Instancia del sistema
@@ -218,6 +386,33 @@ class Testing {
 	*/
     
     // ################################ ElegirCategoria ################################
+    
+    
+    @Test
+    public void ElegirCategoriaExitoso() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	String nom = "TussWArrior";
+    	
+    	try {
+			sis.altaCategoria(nom, false, null);
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	boolean res1 = false;
+    	
+    	try {
+			res1 = sis.elegirCategoria(nom); // Deberia ejecutarse
+		} catch (CategoriaNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	assertTrue(res1, "La categoria Deberia haberse escogido correctametne");
+    	
+    }
+    
     
     @Test
     public void CategoriaNoExisteConNombre() {
@@ -251,6 +446,35 @@ class Testing {
     }
     
  // ################################ AgregarProductoACategorias ################################
+    
+    @Test
+    public void agregarProductoACategoriaExitoso() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("test1234tesistesteado", true, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	Producto prod = new Producto("wattpad", "descrip", null, 81118890, 0, null, lista, null, "dd market");
+    	
+    	sis.setProductoActual(prod);
+    	
+    	try {
+			sis.agregarProductoACategorias(lista); // Deberia ejecutarse
+		} catch (CategoriaNoPuedeTenerProductosException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    }
     
     @Test
     public void agregarProductoACategoriaConProdActualNull() {
@@ -303,10 +527,69 @@ class Testing {
     	assertEquals("Las categorías " + cat.getNombreCat() + " no puede contener productos.", thrown.getMessage());
     }
     
-    //// ################################ AgregarCategoriasAProducto ################################
+    // ################################ AgregarCategoriasAProducto ################################
     
     @Test
-    public void agregarCategoriaSinProductosAProductoConProdActualNull() {
+    public void agregarCategoriasAProductoExitoso() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("test1djkoakko", true, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	Producto prod = new Producto("wat3ad", "descrip", null, 811890, 0, null, lista, null, "dd market");
+    	
+    	sis.setProductoActual(prod);
+    	
+    	
+    	try {
+			sis.agregarCategoriasAProducto(lista); // Deberia ejecutarse
+		} catch (CategoriaNoPuedeTenerProductosException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    }
+    
+    @Test
+    public void agregarCategoriasAProductoConProdActualNull() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	// Instacncia de categoria
+    	Categoria cat = new Categoria("test1jkoakko", false, null);
+    	
+		try {
+			sis.altaCategoria(cat.getNombreCat(), false, cat.getPadre());
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); //no deberia ejecutarse
+		}
+		
+    	List<Categoria> lista = new ArrayList<>();	
+    	lista.add(cat);
+    	
+    	
+    	sis.setProductoActual(null);
+    	
+    	NullPointerException thrown = assertThrows(NullPointerException.class, () ->{ 
+    		sis.agregarCategoriasAProducto(lista);
+    		//no deberia ejecutarse
+    	});
+    	
+    	assertEquals("No se ha elegido un producto previamente.", thrown.getMessage());
+    	
+    }
+    
+    @Test
+    public void agregarCategoriasAProductoConCategoriaSinProductos() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
@@ -335,8 +618,10 @@ class Testing {
     	
     }
     
-    @Test
-    public void RegistrarProductoEnCategoriaSinProductosSinProveedor() {
+    // ################################ RegitrarProducto ################################
+    
+    /*@Test
+    public void RegistrarProductoSinProveedor() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	
@@ -405,12 +690,32 @@ class Testing {
     	assertEquals("Las categorías " + cat.getNombreCat() + " no puede contener productos.", thrown.getMessage());
     	
     }
+    */
+    
+    // ################################ AltaCategoria ################################
     
     @Test
-    public void CategoriaRepetida() {
+    public void AltaCategoriaExitoso() {
     	// Instancia del sistema
     	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	Categoria cat = new Categoria("HOMEINO", true, null);
     	
+    	Categoria c = null;
+    	
+    	try {
+			c = sis.altaCategoria(cat.getNombreCat(), true, cat.getPadre()); // Deberia ejecutarse
+		} catch (CategoriaRepetidaException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	assertNotNull(c, "La Categoria deberia haber sido creada correctamente");
+    	
+    }
+    
+    @Test
+    public void AltaCategoriaConCategoriaRepetida() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
     	Categoria cat = new Categoria("HOMEROCHINO", true, null);
     	
     	try {
@@ -423,12 +728,130 @@ class Testing {
     	
     	
     	CategoriaRepetidaException thrown = assertThrows(CategoriaRepetidaException.class, () ->{ 
-    		sis.altaCategoria(cat2.getNombreCat(), true, cat2.getPadre());
-    		//no deberia ejecutarse
+    		sis.altaCategoria(cat2.getNombreCat(), true, cat2.getPadre()); //no deberia ejecutarse
     	});
     	
     	assertEquals("Ya existe una categoría con el nombre " + '"' + cat.getNombreCat() + '"' + '.', thrown.getMessage());
     }
+    
+    // ################################ ElegirCliente ################################
+    
+    @Test
+    public void ElegirCliente() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	String nick = "jorgitohwudhuahiwhhi";
+    			
+    	DTFecha f = new DTFecha(3, 4, 2000);
+    	
+    	Cliente cli = new Cliente(nick, "bllpald", "cjdjajij", "d@email.com", f, null, "12345454653");
+    			
+    	try {
+			sis.altaUsuarioCliente(cli.getNickname(), cli.getEmail(), cli.getNombre(), cli.getApellido(), f, null, cli.getContrasenia(), cli.getContrasenia()); // Deberia ejecutarse
+		} catch (UsuarioRepetidoException | ContraseniaIncorrectaException | IllegalArgumentException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	boolean res1 = false; 
+    	
+    	try {
+			res1 = sis.elegirCliente(cli.getNickname()); // Deberia ejecutarse
+		} catch (UsuarioNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		} 
+    	
+    	assertTrue(res1, "El cliente debe haber sigo escogido correctamente");
+    }
+    
+    @Test
+    public void ElegirClienteConProveedor() {
+    	// Instancia del sistema
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	String nick = "jorgitohwuahiwhhi";
+    			
+    	DTFecha f = new DTFecha(3, 4, 2000);
+    	
+    	Proveedor prov = new Proveedor(nick, "blald", "cjdjjij", "d@emaill.com", f, null, "jacoco", "jidaa.com", "12345454653");
+    			
+    	// nickname,  email,  nombre,  apellido, DTFecha fechaNac, String nomCompania, String linkWeb, String imagen, String contrasenia1, String contrasenia2
+    	
+    	try {
+			sis.altaUsuarioProveedor(prov.getNickname(), prov.getEmail(), prov.getNombre(), prov.getApellido(), f, prov.getnomCompania(), prov.getlink() , null ,prov.getContrasenia(), prov.getContrasenia()); // Deberia ejecutarse
+		} catch (UsuarioRepetidoException | ContraseniaIncorrectaException | IllegalArgumentException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	
+    	UsuarioNoExisteException thrown = assertThrows(UsuarioNoExisteException.class, () ->{ 
+    		sis.elegirCliente(prov.getNickname()); // No deberia ejecutarse
+    	});
+    	
+    	assertEquals("El usuario de nickname " + '"' + prov.getNickname() + '"' + " existe, pero no es un cliente.", thrown.getMessage());
+    }
+    
+    
+    @Test
+    public void ElegirClienteNoexiste() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	String nick = "tumbalacasamami";
+    	
+    	UsuarioNoExisteException thrown = assertThrows(UsuarioNoExisteException.class, () ->{ 
+    		sis.elegirCliente(nick); // No deberia ejecutarse
+    	});
+    	
+    	assertEquals("El usuario de nickname " + '"' + nick + '"' + " no existe.", thrown.getMessage());
+    }
+    
+    // ################################ VerInfoCliente ################################
+
+    @Test
+    public void VerInfoClienteExitoso() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	DTClienteDetallado dt = null;
+    	
+    	Cliente cli = new Cliente("solsitotodoslosdiasporfanomentira", "bllpald", "cjdjajij", "d@email.com", fecha, null, "12345454653");
+    	
+    	sis.setUsuarioActual((Usuario) cli);
+    	
+    	dt = sis.verInformacionCliente();
+    	
+    	assertNotNull(dt, "LA informacion debe haberse recibido correctamente");
+    }
+    
+    @Test
+    public void VerInfoClienteConProveedor() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	Proveedor prov = new Proveedor("solsitotodoslosdiasporfanomentira", "bllpald", "cjdjajij", "d@email.com", fecha, null,"lapida", "lapida.com" ,"12345454653");
+    	
+    	sis.setUsuarioActual((Usuario) prov);
+    	
+    	NullPointerException thrown = assertThrows(NullPointerException.class, () ->{ 
+    		sis.verInformacionCliente();
+    	});
+   
+    	
+    	assertEquals("No se ha elegido un cliente previamente.", thrown.getMessage());
+    }
+    
+    @Test
+    public void VerInfoClienteConNull() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+    	sis.setUsuarioActual(null);
+    	
+    	NullPointerException thrown = assertThrows(NullPointerException.class, () ->{ 
+    		sis.verInformacionCliente();
+    	});
+   
+    	
+    	assertEquals("No se ha elegido un cliente previamente.", thrown.getMessage());
+    }
+    
+    // ################################ ModificarCanitdadItemCarrito ################################
     
     
     

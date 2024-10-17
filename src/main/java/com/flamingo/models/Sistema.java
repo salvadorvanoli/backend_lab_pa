@@ -98,6 +98,10 @@ public class Sistema extends ISistema {
 	public void setUsuarioActual(Usuario usr) {
 		this.usuarioActual = usr;
 	}
+	
+	public void setOrdenActual(OrdenDeCompra ord) {
+		this.ordenActual = ord;
+	}
 
 	
 	@Override // NO ES NECESARIO QUE SEA BOOL
@@ -428,7 +432,7 @@ public class Sistema extends ISistema {
 		}
 		return cat;
 	}
-
+ 
 	@Override
 	public List<DTOrdenDeCompra> listarOrdenesDeCompra(){
 		List<DTOrdenDeCompra> lista = new ArrayList<>();
@@ -490,7 +494,7 @@ public class Sistema extends ISistema {
 	        List<OrdenDeCompra> ordenes = clienteActual.getOrdenesDeCompras();
 	        ordenes.add(nueva);
 	        clienteActual.setOrdenesDeCompras(ordenes);
-	        System.out.println(nueva);
+	        //System.out.println(nueva);
 	        return nueva;
 	    } else {
 	        throw new IllegalArgumentException("El usuario actual no es un cliente.");
@@ -1129,9 +1133,9 @@ public class Sistema extends ISistema {
 			} else {
 				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 			}
+		}else {
+			throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
 		}
-		throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
 	}
-	
 	
 }

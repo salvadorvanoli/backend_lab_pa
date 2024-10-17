@@ -94,7 +94,7 @@ public class Cliente extends Usuario{
 			}
 			
 			this.setCarrito(new HashMap<>());
-			System.out.println("ORDENNNNNNN: ");
-			System.out.println(ord);
+			//System.out.println("ORDENNNNNNN: ");
+			//System.out.println(ord);
 		}
 }
