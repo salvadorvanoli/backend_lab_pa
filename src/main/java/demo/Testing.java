@@ -13,6 +13,7 @@ import com.flamingo.exceptions.CategoriaNoPuedeTenerProductosException;
 import com.flamingo.exceptions.CategoriaRepetidaException;
 import com.flamingo.exceptions.ContraseniaIncorrectaException;
 import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
+import com.flamingo.exceptions.ProductoNoExisteException;
 import com.flamingo.exceptions.ProductoRepetidoException;
 import com.flamingo.exceptions.UsuarioNoEncontrado;
 import com.flamingo.exceptions.UsuarioNoExisteException;
@@ -23,13 +24,17 @@ import com.flamingo.models.Cliente;
 import com.flamingo.models.DTCantidad;
 import com.flamingo.models.DTCliente;
 import com.flamingo.models.DTFecha;
+import com.flamingo.models.DTOrdenDeCompra;
 import com.flamingo.models.DTOrdenDeCompraDetallada;
 import com.flamingo.models.DTProducto;
+import com.flamingo.models.DTProveedor;
+import com.flamingo.models.DTProveedorDetallado;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.Producto;
 import com.flamingo.models.Proveedor;
 import com.flamingo.models.SistemaFactory;
+import com.flamingo.models.Usuario;
 
 class Testing {
 
@@ -877,4 +882,294 @@ class Testing {
     }
 
     
+    /////////// listar ordenes de compra //////////
+    
+    @Test
+    public void testListarOrdenesDeCompraUsuarioActualEsCliente() throws UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Crear fecha y cliente
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+        sis.altaUsuarioCliente("juancitoq", "juancitoq@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+        sis.iniciarSesion("juancitoq", "12345678");
+
+        // Crear producto y cantidades
+        
+        String titulo = "Producto Test";
+        int numReferencia = 123;
+        String descrip = "Descripción del producto de prueba.";
+        List<String> especificaciones = Arrays.asList("Especificación 1", "Especificación 2");
+        float precio = 99.99f;
+        List<Categoria> categorias = Arrays.asList(new Categoria("Categoría Test", true, null));
+        List<String> imagenes = Arrays.asList("imagen1.png", "imagen2.png");
+        String nombreTienda = "Tienda Test";
+
+        Producto producto = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda);
+
+        List<Cantidad> cantidades = new ArrayList<>();
+        Cantidad cantidad1 = new Cantidad(2);
+        cantidad1.setProducto(producto);
+        cantidades.add(cantidad1);
+
+        // Crear orden de compra
+        OrdenDeCompra orden = sis.agregarOrden(cantidades);
+
+        // Llamar al método para listar las órdenes de compra
+        List<DTOrdenDeCompra> listaOrdenes = sis.listarOrdenesDeCompra();
+
+        // Verificar que la lista contiene la orden creada
+        assertEquals(1, listaOrdenes.size());
+        assertEquals(orden.getNumero(), listaOrdenes.get(0).getNumero());
+    }
+
+    
+    @Test
+    public void testListarOrdenesDeCompraUsuarioNoEsCliente() throws UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado {
+    	// Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Crear fecha y cliente
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+        sis.altaUsuarioCliente("juancitoqq", "juancitoqq@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+        sis.iniciarSesion("juancitoqq", "12345678");
+
+
+        // Crear producto y cantidades
+        
+        String titulo = "Producto Test";
+        int numReferencia = 123;
+        String descrip = "Descripción del producto de prueba.";
+        List<String> especificaciones = Arrays.asList("Especificación 1", "Especificación 2");
+        float precio = 99.99f;
+        List<Categoria> categorias = Arrays.asList(new Categoria("Categoría Test", true, null));
+        List<String> imagenes = Arrays.asList("imagen1.png", "imagen2.png");
+        String nombreTienda = "Tienda Test";
+
+        Producto producto = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda);
+
+        List<Cantidad> cantidades = new ArrayList<>();
+        Cantidad cantidad1 = new Cantidad(2);
+        cantidad1.setProducto(producto);
+        cantidades.add(cantidad1);
+
+        // Crear orden de compra
+        OrdenDeCompra orden = sis.agregarOrden(cantidades);
+        
+        sis.setTodoNull();
+        sis.altaUsuarioProveedor("pepegamer", "pepe@gmail.com", "jose", "pedro", fecha, "comp", "https://hole.com", null, "12345678", "12345678");
+        sis.iniciarSesion("pepegamer", "12345678");
+        
+        // Llamar al método para listar las órdenes de compra
+        List<DTOrdenDeCompra> listaOrdenes = sis.listarOrdenesDeCompra();
+
+        // Verificar que la lista contiene la orden creada
+        assertEquals(1, listaOrdenes.size());
+        assertEquals(orden.getNumero(), listaOrdenes.get(0).getNumero());
+    }
+
+    
+    //////////// listar proveedores ////////////////
+    
+    @Test
+    public void testListarProveedores() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+    	// Crear instancia del sistema
+    	sis = SistemaFactory.getInstancia().getISistema();
+    	fecha = new DTFecha(12, 6, 1978);
+
+    	// Crear algunos proveedores
+    	sis.altaUsuarioProveedor("proveeder1", "proveeder1@gmail.com", "juan", "jujuan", fecha, "Compañía 1", "https://hola1.com", null, "12345678", "12345678");
+    	sis.altaUsuarioProveedor("proveeder2", "proveeder2@gmail.com", "juan", "jujuan", fecha, "Compañía 2", "https://hola2.com", null, "12345678", "12345678");
+
+    	// Crear algunos clientes (para verificar que no son incluidos en la lista de proveedores)
+    	sis.altaUsuarioCliente("noclienteee1", "noclienteee1@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+    	sis.altaUsuarioCliente("noclienteee2", "noclienteee2@gmail.com", "juan", "jujuan", fecha, null, "12345678", "12345678");
+
+    	// Llamar al método para listar proveedores
+    	List<DTProveedor> listaProveedores = sis.listarProveedores();
+
+    	// Verificar que solo se devuelvan los proveedores
+    	assertTrue(listaProveedores.stream().anyMatch(dt -> dt.getNickname().equals("proveeder1")));
+    	assertTrue(listaProveedores.stream().anyMatch(dt -> dt.getNickname().equals("proveeder2")));
+
+    }
+    
+    ///////////// elegir proovedor ///////////////
+    
+    @Test
+    public void testElegirProveedorExitoso() throws UsuarioNoExisteException, UsuarioRepetidoException, ContraseniaIncorrectaException {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+
+        // Crear un proveedor
+        sis.altaUsuarioProveedor("proveedor1", "proveedor1@gmail.com", "Jose", "Perez", fecha, "Compañía 1", "https://compania1.com", null, "12345678", "12345678");
+
+        // Intentar seleccionar el proveedor correctamente
+        sis.elegirProveedor("proveedor1");
+
+        // Verificar que el proveedor es seleccionado como usuario actual
+        Usuario usuarioActual = sis.getUsuarioActual();  // Método getUsuarioActual() en ISistema
+        assertNotNull(usuarioActual);
+        assertTrue(usuarioActual instanceof Proveedor);
+        assertEquals("proveedor1", usuarioActual.getNickname());
+    }
+
+    @Test
+    public void testElegirProveedorUsuarioNoExiste() {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Intentar seleccionar un proveedor que no existe
+        Exception exception = assertThrows(UsuarioNoExisteException.class, () -> {
+            sis.elegirProveedor("proveedorInexistente");
+        });
+
+        // Verificar el mensaje de la excepción
+        String expectedMessage = "El usuario de nickname \"proveedorInexistente\" no existe.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void testElegirProveedorUsuarioNoEsProveedor() throws UsuarioRepetidoException, ContraseniaIncorrectaException {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+
+        // Crear un cliente
+        sis.altaUsuarioCliente("cliente1", "cliente1@gmail.com", "Juan", "Perez", fecha, null, "12345678", "12345678");
+
+        // Intentar seleccionar el cliente como proveedor
+        Exception exception = assertThrows(UsuarioNoExisteException.class, () -> {
+            sis.elegirProveedor("cliente1");
+        });
+
+        // Verificar el mensaje de la excepción
+        String expectedMessage = "El usuario de nickname \"cliente1\" existe, pero no es un proveedor.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+      
+    
+    ///////////////// VER INFORMACION PROVEEDOR /////////////
+    
+    @Test
+    public void testVerInformacionProveedorExitoso() throws UsuarioRepetidoException, UsuarioNoExisteException, ContraseniaIncorrectaException {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+
+        // Crear y elegir un proveedor
+        sis.altaUsuarioProveedor("proveedorcito33", "proveedorcito33@gmail.com", "Jose", "Perez", fecha, "Compañía 1", "https://compania1.com", null, "12345678", "12345678");
+        sis.elegirProveedor("proveedorcito33");
+
+        // Llamar al método para ver información detallada del proveedor
+        DTProveedorDetallado dtProveedor = sis.verInformacionProveedor();
+
+        // Verificar que la información del proveedor es correcta
+        assertNotNull(dtProveedor);
+        assertEquals("proveedorcito33", dtProveedor.getNickname());
+        assertEquals("Jose", dtProveedor.getNombre());
+        assertEquals("Perez", dtProveedor.getApellido());
+        assertEquals("Compañía 1", dtProveedor.getNomCompania());
+        assertEquals("https://compania1.com", dtProveedor.getLink());
+    }
+    
+    @Test
+    public void testVerInformacionProveedorSinSeleccionarProveedor() {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        sis.setTodoNull();
+        // Llamar al método sin seleccionar un proveedor previamente
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            sis.verInformacionProveedor(); //no deberia ejecutarse
+        });
+
+        // Verificar el mensaje de la excepción
+        String expectedMessage = "No se ha elegido un proveedor previamente.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void testVerInformacionProveedorUsuarioNoEsProveedor() throws UsuarioRepetidoException, UsuarioNoExisteException, ContraseniaIncorrectaException {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        DTFecha fecha = new DTFecha(12, 6, 1978);
+
+        // Crear un cliente y establecerlo como usuario actual
+        sis.altaUsuarioCliente("cliente20", "cliente20@gmail.com", "Juan", "Perez", fecha, null, "12345678", "12345678");
+        sis.elegirCliente("cliente20");  // Simulando un mal uso
+
+        // Llamar al método que debería lanzar excepción ya que el usuario no es un proveedor
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            sis.verInformacionProveedor();
+        });
+
+        // Verificar el mensaje de la excepción
+        String expectedMessage = "No se ha elegido un proveedor previamente.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    ////////////////// modificar imagenes producto /////////////////
+    
+    @Test
+    public void testModificarImagenesProductoExitoso() throws ProductoNoExisteException, UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado, ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
+        
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 6, 1978);
+    	sis.altaUsuarioProveedor("juan333", "juan333@gmail.com", "juan", "jujuan", fecha, "CompaniaJuan", "https://www.juan.com", null, "12345678", "12345678");
+        sis.iniciarSesion("juan333", "12345678");
+    	
+    	
+        Producto producto = new Producto("Producto01", "Descripción", Arrays.asList("Especificación 1"), 123, 100.0f, Arrays.asList("imagen1.png"), Arrays.asList(new Categoria("Categoría 1", true, null)), proveedor, "Tienda 1");
+        //sis.registrarProducto(titulo, numReferencia, descrip, especificaciones, precio, categorias, imagenes, nombreTienda);
+        sis.setProductoActual(producto);
+
+        // Modificar imágenes del producto
+        List<String> nuevasImagenes = Arrays.asList("imagen2.png", "imagen3.png");
+        sis.modificarImagenesProducto(nuevasImagenes);
+
+        // Verificar que las imágenes fueron modificadas
+        assertEquals(nuevasImagenes, sis.getProductoActual().getImagenes());
+    }
+
+    @Test
+    public void testModificarImagenesProductoSinSeleccionarProducto() {
+        // Crear instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Intentar modificar imágenes sin haber seleccionado un producto
+        Exception exception = assertThrows(NullPointerException.class, () -> {
+            sis.modificarImagenesProducto(Arrays.asList("imagen2.png", "imagen3.png"));
+        });
+
+        // Verificar el mensaje de la excepción
+        String expectedMessage = "No se ha elegido un producto previamente.";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    
+    @Test
+    public void testModificarImagenesProductoNull() throws ProductoNoExisteException, UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado, ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
+        
+    	sis = SistemaFactory.getInstancia().getISistema();
+        fecha = new DTFecha(12, 6, 1978);
+    	sis.altaUsuarioProveedor("juans333", "juans333@gmail.com", "juan", "jujuan", fecha, "CompaniaJuan", "https://www.juan.com", null, "12345678", "12345678");
+        sis.iniciarSesion("juans333", "12345678");
+    	
+    	
+        Producto producto = new Producto("Producto01", "Descripción", Arrays.asList("Especificación 1"), 123, 100.0f, Arrays.asList("imagen1.png"), Arrays.asList(new Categoria("Categoría 1", true, null)), proveedor, "Tienda 1");
+        //sis.registrarProducto(titulo, numReferencia, descrip, especificaciones, precio, categorias, imagenes, nombreTienda);
+        sis.setProductoActual(producto);
+
+        
+
+     // Intentar modificar con una lista nula
+        sis.modificarImagenesProducto(null);
+        assertEquals(Arrays.asList("imagen1.png"), producto.getImagenes());  // No cambia
+
+        // Intentar modificar con una lista vacía
+        sis.modificarImagenesProducto(new ArrayList<>());
+        assertEquals(Arrays.asList("imagen1.png"), producto.getImagenes());  // No cambia
+
+    }
 }
