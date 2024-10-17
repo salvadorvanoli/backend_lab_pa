@@ -17,10 +17,10 @@
 	<div class="col-12 col-md footer-segundaParte">
 	    <h6 class="color-marron">Navegar</h6>
 	    <br>
-	    <h6 class="color-rosa" onclick="window.location.href='index.html'" style="cursor: pointer;">Inicio</h6>                
-	    <h6 class="color-rosa" onclick="window.location.href='catalogo.html'" style="cursor: pointer;">Catálogo</h6>               
-	    <h6 class="color-rosa" onclick="window.location.href='infoUsuario.html'" style="cursor: pointer;">Perfil</h6>
-	    <h6 class="color-rosa" onclick="window.location.href='carrito.html'" style="cursor: pointer;">Carrito</h6>
+	    <h6 class="color-rosa" onclick="window.location.href='home'" style="cursor: pointer;">Inicio</h6>                
+	    <h6 class="color-rosa" onclick="window.location.href='Catalogo'" style="cursor: pointer;">Catálogo</h6>               
+	    <h6 class="color-rosa" onclick="window.location.href='infoUsuario'" style="cursor: pointer;">Perfil</h6>
+	    <h6 class="color-rosa" onclick="window.location.href='carrito'" style="cursor: pointer;">Carrito</h6>
 	</div>
 </footer>
 
