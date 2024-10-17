@@ -24,6 +24,15 @@ public class Sistema extends ISistema {
 	private Categoria categoriaActual;
 	
 	private List<Producto> productos;
+	
+	public void setUsuarioActual(Usuario usuarioActual) {
+		this.usuarioActual = usuarioActual;
+	}
+
+	public void setCategoriaActual(Categoria categoriaActual) {
+		this.categoriaActual = categoriaActual;
+	}
+
 	private Producto productoActual;
 	
 	private List<Cantidad> listaOrden;

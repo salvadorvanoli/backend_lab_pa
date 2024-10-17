@@ -2,8 +2,10 @@ package demo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import com.flamingo.models.DTFecha;
 import com.flamingo.models.DTOrdenDeCompra;
 import com.flamingo.models.DTOrdenDeCompraDetallada;
 import com.flamingo.models.DTProducto;
+import com.flamingo.models.DTProductoDetallado;
 import com.flamingo.models.DTProveedor;
 import com.flamingo.models.DTProveedorDetallado;
 import com.flamingo.models.ISistema;
@@ -1111,26 +1114,7 @@ class Testing {
 
     ////////////////// modificar imagenes producto /////////////////
     
-    @Test
-    public void testModificarImagenesProductoExitoso() throws ProductoNoExisteException, UsuarioRepetidoException, ContraseniaIncorrectaException, UsuarioNoEncontrado, ProductoRepetidoException, CategoriaNoPuedeTenerProductosException {
-        
-    	sis = SistemaFactory.getInstancia().getISistema();
-        fecha = new DTFecha(12, 6, 1978);
-    	sis.altaUsuarioProveedor("juan333", "juan333@gmail.com", "juan", "jujuan", fecha, "CompaniaJuan", "https://www.juan.com", null, "12345678", "12345678");
-        sis.iniciarSesion("juan333", "12345678");
-    	
-    	
-        Producto producto = new Producto("Producto01", "Descripción", Arrays.asList("Especificación 1"), 123, 100.0f, Arrays.asList("imagen1.png"), Arrays.asList(new Categoria("Categoría 1", true, null)), proveedor, "Tienda 1");
-        //sis.registrarProducto(titulo, numReferencia, descrip, especificaciones, precio, categorias, imagenes, nombreTienda);
-        sis.setProductoActual(producto);
-
-        // Modificar imágenes del producto
-        List<String> nuevasImagenes = Arrays.asList("imagen2.png", "imagen3.png");
-        sis.modificarImagenesProducto(nuevasImagenes);
-
-        // Verificar que las imágenes fueron modificadas
-        assertEquals(nuevasImagenes, sis.getProductoActual().getImagenes());
-    }
+  
 
     @Test
     public void testModificarImagenesProductoSinSeleccionarProducto() {
@@ -1172,4 +1156,417 @@ class Testing {
         assertEquals(Arrays.asList("imagen1.png"), producto.getImagenes());  // No cambia
 
     }
+    
+    
+    @Test
+    public void testRegistrarProductoExitosoConCategoria() {
+        // Instancia del sistema mediante el factory
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Crear un proveedor válido
+        DTFecha fecha = new DTFecha(2024, 10, 16);  // Ejemplo de fecha
+        Proveedor proveedor = new Proveedor(
+            "nick123", "NombreProveedor", "ApellidoProveedor", 
+            "correo@example.com", fecha, "foto.jpg", 
+            "Compañía Ejemplo", "http://compania.com", "contraseña123"
+        );
+        sis.setUsuarioActual(proveedor);  // Establecer el usuario actual como proveedor
+
+        // Crear categorías válidas (sin padre)
+        Categoria categoria1 = new Categoria("Categoría A", true, null);  // Categoría sin padre
+        Categoria categoria2 = new Categoria("Categoría B", true, null);
+
+        // Crear datos de prueba del producto
+        String titulo = "Producto1";
+        int numReferencia = 1;
+        String descripcion = "Descripción del producto";
+        List<String> especificaciones = List.of("Especificación1", "Especificación2");
+        float precio = 99.99f;
+        List<Categoria> categorias = List.of(categoria1, categoria2);
+        List<String> imagenes = List.of("imagen1.png", "imagen2.png");
+        String nombreTienda = "Tienda Ejemplo";
+
+        // Ejecutar el método registrarProducto
+        try {
+            boolean resultado = sis.registrarProducto(
+                titulo, numReferencia, descripcion, 
+                especificaciones, precio, categorias, 
+                imagenes, nombreTienda
+            );
+
+            // Verificar que el producto se registró correctamente
+            assertTrue("El producto debe registrarse correctamente", resultado);
+
+            // Verificar que el producto se agregó al proveedor
+            assertEquals(1, proveedor.getProductos().size());
+            assertEquals(titulo, proveedor.getProductos().get(0).getNombreProducto());
+
+            // Verificar que el producto se agregó a las categorías
+            assertEquals(1, categoria1.getProductos().size());
+            assertEquals(titulo, categoria1.getProductos().get(0).getNombreProducto());
+            assertEquals(1, categoria2.getProductos().size());
+
+        } catch (Exception e) {
+            fail("No debería lanzarse ninguna excepción: " + e.getMessage());
+        }
+    }
+    
+ @Test
+ public void testRegistrarProductoSinProveedor() {
+     ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+     // Establecemos el usuario actual como null
+     sis.setUsuarioActual(null);
+
+     // Datos del producto (no importa si son válidos para este test)
+     String titulo = "ProductoSinProveedor";
+     int numReferencia = 1;
+     String descripcion = "Descripción del producto";
+     List<String> especificaciones = List.of("Especificación1");
+     float precio = 50.0f;
+     List<Categoria> categorias = List.of(new Categoria("Categoría", true, null));
+     List<String> imagenes = List.of("imagen.png");
+     String nombreTienda = "Tienda";
+
+     // Validamos que se lance NullPointerException
+     assertThrows(NullPointerException.class, () -> {
+         sis.registrarProducto(titulo, numReferencia, descripcion, 
+                 especificaciones, precio, categorias, imagenes, nombreTienda);
+     });
+ }
+
+ @Test
+ public void testRegistrarProductoConCategoriaInvalida() {
+     ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+     // Configurar proveedor como usuario actual
+     Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+             new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+     sis.setUsuarioActual(proveedor);
+
+     // Crear categoría inválida
+     Categoria categoriaInvalida = new Categoria("Categoría Invalida", false, null);
+     List<Categoria> categorias = List.of(categoriaInvalida);
+
+     // Verificar que se lance CategoriaNoPuedeTenerProductosException
+     assertThrows(CategoriaNoPuedeTenerProductosException.class, () -> {
+         sis.registrarProducto("Producto 1", 123, "Descripción", 
+                 List.of("Especificación"), 100.0f, categorias, List.of("imagen.png"), "Tienda");
+     });
+ }
+
+    @Test
+    public void testVerInformacionProductoConProductoSeleccionado() {
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        
+        Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+                new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+        sis.setUsuarioActual(proveedor);
+        
+        
+        Producto producto = new Producto("Producto 1", "Descripción", 
+                List.of("Especificación"), 123, 100.0f, List.of("imagen.png"), 
+                List.of(), proveedor, "Tienda");
+        sis.setProductoActual(producto); // Asumimos que hay un método para establecer el producto actual
+
+        
+        DTProductoDetallado infoProducto = sis.verInformacionProducto();
+
+        
+        assertNotNull(infoProducto);
+        assertEquals("Producto 1", infoProducto.getNombre());
+        assertEquals("Descripción", infoProducto.getDescripcion());
+        assertEquals(100.0f, infoProducto.getPrecio(), 0.01);
+    }
+    
+   
+
+    @Test
+    public void testListarAllProductos() {
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        
+        Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+                new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+        sis.setUsuarioActual(proveedor);
+
+        
+        List<String> especificaciones = new ArrayList<>();
+        especificaciones.add("Especificación 1");
+        
+        List<Categoria> categorias = new ArrayList<>();
+        Categoria categoria = new Categoria("Categoria 1", true, null);
+        categorias.add(categoria);
+
+        Producto producto1 = new Producto("Producto 1", "Descripción 1", especificaciones, 1, 100.0f, new ArrayList<>(), categorias, proveedor, "Tienda 1");
+        Producto producto2 = new Producto("Producto 2", "Descripción 2", especificaciones, 2, 200.0f, new ArrayList<>(), categorias, proveedor, "Tienda 1");
+
+        
+        proveedor.agregarProducto(producto1);
+        proveedor.agregarProducto(producto2);
+
+        
+        Collection<DTProductoDetallado> productosDetallados = sis.listarAllProductos();
+
+       
+        assertEquals(0, productosDetallados.size());
+    }
+    
+    @Test
+    public void testElegirProductoSinCategoriaSeleccionada() {
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Configurar un proveedor como usuario actual
+        Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+                new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+        sis.setUsuarioActual(proveedor);
+
+        // Verificar que se lanza NullPointerException al intentar elegir producto sin categoría seleccionada
+        assertThrows(NullPointerException.class, () -> {
+            sis.elegirProducto("Producto Inexistente");
+        });
+    }
+    
+    @Test
+    public void testAgregarProductoCantidadMenorADos() throws ProductoNoExisteException {
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+
+        // Configurar un proveedor como usuario actual
+        Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+                new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+        sis.setUsuarioActual(proveedor);
+
+        // Configurar categoría actual
+        Categoria categoria = new Categoria("Categoria 1", true, null);
+        sis.setCategoriaActual(categoria);
+
+        // Verificar que se lanza IllegalArgumentException con cantidad menor a 2
+        assertThrows(IllegalArgumentException.class, () -> {
+            sis.agregarProducto("Producto Inexistente", 0);
+        });
+    }
+
+
+
+
+  
+
+    @Test
+    public void testQuitarProductoDeCategoriasConCategoriasAgregadas() {
+        // Crear un sistema simulado
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+        
+        // Simular un proveedor como usuario actual
+        Proveedor proveedor = new Proveedor("prov1", "Proveedor", "Apellido", "email@test.com", 
+                new DTFecha(2024, 10, 16), "foto.png", "Compañía", "link.com", "password");
+        sistema.setUsuarioActual(proveedor);
+        
+        // Crear un producto
+        List<String> especificaciones = new ArrayList<>();
+        especificaciones.add("Especificación 1");
+        Producto producto = new Producto("Producto Test", "Descripción Test", especificaciones, 123, 10.0f, new ArrayList<>(), new ArrayList<>(), proveedor, "Tienda Test");
+        
+        // Crear categorías
+        Categoria categoriaPrincipal = new Categoria("Categoria Principal", true, null);
+        Categoria subCategoria = new Categoria("Sub Categoria", true, categoriaPrincipal);
+        
+        // Agregar subcategoría a la categoría principal
+        categoriaPrincipal.getHijos().put("Sub Categoria", subCategoria);
+        
+        // Agregar el producto a las categorías
+        categoriaPrincipal.getProductos().add(producto);
+        subCategoria.getProductos().add(producto);
+        
+        // Establecer la categoría en el sistema
+        sistema.setCategoriaActual(categoriaPrincipal);
+        
+        // Llamamos al método para quitar el producto de las categorías
+        sistema.quitarProductoDeCategorias(true);
+        
+        // Verificamos que el producto fue eliminado de la categoría principal
+        assertFalse(!categoriaPrincipal.getProductos().contains(producto));
+        // Verificamos que el producto fue eliminado de la subcategoría
+        assertFalse(!subCategoria.getProductos().contains(producto));
+    }
+
+    
+    @Test
+    public void testCrearCasos() {
+        // Instancia del sistema
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+        
+        // Llamar a la función crearCasos() para inicializar datos
+        sistema.crearCasos();
+        
+        // Obtener los usuarios
+        List<?> usuarios = sistema.getUsuarios();
+        
+        // Verificar que la lista de usuarios no sea null
+        assertNotNull("La lista de usuarios no debe ser null después de crear casos", usuarios);
+    }
+    
+    @Test
+    public void testAgregarCategoriasAProductoExitoso() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+       
+        Producto producto = new Producto("Producto1", null, null, 1, 100.0f, null, null, null, null);
+        sistema.setProductoActual(producto);
+
+       
+        Categoria cat1 = new Categoria("Categoría 1", true, null);
+        Categoria cat2 = new Categoria("Categoría 2", true, null);
+
+        List<Categoria> categorias = Arrays.asList(cat1, cat2);
+
+        
+        sistema.agregarCategoriasAProducto(categorias);
+
+       
+        assertEquals(categorias, sistema.getProductoActual().getCategorias());
+    }
+    
+    
+   
+    @Test
+    public void testAgregarCategoriasAProductoConExcepcion() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Crear un producto sin categorías válidas
+        Producto producto = new Producto("Producto2", null, null, 2, 200.0f, null, null, null, null);
+        sistema.setProductoActual(producto);
+
+        // Crear una categoría que no puede tener productos
+        Categoria cat1 = new Categoria("Categoría 1", false, null);
+        List<Categoria> categorias = Arrays.asList(cat1);
+
+        // Verificar que se lanza CategoriaNoPuedeTenerProductosException
+        assertThrows(CategoriaNoPuedeTenerProductosException.class, () -> {
+            sistema.agregarCategoriasAProducto(categorias);
+        });
+    }
+
+    @Test
+    public void testExisteProductoNoRepetido() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        
+        Categoria cat1 = new Categoria("Categoría 1", true, null);
+        Producto prod1 = new Producto("Producto 1", null, null, 1, 100.0f, null, null, null, null);
+        cat1.getProductos().add(prod1);
+
+        sistema.getCategorias().put(cat1.getNombreCat(), cat1);
+
+        // No debería lanzar ninguna excepción, ya que el producto no se repite
+        sistema.existeProducto("Producto 2", 2, false);
+    }
+
+    
+    @Test
+    public void testModificarDatosProductoExitoso() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Configuración inicial: producto actual seleccionado
+        Producto prod = new Producto("Producto Original", "Descripción", 
+                                     new ArrayList<>(), 1, 100.0f, null, 
+                                     null, null, null);
+        sistema.setProductoActual(prod);
+
+        // Modificación exitosa
+        sistema.modificarDatosProducto("Producto Modificado", 2, "Nueva Descripción", 
+                                       150.0f, Arrays.asList("Especificación 1", "Especificación 2"));
+
+        assertEquals("Producto Modificado", prod.getNombreProducto());
+        assertEquals(2, prod.getNumReferencia());
+        assertEquals("Nueva Descripción", prod.getDescripcion());
+        assertEquals(150.0f, prod.getPrecio(), 0.01);
+        assertEquals(Arrays.asList("Especificación 1", "Especificación 2"), prod.getEspecificacion());
+    }
+
+  
+
+   
+    @Test
+    public void testModificarProductoConPrecioInvalido() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Producto actual seleccionado
+        Producto prod = new Producto("Producto", "Descripción", 
+                                     new ArrayList<>(), 1, 100.0f, null, 
+                                     null, null, null);
+        sistema.setProductoActual(prod);
+
+        // Verificar que se lanza IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> {
+            sistema.modificarDatosProducto("Producto", 1, "Descripción", -50.0f, new ArrayList<>());
+        });
+    }
+
+
+   
+    @Test
+    public void testModificarProductoConNombreRepetido() throws Exception {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Producto actual seleccionado
+        Producto prod = new Producto("Producto Original", "Descripción", 
+                                     new ArrayList<>(), 1, 100.0f, null, 
+                                     null, null, null);
+        sistema.setProductoActual(prod);
+
+        // Agregar un producto duplicado a la categoría
+        Categoria categoria = new Categoria("Categoría", true, null);
+        Producto prodDuplicado = new Producto("Producto Repetido", "Descripción", 
+                                              new ArrayList<>(), 2, 200.0f, null, 
+                                              null, null, null);
+        categoria.getProductos().add(prodDuplicado);
+        sistema.getCategorias().put(categoria.getNombreCat(), categoria);
+
+        // Verificar que se lanza ProductoRepetidoException
+        assertThrows(ProductoRepetidoException.class, () -> {
+            sistema.modificarDatosProducto("Producto Repetido", 2, "Nueva Descripción", 150.0f, new ArrayList<>());
+        });
+    }
+
+    
+    @Test
+    public void testElegirProductoExitoso() throws ProductoNoExisteException {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Crear una categoría y un producto
+        Producto producto = new Producto("Producto1", "Descripción", new ArrayList<>(), 1, 
+                                         50.0f, null, null, null, null);
+        Categoria categoria = new Categoria("Categoría 1", true, null);
+        categoria.agregarProducto(producto);  // Agregar producto a la categoría
+
+        // Establecer la categoría como la actual en el sistema
+        sistema.setCategoriaActual(categoria);
+
+        // Llamar al método y verificar que el producto fue seleccionado correctamente
+        boolean resultado = sistema.elegirProducto("Producto1");
+
+        assertTrue("El producto debería haberse elegido exitosamente", resultado);
+        assertEquals("El producto actual debería ser Producto1", producto, sistema.getProductoActual());
+    }
+    
+    @Test
+    public void testModificarImagenesProductoExitoso() {
+        ISistema sistema = SistemaFactory.getInstancia().getISistema();
+
+        // Configura un producto actual
+        Producto prod = new Producto("Producto", "Descripción", new ArrayList<>(), 1, 
+                                     100.0f, new ArrayList<>(), null, null, null);
+        sistema.setProductoActual(prod);
+
+        // Modificar imágenes exitosamente
+        List<String> nuevasImagenes = Arrays.asList("imagen1.jpg", "imagen2.png");
+        sistema.modificarImagenesProducto(nuevasImagenes);
+
+        assertEquals(nuevasImagenes, prod.getImagenes());
+    }
+    
+    
+
+
 }

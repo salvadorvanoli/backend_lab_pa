@@ -14,6 +14,9 @@ public abstract class ISistema{
 	
 	// También agrego los getters
 	
+	public abstract void setUsuarioActual(Usuario usuarioActual);
+	public abstract void setCategoriaActual(Categoria categoriaActual);
+	
 	public abstract List<Producto> getProductos();
 	
 	public abstract List<Usuario> getUsuarios();
