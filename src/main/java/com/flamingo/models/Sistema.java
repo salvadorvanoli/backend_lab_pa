@@ -5,11 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import java.time.LocalDate;
-
-import com.flamingo.controllers.Carrito;
 
 // Importamos las excepciones necesarias
 
@@ -27,10 +24,18 @@ public class Sistema extends ISistema {
 	private Categoria categoriaActual;
 	
 	private List<Producto> productos;
+	
+	public void setUsuarioActual(Usuario usuarioActual) {
+		this.usuarioActual = usuarioActual;
+	}
+
+	public void setCategoriaActual(Categoria categoriaActual) {
+		this.categoriaActual = categoriaActual;
+	}
+
 	private Producto productoActual;
 	
 	private List<Cantidad> listaOrden;
-	// private List<Producto> listaOrden;
 	
 	public Sistema() {
 		this.usuarios = new ArrayList<>();
@@ -97,16 +102,7 @@ public class Sistema extends ISistema {
 		this.productoActual = prod;
 	}
 	
-	public void setUsuarioActual(Usuario usr) {
-		this.usuarioActual = usr;
-	}
-	
-	public void setOrdenActual(OrdenDeCompra ord) {
-		this.ordenActual = ord;
-	}
-
-	
-	@Override // NO ES NECESARIO QUE SEA BOOL
+	@Override
 	public boolean altaUsuarioCliente(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String imagen,  String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException {
 		// Lista para almacenar los errores
 	    List<String> errores = new ArrayList<>();
@@ -169,7 +165,7 @@ public class Sistema extends ISistema {
 		return true;
 		}
 	
-	@Override // NO ES NECESARIO QUE SEA BOOL
+	@Override
 	public boolean altaUsuarioProveedor(String nickname, String email, String nombre, String apellido, DTFecha fechaNac, String nomCompania, String linkWeb, String imagen, String contrasenia1, String contrasenia2) throws UsuarioRepetidoException, ContraseniaIncorrectaException {
 		
 		// Lista para almacenar los errores
@@ -267,7 +263,7 @@ public class Sistema extends ISistema {
 	        throw new CategoriaNoPuedeTenerProductosException("Las categorías " + categoriasSinProductos + " no puede contener productos.");
 	    }
 		Proveedor proveedor = (Proveedor) this.usuarioActual;
-		Producto prod = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda); // Esto esta re mal
+		Producto prod = new Producto(titulo, descrip, especificaciones, numReferencia, precio, imagenes, categorias, proveedor, nombreTienda);
 		proveedor.agregarProducto(prod);
 		this.productoActual = prod;
 		this.agregarProductoACategorias(categorias);
@@ -276,7 +272,7 @@ public class Sistema extends ISistema {
 	}
 	
 	
-	@Override // Lo podría leer directamente
+	@Override
 	public DTProductoDetallado verInformacionProducto() {
 		if (this.productoActual == null) {
 			throw new NullPointerException("No se ha elegido un producto previamente.");
@@ -331,7 +327,7 @@ public class Sistema extends ISistema {
         return false;
     }
 
-    private boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
+    public boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
         for (Categoria hijo : categoria.getHijos().values()) {
             if (hijo.getNombreCat().equals(nombreCategoria) || existeCategoriaRecursivamente(hijo, nombreCategoria)) {
                 return true;
@@ -363,50 +359,7 @@ public class Sistema extends ISistema {
 		
 		return lista.values();
 	}
-	
-	/*
-	@Override
-	public Collection<DTProductoDetallado> listarAllProductos(Categoria padre, HashMap<Integer, DTProductoDetallado> lista){
-		if (padre == null) {
-			for (Categoria cat : this.categorias.values()) {
-				for (Producto prod : cat.getProductos()) {
-					DTProductoDetallado dt = prod.getDTProductoDetallado();
-					if (!lista.containsKey(dt.getNumero())) {
-						lista.put(dt.getNumero(), dt);
-					}
-				}
-				listarAllProductos(cat, lista);
-			}
-		} else {
-			for (Categoria cat : padre.getHijos().values()) {
-				for (Producto prod : cat.getProductos()) {
-					DTProductoDetallado dt = prod.getDTProductoDetallado();
-					if (!lista.containsKey(dt.getNumero())) {
-						lista.put(dt.getNumero(), dt);
-					}
-				}
-				listarAllProductos(cat, lista);
-			}
-		}
-		return lista.values();
-	}
-	*/
-	
-	
-	/*
-	@Override
-	public List<DTProductoDetallado> listarAllProductos(){
-		List<DTProductoDetallado> lista = new ArrayList<>();
-		for (Producto prod : this.getProductos()) {
-			DTProductoDetallado dt = prod.getDTProductoDetallado();
-			lista.add(dt);
-			System.out.println(dt);
-		}
-		return lista;
-	}
-	*/
 
-	// No se si incluir el numero de referencia (para buscar el producto)
 	@Override
 	public boolean elegirProducto(String nombreProd) throws ProductoNoExisteException {
 		if (this.categoriaActual == null) {
@@ -434,7 +387,7 @@ public class Sistema extends ISistema {
 		}
 		return cat;
 	}
- 
+
 	@Override
 	public List<DTOrdenDeCompra> listarOrdenesDeCompra(){
 		List<DTOrdenDeCompra> lista = new ArrayList<>();
@@ -446,7 +399,7 @@ public class Sistema extends ISistema {
 			}
 		} else {
 			for (OrdenDeCompra ord : this.ordenes.values()) {
-				DTOrdenDeCompra dt = ord.getDTOrden(); // Capaz la función no se llama así
+				DTOrdenDeCompra dt = ord.getDTOrden();
 				lista.add(dt);
 			}
 		}
@@ -461,7 +414,7 @@ public class Sistema extends ISistema {
             throw new OrdenDeCompraNoExisteException("La orden de compra número " + '"' + numero + '"' + " no existe.");
         }
         this.ordenActual = ord;
-        return true; // No es necesario que sea bool
+        return true;
 	}
 	
 	
@@ -496,7 +449,6 @@ public class Sistema extends ISistema {
 	        List<OrdenDeCompra> ordenes = clienteActual.getOrdenesDeCompras();
 	        ordenes.add(nueva);
 	        clienteActual.setOrdenesDeCompras(ordenes);
-	        //System.out.println(nueva);
 	        return nueva;
 	    } else {
 	        throw new IllegalArgumentException("El usuario actual no es un cliente.");
@@ -530,38 +482,9 @@ public class Sistema extends ISistema {
 		}
 		return numero;
 	}
-	
-	// FUNCION DAR ALTA ORDEN DE COMPRA
-	
-	
-	/* ALTERNATIVA A LA FUNCION DAR ALTA ORDEN */
-	/*
-	@Override
-	public DTOrdenDeCompraDetallada darAltaOrden() throws UsuarioNoExisteException {
-		if (this.usuarioActual == null) {
-			throw new NullPointerException("No se ha elegido un cliente previamente.");
-		}
-		if (this.usuarioActual instanceof Proveedor) {
-			throw new UsuarioNoExisteException("El usuario de nickname " + '"' + this.usuarioActual.getNickname() + '"' + " existe, pero no es un cliente.");
-		}
-		if (this.listaOrden.isEmpty()) {
-			throw new IllegalStateException("No se han elegido productos previamente.");
-		}
-		int numero = this.generarCodigoOrden();
-		DTFecha fecha = this.getFechaActual();
-		Cliente cli = (Cliente) this.usuarioActual;
-		OrdenDeCompra ord = new OrdenDeCompra(numero, fecha, cli, this.listaOrden);
-		this.ordenes.put(numero, ord);
-		this.listaOrden.clear();
-		return ord.getDTOrdenDetallada();
-	}
-	*/
-	
-	
-	
+
 	// FUNCION CANCELAR ORDEN DE COMPRA
 	
-
 	@Override
 	public void cancelarOrdenDeCompra(int numero) throws OrdenDeCompraNoExisteException {
 		OrdenDeCompra ord = this.ordenes.get(numero);
@@ -575,9 +498,9 @@ public class Sistema extends ISistema {
 	}
 	
 	
+	
+	
 	// FUNCION AGREGAR PRODUCTO
-	
-	
 	
 	@Override
 	public boolean agregarProducto(String nombreProducto, int cantidad) throws ProductoNoExisteException {
@@ -619,7 +542,7 @@ public class Sistema extends ISistema {
 				if (user instanceof Cliente) {
 					Cliente cli = (Cliente) user;
 					this.usuarioActual = cli;
-					return true; // No es necesario que sea booleano
+					return true;
 				}
 				throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " existe, pero no es un cliente.");
 			}
@@ -657,7 +580,6 @@ public class Sistema extends ISistema {
 		}
 	}
 	
-	// Funciones que no estaban
 	@Override
 	public void agregarProductoACategorias(List<Categoria> categorias) throws CategoriaNoPuedeTenerProductosException {
 		if (this.productoActual == null) {
@@ -764,8 +686,7 @@ public class Sistema extends ISistema {
 		this.productoActual.setEspecificacion(especificacion);
 		this.productoActual.setPrecio(precio);
 	}
-	
-	// ESTA RECONTRA MAL
+
 	@Override
 	public void modificarImagenesProducto(List<String> imagenes) {
 		if (this.productoActual == null) {
@@ -795,7 +716,6 @@ public class Sistema extends ISistema {
 					Proveedor pr = (Proveedor) user;
 					this.usuarioActual = pr;
 					return;
-					// return true; // No es necesario que sea booleano
 				}
 				throw new UsuarioNoExisteException("El usuario de nickname " + '"' + nickname + '"' + " existe, pero no es un proveedor.");
 			}
@@ -829,7 +749,6 @@ public class Sistema extends ISistema {
 
 	@Override
 	public void crearCasos() {
-		// TODO Auto-generated method stub
 		DTFecha fecha1 = new DTFecha(2, 4, 2024);
         DTFecha fecha2 = new DTFecha(6, 8, 2024);
        
@@ -882,8 +801,6 @@ public class Sistema extends ISistema {
         this.getCategorias().put(Farmacia.getNombreCat(), Farmacia);
         this.getCategorias().put(FloresyPlantas.getNombreCat(), FloresyPlantas);
         this.getCategorias().put(HogaryCocina.getNombreCat(), HogaryCocina);
-        // this.getCategorias().put(Celulares.getNombreCat(), Celulares);
-        // this.getCategorias().put(Laptops.getNombreCat(), Laptops);
         
         String imagen1 = "media/images/Chico1.png";
         String imagen2 = "media/images/Chico2.png";
@@ -974,9 +891,6 @@ public class Sistema extends ISistema {
         OrdenDeCompra orden1 = new OrdenDeCompra(12332, fecha1, cl1, listacantprod);
         orden1.setPrecioTotal(1350.50f);
         
-        //cl1.getOrdenesDeCompras().add(orden1);
-        
-        // HashMap<Integer, Cantidad> carrito = new HashMap<>();
         Cantidad cant1 = new Cantidad(producto1, 4);
         Cantidad cant2 = new Cantidad(producto2, 13);
         
@@ -1081,6 +995,27 @@ public class Sistema extends ISistema {
 		}
 	}
 	
+	public void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				try {
+					cli.realizarCompra(ord);
+				} catch (IllegalArgumentException e) {
+					throw new IllegalArgumentException(e.getMessage());
+				}
+				this.ordenes.put(ord.getNumero(), ord);
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+		throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
+	}
+	
+	public void setOrdenActual(OrdenDeCompra ord) {
+		this.ordenActual = ord;
+	}
+	
 	public void setCarritoActual(HashMap<Integer, Cantidad> car) throws UsuarioNoExisteException {
 		if (this.usuarioActual != null) {
 			if (this.usuarioActual instanceof Cliente) {
@@ -1093,65 +1028,4 @@ public class Sistema extends ISistema {
 		}
 		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
 	}
-	
-	
-	/*
-	
-	@Override
-	public Producto getProducto(int numReferencia) {
-		for (Categoria categoria : this.categorias.values()) {
-			return getProductoEnCategoria(categoria, numReferencia);
-	    }
-		return null;
-	}
-
-	//@Override
-	private Producto getProductoEnCategoria(Categoria categoria, int numReferencia) { // Hay que probar esto
-	    for (Producto producto : categoria.getProductos()) {
-	        if (producto.getNumReferencia() == numReferencia){
-        		return producto;
-	        }
-	    }
-
-	    for (Categoria subcategoria : categoria.getHijos().values()) {
-			return getProductoEnCategoria(subcategoria, numReferencia);
-	    }
-	    return null;
-	}
-	
-	@Override
-	public void actualizarCarritoActual(HashMap<Integer, DTCantidad> DTCarrito) throws UsuarioNoExisteException {
-		if (this.usuarioActual != null) {
-			if (this.usuarioActual instanceof Cliente) {
-				Cliente cli = (Cliente) this.usuarioActual;
-				HashMap<Integer, Cantidad> nuevoCarrito = new HashMap<>();
-				for (DTCantidad dt : DTCarrito.values()) {
-					Producto prod = this.getProducto(dt.getProducto().getNumero());
-					Cantidad cant = new Cantidad(prod, dt.getCantidad());
-					nuevoCarrito.put(prod.getNumReferencia(), cant);
-				}
-				cli.setCarrito(nuevoCarrito);
-			} else {
-				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
-			}
-		}
-		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
-	}
-	
-	*/
-	
-	public void realizarCompra(OrdenDeCompra ord) throws UsuarioNoExisteException {
-		if (this.usuarioActual != null) {
-			if (this.usuarioActual instanceof Cliente) {
-				Cliente cli = (Cliente) this.usuarioActual;
-				cli.realizarCompra(ord);
-				this.ordenes.put(ord.getNumero(), ord);
-			} else {
-				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
-			}
-		}else {
-			throw new UsuarioNoExisteException("No se ha seleccionado ningún usuario previamente.");
-		}
-	}
-	
 }

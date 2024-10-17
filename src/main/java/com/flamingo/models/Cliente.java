@@ -78,23 +78,26 @@ public class Cliente extends Usuario{
 		
 		public void realizarCompra(OrdenDeCompra ord) {
 			ord.setCliente(this); 
-			this.vincularOrdenDeCompra(ord);
 			List<Proveedor> proveedores = new ArrayList<>();
 			for (Cantidad item : this.carrito.values()) {
-				Producto prod = item.getProducto();
-				prod.setCantCompras(prod.getCantCompras() + item.getCantidad());
 				if (!proveedores.contains(item.getProducto().getProveedor())) {
 					proveedores.add(item.getProducto().getProveedor());
 				}
 			}
 			ord.setProveedores(proveedores);
 			
+			if (!ord.esValida()) {
+				throw new IllegalArgumentException("La orden de compra es inválida");
+			}
+			
 			for(Proveedor prov : proveedores) {
 				prov.getOrdenesDeCompras().add(ord);
 			}
-			
+			for (Cantidad item : this.carrito.values()) {
+				Producto prod = item.getProducto();
+				prod.setCantCompras(prod.getCantCompras() + item.getCantidad());
+			}
 			this.setCarrito(new HashMap<>());
-			//System.out.println("ORDENNNNNNN: ");
-			//System.out.println(ord);
+			this.vincularOrdenDeCompra(ord);
 		}
 }

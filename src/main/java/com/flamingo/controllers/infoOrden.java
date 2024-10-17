@@ -3,7 +3,6 @@ package com.flamingo.controllers;
 import java.io.IOException; 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,22 +10,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.models.Cantidad;
 import com.flamingo.models.DTCantidad;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Usuario;
 import com.flamingo.models.OrdenDeCompra;
-import com.flamingo.models.Cliente;
-import com.flamingo.models.DTFecha;
 import com.flamingo.models.DTProducto;
-import com.flamingo.exceptions.ContraseniaIncorrectaException;
 import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
-import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.exceptions.UsuarioRepetidoException;
 
 @WebServlet("/VerOrdenDeCompra")
 public class infoOrden extends HttpServlet {
@@ -37,7 +28,6 @@ public class infoOrden extends HttpServlet {
     	ISistema sis;
 		
 		if (getServletContext().getAttribute("sistema") == null) {
-		    System.out.println("CREO EL SISTEMA");
 		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		    sis.crearCasos();

@@ -543,17 +543,17 @@
     	            }
     	        });
     	        const data = await response.json();
-    	        console.log('Datos recibidos: ', data);
+    	        // console.log('Datos recibidos: ', data);
     	        return data;
     	    } catch (error) {
-    	        console.error('Hubo un problema con la solicitud: ', error);
+    	        // console.error('Hubo un problema con la solicitud: ', error);
     	    }
     	}
     	
     	async function updateCarrito(URL, body, tipo) {
     		try {
     			
-    			console.log(body);
+    			// console.log(body);
     			
     	        const response = await fetch(URL, {
     	            method: 'POST',
@@ -570,11 +570,11 @@
     	        }
 
     	        const result = await response.text();
-    	        console.log("Datos recibidos del servidor: ", result);
+    	        // console.log("Datos recibidos del servidor: ", result);
     	        return result;
     	        
     	    } catch (error) {
-    	        console.error('Hubo un problema con la solicitud:', error);
+    	        // console.error('Hubo un problema con la solicitud:', error);
     	    }
     	}
     	
@@ -632,7 +632,7 @@
 	            let subtotal = 0;
 	            for (let element in array){
 	                let itemCarrito = document.createElement("div");
-	                console.log(array[element]);
+	                // console.log(array[element]);
 	                
 	                if(array[element].producto.imagenes[0] == null || array[element].producto.imagenes[0] == ""){
 	                	itemCarrito.innerHTML =
@@ -755,7 +755,7 @@
 	    function modificarAllTextos(array){
 	        let subtotal = 0;
 	        
-	        console.log(array);
+	        // console.log(array);
 	
 	        for(let element in array){
 	            subtotal += array[element].producto.precio * array[element].cantidad;
@@ -824,7 +824,7 @@
 		
 		        modificarAllTextos(carritoActual);
 		        
-		        console.log(document.querySelector("#producto" + id));
+		        // console.log(document.querySelector("#producto" + id));
 		
 		        const item = document.querySelector("#producto" + id);
 		        item.remove();
@@ -1164,7 +1164,7 @@
 	            // console.log(json);
 	            return json;
 	        } catch (error) {
-	            console.log(error.message);
+	            // console.log(error.message);
 	        }
 	    }
 	
@@ -1208,7 +1208,7 @@
 	    
 	    document.addEventListener("DOMContentLoaded", async function(){
 	    	carritoActual = await getCarrito("/backend_lab_pa/manejarcarrito", "getCarrito");
-	    	console.log(carritoActual);
+	    	// console.log(carritoActual);
 	    	
 	    	cargarElementosCarrito(carritoActual);
 	    	

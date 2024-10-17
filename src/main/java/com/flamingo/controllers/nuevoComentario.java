@@ -1,6 +1,5 @@
 package com.flamingo.controllers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.models.Usuario;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
 import com.flamingo.models.Cliente;
@@ -33,7 +31,6 @@ public class nuevoComentario extends HttpServlet {
 
     	ISistema sis;
     	if (getServletContext().getAttribute("sistema") == null) {
-    	    System.out.println("CREO EL SISTEMA");
     	    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
     	    sis = (ISistema) getServletContext().getAttribute("sistema");
     	    sis.crearCasos();

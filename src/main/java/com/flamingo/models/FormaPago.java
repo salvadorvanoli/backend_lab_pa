@@ -1,6 +1,7 @@
 package com.flamingo.models;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 
 public class FormaPago {
@@ -48,6 +49,16 @@ public class FormaPago {
 
 	public void setNomTitular(String nomTitular) {
 		this.nomTitular = nomTitular;
+	}
+	
+	public Boolean esValida() {
+		Boolean numTarjeta = Pattern.compile("([0-9]{16}|(([0-9]){4} ){3}[0-9]{4})").matcher(this.numTarjeta).matches();
+		Boolean fecVencimiento = Pattern.compile("(0[1-9]|1[0-2])/[0-9]{2}").matcher(this.fecVencimiento).matches();
+		Boolean cvv = Pattern.compile("[0-9]{3}").matcher(this.cvv).matches();
+		Boolean nomTitular = Pattern.compile("[A-Za-z]+(( ?([A-Za-z]+))?)+").matcher(this.nomTitular).matches();
+		
+		return numTarjeta && fecVencimiento && cvv && nomTitular;
+		
 	}
 
 }

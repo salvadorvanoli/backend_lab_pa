@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 // import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import com.flamingo.controllers.Carrito;
 import com.flamingo.exceptions.*;
@@ -13,6 +14,9 @@ public abstract class ISistema{
 	public ISistema() {};
 	
 	// También agrego los getters
+	
+	public abstract void setUsuarioActual(Usuario usuarioActual);
+	public abstract void setCategoriaActual(Categoria categoriaActual);
 	
 	public abstract List<Producto> getProductos();
 	
@@ -33,6 +37,10 @@ public abstract class ISistema{
 	public abstract Categoria getCategoriaActual();
 	
 	public abstract Producto getProductoActual();
+	
+	public abstract void setOrdenActual(OrdenDeCompra ord);
+	
+	public abstract void setCarritoActual(HashMap<Integer, Cantidad> car) throws UsuarioNoExisteException;
 	
 	public abstract void crearCasos();
 	
@@ -140,5 +148,7 @@ public abstract class ISistema{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public abstract boolean existeCategoriaRecursivamente(Categoria categoriaPadre, String string);
 
 }

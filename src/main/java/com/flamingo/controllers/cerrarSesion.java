@@ -1,7 +1,6 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,10 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.models.Cliente;
 import com.flamingo.models.ISistema;
-import com.flamingo.models.Usuario;
 
 /**
  * Servlet implementation class Usuarios

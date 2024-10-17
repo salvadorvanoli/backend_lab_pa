@@ -1,6 +1,8 @@
 package com.flamingo.models;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class OrdenDeCompra {
 	
@@ -174,6 +176,21 @@ public class OrdenDeCompra {
 			}
 		}
 		return false;
+	}
+	
+	public Boolean esValida() {
+		Boolean id = Pattern.compile("[0-9]+").matcher(Integer.toString(this.numero)).matches();
+		Boolean precioTotal = Pattern.compile("[0-9]+(\\.[0-9]+)?").matcher(Float.toString(this.precioTotal)).matches();
+		Boolean fecha = (this.fecha != null);
+		Boolean cliente = (this.cliente != null);
+		Boolean proveedores = (this.proveedores != null && this.proveedores.size() > 0);
+		Boolean cantidad = (this.cantidad != null && this.cantidad.size() > 0);
+		Boolean detallesEnvio = (this.detallesEnvio != null && this.detallesEnvio.esValida());
+		Boolean formaPago = (this.formaPago != null && this.formaPago.esValida());
+		Boolean estado = (this.estado == Estado.comprada || this.estado == Estado.enCamino || this.estado == Estado.enPreparacion || this.estado == Estado.entregada);
+		
+		return id && precioTotal && fecha && cliente && proveedores && cantidad && detallesEnvio && formaPago && estado;
+		
 	}
 	
 

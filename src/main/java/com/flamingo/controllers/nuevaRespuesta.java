@@ -1,6 +1,5 @@
 package com.flamingo.controllers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -13,13 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.models.Usuario;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.Comentario;
 import com.flamingo.models.DTFecha;
-import com.google.gson.Gson;
 
 @WebServlet("/nuevaRespuesta")
 public class nuevaRespuesta extends HttpServlet {
@@ -34,7 +31,6 @@ public class nuevaRespuesta extends HttpServlet {
 
     	ISistema sis;
     	if (getServletContext().getAttribute("sistema") == null) {
-    	    System.out.println("CREO EL SISTEMA");
     	    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
     	    sis = (ISistema) getServletContext().getAttribute("sistema");
     	    sis.crearCasos();
@@ -50,9 +46,6 @@ public class nuevaRespuesta extends HttpServlet {
             // Obtener los parámetros del formulario
             String textoComentario = request.getParameter("texto");
             int idComentario = Integer.parseInt(request.getParameter("id"));
-            
-            System.out.println(textoComentario);
-            System.out.println(idComentario);
 
             // Supongamos que obtienes el usuario logueado de la sesión
             Cliente usuarioActual = (Cliente) sis.getUsuarioActual();

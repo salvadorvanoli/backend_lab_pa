@@ -1,10 +1,6 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collection;
-import java.util.HashMap;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,16 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-// import com.flamingo.exceptions.UsuarioNoEncontrado;
-import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.models.Cantidad;
 import com.flamingo.models.Cliente;
 import com.flamingo.models.ISistema;
-import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Servlet implementation class Carrito
@@ -40,7 +30,6 @@ public class Carrito extends HttpServlet {
 			throws ServletException, IOException {
 		ISistema sis;
 		if (getServletContext().getAttribute("sistema") == null) {
-			System.out.println("CREO EL SISTEMA");
 			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 			sis.crearCasos();
@@ -53,7 +42,6 @@ public class Carrito extends HttpServlet {
 		Object usuario = session.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
-			// session.setAttribute("usuarioActual", null);
 			request.setAttribute("usuarioActual", null);
 			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
 					forward(request, response);
@@ -62,7 +50,6 @@ public class Carrito extends HttpServlet {
 			Usuario usr = (Usuario) usuario;
 			
 			if (usr instanceof Cliente) {
-				Cliente cli = (Cliente) sis.getUsuarioActual();
 				session.setAttribute("usuarioActual", usr);
 
 				request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").

@@ -1,11 +1,6 @@
 package com.flamingo.controllers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,15 +8,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.models.Usuario;
 import com.flamingo.models.ISistema;
-import com.flamingo.models.Producto;
 import com.flamingo.models.Proveedor;
 import com.flamingo.models.Cantidad;
 import com.flamingo.models.Cliente;
-import com.flamingo.models.Comentario;
-import com.flamingo.models.DTFecha;
-import com.google.gson.Gson;
 
 @WebServlet("/agregarAlCarrito")
 public class agregarAlCarrito extends HttpServlet {
@@ -36,7 +26,6 @@ public class agregarAlCarrito extends HttpServlet {
 
     	ISistema sis;
     	if (getServletContext().getAttribute("sistema") == null) {
-    	    System.out.println("CREO EL SISTEMA");
     	    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
     	    sis = (ISistema) getServletContext().getAttribute("sistema");
     	    sis.crearCasos();

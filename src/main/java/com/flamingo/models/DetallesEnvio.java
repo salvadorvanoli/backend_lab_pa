@@ -1,6 +1,7 @@
 package com.flamingo.models;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 
 public class DetallesEnvio {
@@ -107,6 +108,21 @@ public class DetallesEnvio {
 	
 	public void setPrecioEnvio(String precioEnvio) {
 		this.precioEnvio = precioEnvio;
+	}
+	
+	public Boolean esValida() {
+		Boolean nombre = Pattern.compile("[A-Za-z]+(( ?([A-Za-z]+))?)+").matcher(this.nombre).matches();
+		Boolean apellido = Pattern.compile("[A-Za-z]+(( ?([A-Za-z]+))?)+").matcher(this.apellido).matches();
+		Boolean direccion1 = Pattern.compile("[A-Za-z0-9]+(( ?([A-Za-z0-9]+))?)+ [0-9]+").matcher(this.direccion1).matches();
+		Boolean departamento = (this.departamento != "");
+		Boolean ciudad = (this.ciudad != "");
+		Boolean codPostal = Pattern.compile("[0-9]{5}").matcher(this.codPostal).matches();
+		Boolean numTelefono = Pattern.compile("09[1-9][0-9]{6}").matcher(this.numTelefono).matches();
+		Boolean tipoEnvio = Pattern.compile("[A-Za-z]+(( ?([A-Za-z]+))?)+").matcher(this.tipoEnvio).matches();
+		Boolean precioEnvio = Pattern.compile("[0-9]+(\\.[0-9]+)?").matcher(this.precioEnvio).matches();
+		
+		return nombre && apellido && direccion1 && departamento && ciudad && codPostal && numTelefono && tipoEnvio && precioEnvio;
+		
 	}
 	
 }

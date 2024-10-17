@@ -70,7 +70,7 @@
             .then(data => {
                 usuariosRegistrados = data; // Supongo que la respuesta es un arreglo de usuarios
             })
-            .catch(error => console.error('Error al obtener usuarios:', error));
+            .catch(error => {/*console.error('Error al obtener usuarios:', error)*/});
 
         // Verificar email
         emailInput.addEventListener('input', function() {
