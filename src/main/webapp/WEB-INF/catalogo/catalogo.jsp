@@ -93,8 +93,27 @@
     	            'tipo': tipo
     	        }
     	    });
-    	    const data = await response.json();
-    	    // console.log('Datos recibidos: ', data);
+    	    let data = await response.json();
+    	    
+    	    const textoBusqueda = document.getElementById('textoBusqueda').value;
+    	    
+    	    if(tipo == "getProductos"){
+    	    	if (textoBusqueda) {
+    			    data = data.filter(producto => {
+    			        let nombreProducto = producto.nombre.toLowerCase();
+    			        
+    			        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
+    			        
+    			        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
+
+    			        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
+    			        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
+    			               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
+    			               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
+    			    });
+    			}
+    	    }
+    	    
     	    return data;
     	} catch (error) {
     	    // console.error('Hubo un problema con la solicitud: ', error);
@@ -186,21 +205,7 @@
 	            return buscarEnSubcategorias(categoria, categoriasSeleccionadas);
 	        });
 	    });
-	
-	    const textoBusqueda = document.getElementById('textoBusqueda').value;
-		if (textoBusqueda) {
-		    productosFiltrados = productosFiltrados.filter(producto => {
-		        let nombreProducto = producto.nombre.toLowerCase();
-		        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
-		        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
 
-		        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
-		        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
-		               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
-		               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
-		    });
-		}
-	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos filtrados
 	}
 	
@@ -294,20 +299,6 @@
 	    } else if (orden === "6") {
 	        productosFiltrados.sort((a, b) => b.cantCompras - a.cantCompras); // Ordenar por cantidad de compras descendente
 	    }
-	    
-	    const textoBusqueda = document.getElementById('textoBusqueda').value;
-		if (textoBusqueda) {
-		    productosFiltrados = productosFiltrados.filter(producto => {
-		        let nombreProducto = producto.nombre.toLowerCase();
-		        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
-		        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
-
-		        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
-		        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
-		               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
-		               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
-		    });
-		}
 	
 	    cargarCatalogo(productosFiltrados); // Cargar los productos ordenados
 	}
@@ -416,29 +407,8 @@
 	        const ordenSeleccionado = this.value;
 	        ordenarProductos(ordenSeleccionado); // Llama a la función de ordenar productos
 	    });
-	    
-		function ordenarAlEntrar() {
-			let productosFiltrados = prod;
-			
-			const textoBusqueda = document.getElementById('textoBusqueda').value;
-			if (textoBusqueda) {
-			    productosFiltrados = productosFiltrados.filter(producto => {
-			        let nombreProducto = producto.nombre.toLowerCase();
-			        let nombreProveedor = producto.proveedor.nickname.toLowerCase();
-			        let categoriasProducto = producto.categorias.map(categoria => categoria.toLowerCase());
-
-			        // Verifica si el texto de búsqueda coincide con el nombre del producto, proveedor o alguna categoría
-			        return nombreProducto.includes(textoBusqueda.toLowerCase()) ||
-			               nombreProveedor.includes(textoBusqueda.toLowerCase()) ||
-			               categoriasProducto.some(categoriaNombre => categoriaNombre.toLowerCase().includes(textoBusqueda.toLowerCase()));
-			    });
-			}
-		    
-		    cargarCatalogo(productosFiltrados);
-		}
 		
 		if(prod) {
-			ordenarAlEntrar();
 			document.getElementById("searchbar").value = document.getElementById("textoBusqueda").value;
 		}
 		
