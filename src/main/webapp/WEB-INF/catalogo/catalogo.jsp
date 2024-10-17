@@ -94,10 +94,10 @@
     	        }
     	    });
     	    const data = await response.json();
-    	    console.log('Datos recibidos: ', data);
+    	    // console.log('Datos recibidos: ', data);
     	    return data;
     	} catch (error) {
-    	    console.error('Hubo un problema con la solicitud: ', error);
+    	    // console.error('Hubo un problema con la solicitud: ', error);
     	}
   	}
 	
@@ -402,11 +402,11 @@
 
 	document.addEventListener("DOMContentLoaded", async function(){
 	    categor = await getDatos("/backend_lab_pa/manejarcatalogo", "getCategorias");
-	    console.log(categor);
-		console.log(categor[0]);
+	    // console.log(categor);
+		// console.log(categor[0]);
 
 		prod = await getDatos("/backend_lab_pa/manejarcatalogo", "getProductos");
-		console.log(prod);
+		// console.log(prod);
 
 		cargarCategorias(categor, null);
 	    cargarCatalogo(prod); // Carga el catálogo inicialmente

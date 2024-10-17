@@ -1,7 +1,6 @@
 package com.flamingo.controllers;
 
 import java.io.IOException;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +18,7 @@ import com.flamingo.exceptions.CategoriaNoExisteException;
 import com.flamingo.exceptions.CategoriaNoPuedeTenerProductosException;
 import com.flamingo.exceptions.ProductoNoExisteException;
 import com.flamingo.exceptions.ProductoRepetidoException;
-import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.models.EstadoSesion;
+
 import com.flamingo.models.ISistema;
 import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
@@ -46,7 +44,6 @@ public class registrarProducto extends HttpServlet {
 
         // Inicializar el sistema si no está en el contexto
         if (getServletContext().getAttribute("sistema") == null) {
-            System.out.println("CREO EL SISTEMA");
             sis = SistemaFactory.getInstancia().getISistema();
             getServletContext().setAttribute("sistema", sis);
             sis.crearCasos();
@@ -57,12 +54,14 @@ public class registrarProducto extends HttpServlet {
         // Obtener el usuario actual desde la sesión
         Usuario usuarioActual = (Usuario) session.getAttribute("usuarioActual");
 
+        /*
         // Registro de la información del usuario actual
         if (usuarioActual != null) {
             System.out.println("Nombre del usuario actual: " + usuarioActual.getNombre());
         } else {
             System.out.println("No hay un usuario actual en la sesión.");
         }
+        */
 
         // Obtener los nombres y números de referencia de los productos del sistema
         List<String> nombresProductos = new ArrayList<>();
@@ -122,7 +121,7 @@ public class registrarProducto extends HttpServlet {
 		
 		ISistema sis;
 		if (getServletContext().getAttribute("sistema") == null) {
-		    System.out.println("CREO EL SISTEMA");
+		    // System.out.println("CREO EL SISTEMA");
 		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 		    sis = (ISistema) getServletContext().getAttribute("sistema");
 		    sis.crearCasos();
@@ -136,11 +135,11 @@ public class registrarProducto extends HttpServlet {
 	  
 	 // Obtener los parámetros del formulario que enviaste
 	    String nombre = request.getParameter("nombre");
-	    String id = request.getParameter("id");
+	    // String id = request.getParameter("id");
 	    String precio = request.getParameter("precio");
 	    String numeroRef = request.getParameter("numero");
 	    String descripcion = request.getParameter("descripcion");
-	    String imagenes = request.getParameter("imagenes");
+	    // String imagenes = request.getParameter("imagenes");
 	    
 	    if(nombre == "a") {
 	    	
@@ -173,18 +172,22 @@ public class registrarProducto extends HttpServlet {
 	            }
 	        }
 
+	        /*
 	        // Imprimir cada imagen en una nueva línea
 	        for (String imagen : listaImagenes) {
 	            System.out.println(imagen.trim()); // Imprime la imagen limpia
 	        }
-	    } else {
+	        */
+	    }/* else {
 	        System.out.println("No se recibieron imágenes.");
-	    }
+	    }*/
 
+	    /*
 	    // Verificar y mostrar las imágenes guardadas en la lista
 	    for (int i = 0; i < listaImagenes.size(); i++) {
 	        System.out.println("Imagen en lista " + (i + 1) + ": " + listaImagenes.get(i).trim()); // Imprime cada imagen
 	    }
+	    */
 
 	 // Declarar la lista de especificaciones fuera del if
 	    List<String> listaEspecificaciones = new ArrayList<>();
@@ -203,13 +206,15 @@ public class registrarProducto extends HttpServlet {
 	        // Crear la lista de especificaciones
 	        listaEspecificaciones = new ArrayList<>(Arrays.asList(especificacionesArray));
 
+	        /*
 	        // Imprimir cada especificación en una nueva línea
 	        for (String especificacion : listaEspecificaciones) {
 	            System.out.println(especificacion.trim()); // Imprime la especificación
 	        }
-	    } else {
+	        */
+	    }/* else {
 	        System.out.println("No se recibieron especificaciones.");
-	    }
+	    }*/
 
 	     
 		 // Obtener el parámetro de categorías
@@ -225,10 +230,12 @@ public class registrarProducto extends HttpServlet {
 		        // Crear la lista de categorías
 		        List<String> listaCategorias = new ArrayList<>(Arrays.asList(categoriasArray));
 
+		        /*
 		        // Imprimir cada categoría en una nueva línea
 		        for (String categoria : listaCategorias) {
 		            System.out.println(categoria.trim()); // Imprime la categoría
 		        }
+		        */
 		   
 		        
 		        
@@ -284,14 +291,14 @@ public class registrarProducto extends HttpServlet {
 			                categoriasGuardadas.add(categoria);
 			                categoria.agregarProducto(sis.getProductoActual());
 			                // Imprimir información para verificar
-			                System.out.println("Producto '" + nuevoProducto.getNombreProducto() + "' agregado a la categoría: " + nombreCategoria);
-			            } else {
+			                // System.out.println("Producto '" + nuevoProducto.getNombreProducto() + "' agregado a la categoría: " + nombreCategoria);
+			            }/* else {
 			                System.out.println("Categoría no encontrada: " + nombreCategoria);
-			            }
+			            }*/
 			        }
-			    } else {
+			    }/* else {
 			        System.out.println("No se seleccionaron categorías.");
-			    }
+			    }*/
 		
 
 	/////////////////////////////////////////////////
@@ -307,6 +314,8 @@ public class registrarProducto extends HttpServlet {
 
 	    
 		    List<String> op = new ArrayList<>();
+		    
+		    /*
 		 // Suponiendo que ya tienes la lista de imágenes llena
 		    if (!listaImagenes.isEmpty()) {
 		        System.out.println("Lista de imágenes:");
@@ -316,6 +325,7 @@ public class registrarProducto extends HttpServlet {
 		    } else {
 		        System.out.println("No hay imágenes para mostrar.");
 		    }
+		    */
 
 		 // Agregar los strings "a" y "b" a la lista, imagenes
 		 op.add("p");
@@ -334,7 +344,7 @@ public class registrarProducto extends HttpServlet {
 		        categoria.agregarProducto(sis.getProductoActual());
 
 		        // Verificación opcional
-		        System.out.println("Producto agregado a la categoría: " + categoria.getNombreCat());
+		        // System.out.println("Producto agregado a la categoría: " + categoria.getNombreCat());
 		    }
 
 		    
@@ -342,12 +352,12 @@ public class registrarProducto extends HttpServlet {
 	    HashMap<String, Categoria> categoriasMap = sis.getCategorias();
 
 	    // Imprimir los productos de cada categoría
-	    System.out.println("Productos en cada categoría:");
+	    // System.out.println("Productos en cada categoría:");
 	    for (String categoriaNombre : categoriasMap.keySet()) {
 	        Categoria categoriaActual = categoriasMap.get(categoriaNombre);
 	        List<Producto> productosEnCategoria = categoriaActual.getProductos(); // Asegúrate de que este método exista en tu clase Categoria
 
-	        System.out.println("Categoría: " + categoriaNombre);
+	        // System.out.println("Categoría: " + categoriaNombre);
 	        if (productosEnCategoria != null && !productosEnCategoria.isEmpty()) {
 	            for (Producto producto : productosEnCategoria) {
 	            	// Crear un StringBuilder para construir la cadena de especificaciones
@@ -361,22 +371,25 @@ public class registrarProducto extends HttpServlet {
 	            	    }
 	            	}
 
+	            	/*
 	            	// Imprimir el producto con las especificaciones
 	            	System.out.println("- Producto: " + producto.getNombreProducto() + 
 	            	                   " (Número de referencia: " + producto.getNumReferencia() + 
 	            	                   ", Descripción: " + producto.getDescripcion() + 
 	            	                   ", Precio: $" + producto.getPrecio() + 
 	            	                   ", " + especificacionesBuilder.toString() + ")");
+	            	*/
+	            	
 	            }
-	        } else {
+	        }/* else {
 	            System.out.println("- No hay productos en esta categoría.");
-	        }
+	        }*/
 	    }
 	    
 	    session.setAttribute("usuarioActual", sis.getUsuarioActual());
 
 	 // Imprimir el valor de "usuarioActual" para depuración
-	 System.out.println("Usuario actual en la sesiónAAA: " + session.getAttribute("usuarioActual"));
+	 // System.out.println("Usuario actual en la sesiónAAA: " + session.getAttribute("usuarioActual"));
 
 	
 	 request.getRequestDispatcher("infoUsuario").forward(request, response); // No pierdes el request ni los atributos

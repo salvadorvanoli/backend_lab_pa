@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import com.flamingo.exceptions.UsuarioNoExisteException;
 import com.flamingo.models.EstadoSesion;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.SistemaFactory;
@@ -35,7 +34,6 @@ public class infoUsuario extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		if (getServletContext().getAttribute("sistema") == null) {
-			System.out.println("CREO EL SISTEMA");
 			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 			sis.crearCasos();

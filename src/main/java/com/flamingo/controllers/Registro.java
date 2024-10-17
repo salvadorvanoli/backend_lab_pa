@@ -26,10 +26,11 @@ public class Registro extends HttpServlet {
         // Obtener los parámetros enviados desde el formulario de registro
         String email = request.getParameter("email");
         String nickname = request.getParameter("nickname");
-
-  
+        
+        /*
         System.out.println("registro Email: " + email);
         System.out.println("registro Nickname: " + nickname);
+        */
         
         ISistema sis = SistemaFactory.getInstancia().getISistema();
         try {

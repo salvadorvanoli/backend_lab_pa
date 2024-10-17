@@ -3,11 +3,6 @@ package com.flamingo.controllers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,18 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 // import com.flamingo.exceptions.UsuarioNoEncontrado;
-import com.flamingo.exceptions.UsuarioNoExisteException;
-import com.flamingo.models.Cantidad;
-import com.flamingo.models.Cliente;
-import com.flamingo.models.DTCantidad;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
-import com.flamingo.models.DTCantidad;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.models.Usuario;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * Servlet implementation class Carrito
@@ -63,7 +50,6 @@ public class ManejarCarrito extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ISistema sis;
 		if (getServletContext().getAttribute("sistema") == null) {
-			System.out.println("CREO EL SISTEMA");
 			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 			sis.crearCasos();
@@ -76,14 +62,12 @@ public class ManejarCarrito extends HttpServlet {
 		Object usuario = session.getAttribute("usuarioActual");	
 		
 		if(usuario == null) {
-			System.out.println("Entre a user = null");
 			// session.setAttribute("usuarioActual", null);
 			session.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
+			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
 					forward(request, response);
 				
 		} else {
-			System.out.println("NOOOOOO Entre a user = null");
 			try {
 				
 				String tipoGET = request.getHeader("tipo");
@@ -94,10 +78,8 @@ public class ManejarCarrito extends HttpServlet {
 				
 				if (tipoGET.equals("getIDOrden")) {
 					result = gson.toJson(sis.generarCodigoOrden());
-					System.out.println(result);
 				} else if (tipoGET.equals("getCarrito")) {
 					result = gson.toJson(sis.getCarritoActual());
-					System.out.println(result);
 				}
 				
 				response.setContentType("application/json");
@@ -119,7 +101,6 @@ public class ManejarCarrito extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ISistema sis;
 		if (getServletContext().getAttribute("sistema") == null) {
-			System.out.println("CREO EL SISTEMA");
 			getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
 			sis = (ISistema) getServletContext().getAttribute("sistema");
 			sis.crearCasos();
@@ -131,10 +112,9 @@ public class ManejarCarrito extends HttpServlet {
 		Object usuario = session.getAttribute("usuarioActual");
 		
 		if(usuario == null) {
-			System.out.println("Entre a user = null");
 			// session.setAttribute("usuarioActual", null);
 			request.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
+			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
 					forward(request, response);
 				
 		} else {
@@ -154,8 +134,7 @@ public class ManejarCarrito extends HttpServlet {
 				if (tipoPOST.equals("eliminarItem")) {
 					
 			        int numReferencia = gson.fromJson(jsonBuilder.toString(), int.class);
-			        
-			        System.out.println(numReferencia);
+
 			        sis.eliminarItemCarrito(numReferencia);
 			        
 				} else if (tipoPOST.equals("manejarCantidad")) {
@@ -169,7 +148,6 @@ public class ManejarCarrito extends HttpServlet {
 					sis.realizarCompra(orden);
 					
 				}
-				// Puedes enviar una respuesta si lo deseas
 		        response.setContentType("application/json");
 		        response.setCharacterEncoding("UTF-8");
 		        response.getWriter().write("{\"message\":\"Producto recibido correctamente\"}");

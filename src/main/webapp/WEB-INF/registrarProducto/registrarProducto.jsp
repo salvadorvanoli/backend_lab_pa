@@ -201,23 +201,27 @@
 	<script type="text/javascript">
         // Pasar la lista de nombres desde el backend a un array de JavaScript
         var nombresProductos = <%= new Gson().toJson(request.getAttribute("nombres")) %>;
-        console.log(nombresProductos);  // Ahora tienes la lista de nombres en JavaScript
+        // console.log(nombresProductos);  // Ahora tienes la lista de nombres en JavaScript
 
         // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        /*
         nombresProductos.forEach(function(nombre) {
             console.log("Nombre del producto: " + nombre);
         });
+        */
     </script>
     
     	<script type="text/javascript">
         // Pasar la lista de nombres desde el backend a un array de JavaScript
         var numerosProductos = <%= new Gson().toJson(request.getAttribute("numeros")) %>;
-        console.log(numerosProductos);  // Ahora tienes la lista de nombres en JavaScript
+        // console.log(numerosProductos);  // Ahora tienes la lista de nombres en JavaScript
 
         // Aquí puedes trabajar con la lista, por ejemplo, para validaciones
+        /*
         numerosProductos.forEach(function(numero) {
             console.log("Numero del producto: " + numero);
         });
+        */
     </script>
 
 	<script>
@@ -231,10 +235,10 @@
     	        }
     	    });
     	    const data = await response.json();
-    	    console.log('Datos recibidos: ', data);
+    	    // console.log('Datos recibidos: ', data);
     	    return data;
     	} catch (error) {
-    	    console.error('Hubo un problema con la solicitud: ', error);
+    	    // console.error('Hubo un problema con la solicitud: ', error);
     	}
   	}
 	
@@ -293,7 +297,7 @@
 	
 	
 	function mostrarAlerta(mensaje) {
-	    console.log("Mensaje recibido:", mensaje); // Para verificar si el mensaje llega
+	    // console.log("Mensaje recibido:", mensaje); // Para verificar si el mensaje llega
 	    let alertaExistente = document.getElementById("alerta");
 	    
 	    if (alertaExistente) {
@@ -380,7 +384,7 @@
 	                            nuevoProducto.imagenes.push(e.target.result); // Guardar la ruta en el arreglo de nuevoProducto
 
 	                            // Muestra la ruta en consola (opcional)
-	                            console.log('Ruta de la imagen guardada en nuevoProducto:', e.target.result);
+	                            // console.log('Ruta de la imagen guardada en nuevoProducto:', e.target.result);
 	                            
 	                            // Añade la imagen al nuevo div
 	                            newRow.appendChild(img);
@@ -414,7 +418,7 @@
 	        if (!nuevoProducto.categorias.includes(categoria)) {
 	            // Agrega la categoría al producto
 	            nuevoProducto.categorias.push(categoria);
-	            console.log("Categoría " + categoria + " agregada al producto.");
+	            // console.log("Categoría " + categoria + " agregada al producto.");
 
 	            // Crea un nuevo elemento de lista (li) para la categoría
 	            const li = document.createElement('li');
@@ -439,7 +443,7 @@
 	            const listaCategorias = document.querySelector('.verCategorias ul');
 	            listaCategorias.appendChild(li);
 	        } else {
-	            console.log(`La categoría "${categoria}" ya está seleccionada.`);
+	            // console.log(`La categoría "${categoria}" ya está seleccionada.`);
 	        }
 	    }
 
@@ -455,7 +459,7 @@
 
 	        // Elimina la categoría de nuevoProducto.categorias
 	        nuevoProducto.categorias = nuevoProducto.categorias.filter(cat => cat !== categoria);
-	        console.log("Categoría " + categoria + " eliminada del producto.");
+	        // console.log("Categoría " + categoria + " eliminada del producto.");
 	    }
 	    
 	    

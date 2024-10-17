@@ -1,10 +1,7 @@
 package com.flamingo.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import com.flamingo.models.DTFecha;
 
 public class Usuario{
     private String nickname;

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Locale;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -13,13 +12,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
-import com.flamingo.exceptions.OrdenDeCompraNoExisteException;
 import com.flamingo.models.Categoria;
-import com.flamingo.models.Comentario;
 import com.flamingo.models.ISistema;
 
 
@@ -32,10 +28,7 @@ public class Catalogo extends HttpServlet {
         	
         	ISistema sis;
     		
-    		HttpSession session = request.getSession();
-    		
     		if (getServletContext().getAttribute("sistema") == null) {
-    		    System.out.println("CREO EL SISTEMA");
     		    getServletContext().setAttribute("sistema", SistemaFactory.getInstancia().getISistema());
     		    sis = (ISistema) getServletContext().getAttribute("sistema");
     		    sis.crearCasos();

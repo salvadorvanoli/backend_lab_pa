@@ -99,7 +99,5 @@ public class Cliente extends Usuario{
 			}
 			this.setCarrito(new HashMap<>());
 			this.vincularOrdenDeCompra(ord);
-			System.out.println("ORDENNNNNNN: ");
-			System.out.println(ord);
 		}
 }
