@@ -3,7 +3,7 @@ package com.flamingo.models;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.regex.Pattern;
 import java.util.HashMap;
 
 import java.time.LocalDate;
@@ -154,6 +154,24 @@ public class Sistema extends ISistema {
 	}
 	
 	public boolean registro(String nickname, String email) throws UsuarioRepetidoException {
+		
+	    List<String> errores = new ArrayList<>();
+	    
+	    // Validar nickname
+	    if (nickname == null || nickname.trim().isEmpty()) {
+	        errores.add("El nickname no puede ser vacio");
+	    }
+	    
+	 // Validar email
+	    if (email == null || email.trim().isEmpty() || !Pattern.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", email)) {
+	        errores.add("Por favor, introduce un correo electrónico válido.");
+	    }
+	    
+	 // Si hay errores tirar excepción
+	    if (!errores.isEmpty()) {
+	        throw new IllegalArgumentException("Errores de validación: " + String.join(", ", errores));
+	    }
+	    
 		for (Usuario user : this.usuarios) {
 			if (user.getEmail().equalsIgnoreCase(email)) {
 				throw new UsuarioRepetidoException("Ya existe un usuario registrado con el email " + '"' + email + '"' + '.');
@@ -194,8 +212,13 @@ public class Sistema extends ISistema {
 	    }
 
 	    // Validar URL del sitio web si es proporcionada
-	    if (linkWeb != null && !linkWeb.trim().isEmpty() && !validarUrl(linkWeb)) {
+	    if (linkWeb != null && !linkWeb.trim().isEmpty() && !validarUrl(linkWeb)) {  // Validar el correo) {
 	        errores.add("La URL del sitio web no es válida.");
+	    }
+	    
+	 // Validar URL del sitio web obligatoria
+	    if (linkWeb == null || linkWeb.trim().isEmpty()) {
+	        errores.add("La URL del sitio web es obligatoria.");
 	    }
 
 	    // Validar nombre de la compañía

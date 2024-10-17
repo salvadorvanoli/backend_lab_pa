@@ -1742,37 +1742,54 @@ class Testing {
     
     @Test
     public void realizarCompraExitoso() {
-    	// Instancia del sistema
-    	ISistema sis = SistemaFactory.getInstancia().getISistema();
-    	
-    	OrdenDeCompra ord = new OrdenDeCompra(535674, new DTFecha(1, 10, 1990), null, null);
-    	
-    	Cliente cli = new Cliente(null, null, null, null, fecha, null, null);
-    	
-    	HashMap <Integer, Cantidad> car = new HashMap<>();
-    	
-    	Cantidad cant = new Cantidad(1);
-    	
-    	Proveedor prov = new Proveedor(null, null, null, null, fecha, null, null, null, null);
-    	
-    	Producto prod = new Producto(null, null, null, 0, 0, null, null, prov, null);
-    	
-    	prod.setCantCompras(1);
-    	
-    	cant.setProducto(prod);
-    	
-    	car.put(1, cant);
-    	
-    	cli.setCarrito(car);
-    	
-    	sis.setUsuarioActual((Usuario) cli);
-    	
-    	try {
-			sis.realizarCompra(ord); // Deberia ejecutarse
-		} catch (UsuarioNoExisteException e) {
-			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
-		}
+        // Instancia del sistema
+        ISistema sis = SistemaFactory.getInstancia().getISistema();
+        
+        // Crear fecha para los objetos
+        DTFecha fecha = new DTFecha(1, 10, 1990);
+        
+        // Crear proveedor
+        Proveedor prov = new Proveedor("Proveedor1", "prov1@gmail.com", "Carlos", "Perez", fecha, "Compañía 1", "https://compania1.com", null, "12345678", "12345678");
+
+        // Crear producto válido
+        Producto prod = new Producto("Producto1", "Descripción de Producto1", Arrays.asList("Especificación 1", "Especificación 2"), 101, 200.0f, Arrays.asList("imagen1.jpg", "imagen2.jpg"), Arrays.asList(new Categoria("Categoria1", true, null)), prov, "Tienda1");
+        
+        // Crear cantidad asociada al producto
+        Cantidad cantidad = new Cantidad(2); // Cantidad de 2 productos
+        cantidad.setProducto(prod); // Asignar el producto a la cantidad
+
+        // Crear carrito para el cliente
+        HashMap<Integer, Cantidad> carrito = new HashMap<>();
+        carrito.put(1, cantidad); // Añadir la cantidad al carrito
+
+        // Crear cliente con un carrito
+        Cliente cliente = new Cliente("Cliente1", "cliente1@gmail.com", "Juan", "Lopez", fecha, null, "87654321");
+        cliente.setCarrito(carrito); // Asignar el carrito al cliente
+
+        // Establecer al cliente como el usuario actual en el sistema
+        sis.setUsuarioActual(cliente);
+        
+        // Crear una orden de compra con los productos del carrito
+        OrdenDeCompra orden = new OrdenDeCompra(12345, fecha, prod, Arrays.asList(cantidad));
+
+        try {
+            // Realizar la compra
+            sis.realizarCompra(orden);
+            
+            // Verificar que la orden fue registrada correctamente en el sistema
+            List<DTOrdenDeCompra> ordenes = sis.listarOrdenesDeCompra();
+            
+            // Verificar que la lista de órdenes contiene la orden recién creada
+            assertTrue(ordenes.stream().anyMatch(o -> o.getNumero() == orden.getNumero()));
+            
+        } catch (UsuarioNoExisteException e) {
+            fail("No se debería haber lanzado una excepción de usuario: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            fail("No se debería haber lanzado una excepción de argumento: " + e.getMessage());
+        }
     }
+
+
     
     
     @Test
