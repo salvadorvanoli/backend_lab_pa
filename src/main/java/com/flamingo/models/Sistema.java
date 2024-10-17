@@ -318,7 +318,7 @@ public class Sistema extends ISistema {
         return false;
     }
 
-    private boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
+    public boolean existeCategoriaRecursivamente(Categoria categoria, String nombreCategoria) {
         for (Categoria hijo : categoria.getHijos().values()) {
             if (hijo.getNombreCat().equals(nombreCategoria) || existeCategoriaRecursivamente(hijo, nombreCategoria)) {
                 return true;
