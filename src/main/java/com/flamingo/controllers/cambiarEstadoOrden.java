@@ -35,9 +35,6 @@ public class cambiarEstadoOrden extends HttpServlet {
         String estadoOrden = request.getParameter("estadoOrden");
         String numeroOrden = request.getParameter("numeroOrden");
         
-        System.out.println(estadoOrden);
-        System.out.println(numeroOrden);
-        
         if(estadoOrden == null || estadoOrden == "" || numeroOrden == null || numeroOrden == "") {
         	response.sendRedirect(request.getContextPath() + "/infoUsuario");
         	return;

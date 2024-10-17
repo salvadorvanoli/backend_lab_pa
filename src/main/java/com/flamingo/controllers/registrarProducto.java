@@ -24,6 +24,7 @@ import com.flamingo.models.Producto;
 import com.flamingo.models.SistemaFactory;
 import com.flamingo.models.Usuario;
 import com.flamingo.models.Categoria;
+import com.flamingo.models.Cliente;
 import com.flamingo.models.Proveedor;
 
 @WebServlet ("/registrarProducto")
@@ -78,9 +79,9 @@ public class registrarProducto extends HttpServlet {
         request.setAttribute("categorias", sis.getCategorias());
 
         // Redirigir según la presencia del usuario en la sesión
-        if (usuarioActual == null) {
-            // Si no hay un usuario, redirigir a la página de registro de productos
-            request.getRequestDispatcher("/WEB-INF/registrarProducto/registrarProducto.jsp").forward(request, response);
+        if (usuarioActual == null || usuarioActual instanceof Cliente) {
+            // Si no hay un usuario, redirigir al home
+        	response.sendRedirect("home");
         } else {
             // Si el usuario existe, actualizar la sesión y pasar las categorías
             session.setAttribute("usuarioActual", usuarioActual);
@@ -132,6 +133,9 @@ public class registrarProducto extends HttpServlet {
 		// Configurar el encoding para manejar caracteres especiales (por si es necesario)
 	    request.setCharacterEncoding("UTF-8");
 	    
+	    Usuario usuario = (Usuario) session.getAttribute("usuarioActual");
+	    
+	    if (usuario instanceof Proveedor) {
 	  
 	 // Obtener los parámetros del formulario que enviaste
 	    String nombre = request.getParameter("nombre");
@@ -332,7 +336,7 @@ public class registrarProducto extends HttpServlet {
 		 op.add("q");
 		    
 		    try {
-				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  listaImagenes, ((Proveedor) sis.getUsuarioActual()).getnomCompania());         
+				sis.registrarProducto(nuevoProducto.getNombreProducto(), nuevoProducto.getNumReferencia(), nuevoProducto.getDescripcion(), nuevoProducto.getEspecificacion(), nuevoProducto.getPrecio(), nuevoProducto.getCategorias(),  listaImagenes, ((Proveedor) usuario).getnomCompania());         
 			} catch (ProductoRepetidoException | CategoriaNoPuedeTenerProductosException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -387,6 +391,9 @@ public class registrarProducto extends HttpServlet {
 	    }
 	    
 	    session.setAttribute("usuarioActual", sis.getUsuarioActual());
+	} else {
+		response.sendRedirect("home");
+	}
 
 	 // Imprimir el valor de "usuarioActual" para depuración
 	 // System.out.println("Usuario actual en la sesiónAAA: " + session.getAttribute("usuarioActual"));

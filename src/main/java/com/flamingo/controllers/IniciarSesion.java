@@ -69,8 +69,7 @@ public class IniciarSesion extends HttpServlet {
             
             objSesion.setAttribute("usuarioActual", usuarioEncontrado);
             
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/home");
-            dispatcher.forward(request, response);
+            response.sendRedirect("home");
         }
     }
 

@@ -43,7 +43,7 @@ public class Carrito extends HttpServlet {
 		
 		if(usuario == null) {
 			request.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp"). // Se debería enviar a una pagina de error?
+			request.getRequestDispatcher("/WEB-INF/carrito/carrito.jsp").
 					forward(request, response);
 				
 		} else {
@@ -57,8 +57,7 @@ public class Carrito extends HttpServlet {
 			} else {
 				session.setAttribute("usuarioActual", usr);
 
-				request.getRequestDispatcher("/WEB-INF/home/home.jsp").
-						forward(request, response);
+				response.sendRedirect("home");
 			}
 		}
 	}

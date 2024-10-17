@@ -518,7 +518,7 @@
 		} else {
 			%>
 				<div class="text-center fs-1 m-5">
-					Aún no tienes la sesión iniciada. Serás redirigido a inicio en unos segundos.
+					Aún no tienes la sesión iniciada.
 				</div>
 			<%
 			// Falta redirigir al usuario

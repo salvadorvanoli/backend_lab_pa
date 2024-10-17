@@ -46,8 +46,7 @@ public class infoUsuario extends HttpServlet {
 		
 		if(usuario == null) {
 			request.setAttribute("usuarioActual", null);
-			request.getRequestDispatcher("/WEB-INF/sesion/iniciarSesion.jsp").
-					forward(request, response);
+			response.sendRedirect("iniciarsesion");
 		} else {
 			Usuario usr = (Usuario) usuario;
 			request.setAttribute("usuarioActual", usr);
