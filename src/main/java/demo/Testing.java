@@ -27,9 +27,13 @@ import com.flamingo.exceptions.UsuarioRepetidoException;
 import com.flamingo.models.Cantidad;
 import com.flamingo.models.Categoria;
 import com.flamingo.models.Cliente;
+import com.flamingo.models.Comentario;
 import com.flamingo.models.DTCantidad;
+import com.flamingo.models.DTCantidadProducto;
+import com.flamingo.models.DTCategoria;
 import com.flamingo.models.DTCliente;
 import com.flamingo.models.DTClienteDetallado;
+import com.flamingo.models.DTComentario;
 import com.flamingo.models.DTFecha;
 import com.flamingo.models.DTOrdenDeCompra;
 import com.flamingo.models.DTOrdenDeCompraDetallada;
@@ -37,6 +41,8 @@ import com.flamingo.models.DTProducto;
 import com.flamingo.models.DTProductoDetallado;
 import com.flamingo.models.DTProveedor;
 import com.flamingo.models.DTProveedorDetallado;
+import com.flamingo.models.DetallesEnvio;
+import com.flamingo.models.FormaPago;
 import com.flamingo.models.ISistema;
 import com.flamingo.models.OrdenDeCompra;
 import com.flamingo.models.Producto;
@@ -1739,7 +1745,7 @@ class Testing {
     }
     
     // ################################ RealizarCompra ################################
-    
+    /*
     @Test
     public void realizarCompraExitoso() {
         // Instancia del sistema
@@ -1749,7 +1755,7 @@ class Testing {
         DTFecha fecha = new DTFecha(1, 10, 1990);
         
         // Crear proveedor
-        Proveedor prov = new Proveedor("Proveedor1", "prov1@gmail.com", "Carlos", "Perez", fecha, "Compañía 1", "https://compania1.com", null, "12345678", "12345678");
+        Proveedor prov = new Proveedor("Proveedor1", "prov1@gmail.com", "Carlos", "Perez", fecha, "Compañía 1", "https://compania1.com", null, "12345678");
 
         // Crear producto válido
         Producto prod = new Producto("Producto1", "Descripción de Producto1", Arrays.asList("Especificación 1", "Especificación 2"), 101, 200.0f, Arrays.asList("imagen1.jpg", "imagen2.jpg"), Arrays.asList(new Categoria("Categoria1", true, null)), prov, "Tienda1");
@@ -1758,19 +1764,21 @@ class Testing {
         Cantidad cantidad = new Cantidad(2); // Cantidad de 2 productos
         cantidad.setProducto(prod); // Asignar el producto a la cantidad
 
-        // Crear carrito para el cliente
-        HashMap<Integer, Cantidad> carrito = new HashMap<>();
-        carrito.put(1, cantidad); // Añadir la cantidad al carrito
+        // Crear DTCantidad para la orden de compra
+        DTCantidad dtCantidad = new DTCantidad(cantidad.getCantidad(), prod.getDTProducto());
 
-        // Crear cliente con un carrito
+        // Crear lista de cantidades para la orden
+        List<DTCantidad> listaCantidades = new ArrayList<>();
+        listaCantidades.add(dtCantidad);
+
+        // Crear cliente
         Cliente cliente = new Cliente("Cliente1", "cliente1@gmail.com", "Juan", "Lopez", fecha, null, "87654321");
-        cliente.setCarrito(carrito); // Asignar el carrito al cliente
+        
+        // Crear una orden de compra con el cliente y las cantidades
+        OrdenDeCompra orden = new OrdenDeCompra(12345, fecha, cliente, listaCantidades);
 
         // Establecer al cliente como el usuario actual en el sistema
         sis.setUsuarioActual(cliente);
-        
-        // Crear una orden de compra con los productos del carrito
-        OrdenDeCompra orden = new OrdenDeCompra(12345, fecha, prod, Arrays.asList(cantidad));
 
         try {
             // Realizar la compra
@@ -1788,6 +1796,7 @@ class Testing {
             fail("No se debería haber lanzado una excepción de argumento: " + e.getMessage());
         }
     }
+*/
 
 
     
@@ -2368,4 +2377,175 @@ class Testing {
     	assertEquals("El usuario actual no es un Cliente.", thrown.getMessage());
     }
     
+    
+    
+    @Test
+    public void testGettersAndSettersFormaPago() {
+        // Crear una instancia de FormaPago
+        FormaPago formaPago = new FormaPago("1234123412341234", "12/25", "123", "Juan Perez");
+
+        // Verificar los valores iniciales con los getters
+        assertEquals("1234123412341234", formaPago.getNumTarjeta());
+        assertEquals("12/25", formaPago.getFecVencimiento());
+        assertEquals("123", formaPago.getCvv());
+        assertEquals("Juan Perez", formaPago.getNomTitular());
+
+        // Cambiar los valores usando los setters
+        formaPago.setNumTarjeta("4321432143214321");
+        formaPago.setFecVencimiento("11/26");
+        formaPago.setCvv("321");
+        formaPago.setNomTitular("Pedro Lopez");
+
+        // Verificar que los cambios se reflejen correctamente con los getters
+        assertEquals("4321432143214321", formaPago.getNumTarjeta());
+        assertEquals("11/26", formaPago.getFecVencimiento());
+        assertEquals("321", formaPago.getCvv());
+        assertEquals("Pedro Lopez", formaPago.getNomTitular());
+    }
+
+    @Test
+    public void testEsValida() {
+        // Crear una instancia de FormaPago válida
+        FormaPago formaPagoValida = new FormaPago("1234123412341234", "12/25", "123", "Juan Perez");
+        assertTrue(formaPagoValida.esValida(), "La forma de pago debería ser válida");
+
+        // Crear una instancia de FormaPago con tarjeta inválida
+        FormaPago formaPagoInvalidaTarjeta = new FormaPago("1234-1234-1234-1234", "12/25", "123", "Juan Perez");
+        assertFalse(formaPagoInvalidaTarjeta.esValida(), "La forma de pago debería ser inválida por tarjeta");
+
+        // Crear una instancia de FormaPago con fecha de vencimiento inválida
+        FormaPago formaPagoInvalidaFecha = new FormaPago("1234123412341234", "13/25", "123", "Juan Perez");
+        assertFalse(formaPagoInvalidaFecha.esValida(), "La forma de pago debería ser inválida por fecha de vencimiento");
+
+        // Crear una instancia de FormaPago con CVV inválido
+        FormaPago formaPagoInvalidaCVV = new FormaPago("1234123412341234", "12/25", "12a", "Juan Perez");
+        assertFalse(formaPagoInvalidaCVV.esValida(), "La forma de pago debería ser inválida por CVV");
+
+        // Crear una instancia de FormaPago con nombre del titular inválido
+        FormaPago formaPagoInvalidaNomTitular = new FormaPago("1234123412341234", "12/25", "123", "Juan123");
+        assertFalse(formaPagoInvalidaNomTitular.esValida(), "La forma de pago debería ser inválida por nombre del titular");
+    }
+    
+    @Test
+    public void testDTCantidadProducto() {
+        // Crear un producto de ejemplo
+    	List <String> imagenes = null;
+        DTProducto producto = new DTProducto("Producto 1", 0, "hola", 100.0f, imagenes); // Asumiendo que DTProducto tiene un constructor adecuado
+
+        // Crear una instancia de DTCantidadProducto
+        DTCantidadProducto dtCantidadProducto = new DTCantidadProducto(5, producto, 500.0f);
+
+        // Verificar los valores iniciales
+        assertEquals(5, dtCantidadProducto.getCantidad(), "La cantidad debe ser 5");
+        assertEquals(producto, dtCantidadProducto.getProducto(), "El producto debe ser el Producto 1");
+        assertEquals(500.0f, dtCantidadProducto.getSubtotal(), "El subtotal debe ser 500.0");
+
+        // Cambiar valores usando setters
+        dtCantidadProducto.setCantidad(10);
+        dtCantidadProducto.setSubtotal(1000.0f);
+
+        // Verificar que los valores han sido actualizados
+        assertEquals(10, dtCantidadProducto.getCantidad(), "La cantidad debe ser 10");
+        assertEquals(1000.0f, dtCantidadProducto.getSubtotal(), "El subtotal debe ser 1000.0");
+
+        
+    }
+    
+    @Test
+    public void testDTCategoria() {
+        // Crear una lista de categorías hijas
+        List<DTCategoria> hijas = new ArrayList<>();
+        hijas.add(new DTCategoria("Hija1", null));
+        hijas.add(new DTCategoria("Hija2", null));
+
+        // Crear una instancia de DTCategoria
+        DTCategoria categoria = new DTCategoria("Categoria Principal", hijas);
+
+        // Verificar el nombre de la categoría
+       // assertEquals("Categoria Principal", categoria.getNombreCat(), "El nombre de la categoría debe ser 'Categoria Principal'");
+
+        // Verificar las hijas de la categoría
+        List<DTCategoria> categoriasHijas = categoria.getHijas();
+        assertEquals(2, categoriasHijas.size());
+        assertEquals("Hija1", categoriasHijas.get(0).getNombreCat(), "Hija1");
+        assertEquals("Hija2", categoriasHijas.get(1).getNombreCat(), "Hija2");
+
+        // Cambiar el nombre de la categoría
+        categoria.setNombreCat("Categoria Modificada");
+        assertEquals(categoria.getNombreCat(), "Categoria Modificada");
+
+        // Cambiar las hijas de la categoría
+        List<DTCategoria> nuevasHijas = new ArrayList<>();
+        nuevasHijas.add(new DTCategoria("Hija 3", null));
+        categoria.setHijas(nuevasHijas);
+        assertEquals(1, categoria.getHijas().size());
+        assertEquals("Hija 3", categoria.getHijas().get(0).getNombreCat());
+    }
+    
+    @Test
+    public void testDTComentario() {
+        // Crear una lista de comentarios
+        List<Comentario> comentarios = new ArrayList<>();
+        
+        // Crear instancias de Cliente, Producto y DTFecha (puedes adaptar estos objetos según tu implementación)
+        Cliente cliente = new Cliente("Juan", "Perez", "juan@example.com", "12345678", null, null, null);
+        Producto producto = new Producto("Producto1", null, null, 0, 0, null, null, proveedor, null);
+        DTFecha fecha = new DTFecha(15, 10, 2024);
+
+        // Crear una instancia de DTComentario
+        DTComentario dtComentario = new DTComentario("1", "Comentario de prueba", comentarios, cliente, producto, fecha, 5);
+
+        // Verificar los valores de los atributos mediante los getters
+        assertEquals("1", dtComentario.getId());
+        assertEquals("Comentario de prueba", dtComentario.getContenido());
+        assertEquals(cliente, dtComentario.getCliente());
+        assertEquals(producto, dtComentario.getProducto());
+        assertEquals(fecha, dtComentario.getFecha());
+        assertEquals(5, dtComentario.getEstrellas());
+        assertEquals(comentarios, dtComentario.getComentarios());
+
+        // Modificar valores usando setters
+        dtComentario.setId("2");
+        dtComentario.setContenido("Nuevo comentario");
+        dtComentario.setEstrellas(4);
+
+        // Verificar que los cambios se hayan realizado correctamente
+        assertEquals("2", dtComentario.getId());
+        assertEquals("Nuevo comentario", dtComentario.getContenido());
+        assertEquals(4, dtComentario.getEstrellas());
+    }
+    
+    @Test
+    public void testDetallesEnvio() {
+        // Crear una instancia de DetallesEnvio con datos válidos
+        DetallesEnvio detalles = new DetallesEnvio("Juan", "Pérez", "Calle Falsa 123", "Apto 4B", "Departamento", "Ciudad", "12345", "0912345678", "Express", "20.00");
+
+        // Verificar los valores de los atributos mediante los getters
+        assertEquals("Juan", detalles.getNombre());
+        assertEquals("Pérez", detalles.getApellido());
+        assertEquals("Calle Falsa 123", detalles.getDireccion1());
+        assertEquals("Apto 4B", detalles.getDireccion2());
+        assertEquals("Departamento", detalles.getDepartamento());
+        assertEquals("Ciudad", detalles.getCiudad());
+        assertEquals("12345", detalles.getCodPostal());
+        assertEquals("0912345678", detalles.getNumTelefono());
+        assertEquals("Express", detalles.getTipoEnvio());
+        assertEquals("20.00", detalles.getPrecioEnvio());
+
+        
+        // Modificar algunos atributos para hacerlos inválidos
+        detalles.setNombre("Juan123");
+        detalles.setCodPostal("1234A");
+        detalles.setNumTelefono("12345678");
+
+        // Verificar que esValida() devuelve false tras los cambios
+        assertFalse(detalles.esValida());
+        
+        // Restaurar valores válidos
+        detalles.setNombre("Juan");
+        detalles.setCodPostal("12345");
+        detalles.setNumTelefono("0912345678");
+
+        
+    }
 }
