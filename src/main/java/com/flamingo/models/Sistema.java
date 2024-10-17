@@ -9,6 +9,8 @@ import java.util.Map;
 
 import java.time.LocalDate;
 
+import com.flamingo.controllers.Carrito;
+
 // Importamos las excepciones necesarias
 
 import com.flamingo.exceptions.*;
@@ -1078,6 +1080,20 @@ public class Sistema extends ISistema {
 			}
 		}
 	}
+	
+	public void setCarritoActual(HashMap<Integer, Cantidad> car) throws UsuarioNoExisteException {
+		if (this.usuarioActual != null) {
+			if (this.usuarioActual instanceof Cliente) {
+				Cliente cli = (Cliente) this.usuarioActual;
+				cli.setCarrito(car);
+				return;
+			} else {
+				throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+			}
+		}
+		throw new UsuarioNoExisteException("El usuario actual no es un Cliente.");
+	}
+	
 	
 	/*
 	

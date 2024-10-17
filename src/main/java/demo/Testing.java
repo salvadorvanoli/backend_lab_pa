@@ -853,6 +853,51 @@ class Testing {
     
     // ################################ ModificarCanitdadItemCarrito ################################
     
+    @Test
+    public void ModificarCantidadIemCarritoExitoso() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	Cliente cli = new Cliente("solsitotodoslosdiasporfanomentira", "bllpald", "cjdjajij", "d@email.com", fecha, null, "1234545463");
+    	
+    	HashMap<Integer, Cantidad> car = new HashMap<>();
+    	
+    	Cantidad cant = new Cantidad(1);
+    	
+    	car.put(1, cant);
+    	
+    	cli.setCarrito(car);
+    	
+    	sis.setUsuarioActual((Usuario) cli); 
+    	
+    	try {
+			sis.setCarritoActual(car);	//Deberia ejecutarse
+		} catch (UsuarioNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    	try {
+			sis.modificarCantidadItemCarrito(1, 2); //Deberia ejecutarse
+		} catch (UsuarioNoExisteException e) {
+			fail("No se debería haber lanzado una excepción."); // No deberia ejecutarse
+		}
+    	
+    }
+    
+    @Test
+    public void ModificarCantidadIemCarritoConProveedor() {
+    	ISistema sis = SistemaFactory.getInstancia().getISistema();
+    	
+    	Proveedor prov = new Proveedor("solsitotodoslosdiasporfanomentira", "bllpald", "cjdjajij", "d@email.com", fecha, null, "link","link.com","1234545463");
+    	
+    	sis.setUsuarioActual((Usuario)prov);
+    	
+    	UsuarioNoExisteException thrown = assertThrows(UsuarioNoExisteException.class, () ->{ 
+    		sis.modificarCantidadItemCarrito(0, 0);
+    	});
+    	
+    	assertEquals("El usuario actual no es un Cliente.", thrown.getMessage());
+    }
+    
     
     
 }

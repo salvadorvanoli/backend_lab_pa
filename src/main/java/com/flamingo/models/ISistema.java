@@ -5,6 +5,7 @@ import java.util.HashMap;
 // import java.util.ArrayList;
 import java.util.List;
 
+import com.flamingo.controllers.Carrito;
 import com.flamingo.exceptions.*;
 
 public abstract class ISistema{
@@ -24,6 +25,8 @@ public abstract class ISistema{
 	public abstract Usuario getUsuarioActual();
 	
 	public abstract void setOrdenActual(OrdenDeCompra ord);
+	
+	public abstract void setCarritoActual(HashMap<Integer, Cantidad> car) throws UsuarioNoExisteException;
 	
 	public abstract OrdenDeCompra getOrdenDeCompraActual();
 	
